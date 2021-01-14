@@ -27,5 +27,4 @@ jobs:
         with:
           author_name: icebreaker-bot
           author_email: 1324318532@qq.com
-          message: '`date '+%Y-%m-%d %H:%M:%S'`'
           add: '*.md'

@@ -19,7 +19,7 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           # 要装就装最新稳定版
-          node-version: [14.x]
+          node-version: '14'
       - name: generate README.md
         run: npm i --production && npm start
       - name: git commit files

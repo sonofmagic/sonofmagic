@@ -1,0 +1,34 @@
+{
+  "name": "sonofmagic",
+  "version": "1.0.0",
+  "description": "<!--\r **sonofmagic/sonofmagic** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sonofmagic/sonofmagic.git"
+  },
+  "keywords": [],
+  "author": "sonofmagic",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sonofmagic/sonofmagic/issues"
+  },
+  "homepage": "https://github.com/sonofmagic/sonofmagic#readme",
+  "devDependencies": {
+    "eslint": "^7.17.0",
+    "eslint-config-standard": "^16.0.2",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "markdown-it": "^12.0.4"
+  },
+  "dependencies": {
+    "ascii-art-font": "^1.0.2",
+    "dayjs": "^1.10.3",
+    "dotenv": "^8.2.0"
+  }
+}

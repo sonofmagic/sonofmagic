@@ -25,7 +25,7 @@ jobs:
       - name: git commit files
         uses: EndBug/add-and-commit@v6
         with:
-          author_name: icebreaker's bot
+          author_name: icebreaker-bot
           author_email: 1324318532@qq.com
           message: '`date '+%Y-%m-%d %H:%M:%S'`'
           add: '*.md'

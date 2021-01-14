@@ -39,3 +39,6 @@ npm config set proxy "https://127.0.0.1:10800"
 开始写着玩吧
 
 字符画一定要用```包裹，让他保持不转义
+
+crontab
+https://pubs.opengroup.org/onlinepubs/9699919799/utilities/crontab.html#tag_20_25_07

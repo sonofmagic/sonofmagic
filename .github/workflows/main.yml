@@ -1,0 +1,31 @@
+name: 'Change Date Everyday'
+
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    # 时区是UTC世界，我们中国在东八区，所以要加8
+    # 下面指我们这的凌晨5点
+    - cron: '0 21 * * *'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # git啥的
+      - uses: actions/checkout@v2
+      # 安装node
+      - uses: actions/setup-node@v2
+        with:
+          # 要装就装最新稳定版
+          node-version: [14.x]
+      - name: generate README.md
+        run: npm i --production && npm start
+      - name: git commit files
+        uses: EndBug/add-and-commit@v6
+        with:
+          author_name: icebreaker's bot
+          author_email: 1324318532@qq.com
+          message: '`date '+%Y-%m-%d %H:%M:%S'`'
+          add: '*.md'

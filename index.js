@@ -3,7 +3,7 @@ const fsp = require('fs').promises
 const path = require('path')
 const dayjs = require('dayjs')
 const Font = require('ascii-art-font')
-const ansi = require('ascii-art-ansi')
+// const ansi = require('ascii-art-ansi')
 
 ;(async () => {
   const now = dayjs()
@@ -25,11 +25,11 @@ const ansi = require('ascii-art-ansi')
     .replace(/{{replace}}/g, (o1 + o2).trimEnd())
     .replace(/{{date}}/g, moment)
 
-  const result = ansi.map(matrix, (chr, codes, rowcol, pos, shortcircuit) => {
-    // console.log(chr, codes, rowcol, pos, shortcircuit)
-    const char = ansi.Codes(chr, 'yellow')
-    return char
-  })
+  // const result = ansi.map(matrix, (chr, codes, rowcol, pos, shortcircuit) => {
+  //   // console.log(chr, codes, rowcol, pos, shortcircuit)
+  //   const char = ansi.Codes(chr, 'yellow')
+  //   return char
+  // })
 
-  await fsp.writeFile(path.resolve(__dirname, 'README.md'), result)
+  await fsp.writeFile(path.resolve(__dirname, 'README.md'), matrix)
 })()

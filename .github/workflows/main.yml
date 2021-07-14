@@ -12,6 +12,7 @@ on:
     # - cron: '0 1 * * *'
     # UTC时间触发
     - cron: '5 0 * * *'
+  workflow_dispatch:
 
 jobs:
   build:
@@ -24,10 +25,11 @@ jobs:
         with:
           # 要装就装最新稳定版
           node-version: '14'
+          cache: 'yarn'
       - name: generate README.md
-        run: npm i --production && npm start
+        run: yarn install --prod && yarn start
       - name: git commit files
-        uses: EndBug/add-and-commit@v6
+        uses: EndBug/add-and-commit@v7
         with:
           author_name: icebreaker-bot
           author_email: 1324318532@qq.com

@@ -106,5 +106,3 @@ dist
 package-lock.json
 
 .vscode
-
-**.lock

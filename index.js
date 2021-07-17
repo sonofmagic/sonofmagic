@@ -15,7 +15,7 @@ const Font = require('ascii-art-font')
   const [o1, o2, template] = await Promise.all([
     Font.create('UTC :', 'Doom'),
     Font.create(today, 'Doom'),
-    fsp.readFile(path.resolve(__dirname, 'FUCKME.md'), {
+    fsp.readFile(path.resolve(__dirname, 'TEMPLATE.md'), {
       encoding: 'utf-8'
     })
   ])

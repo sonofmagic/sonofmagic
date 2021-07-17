@@ -9,7 +9,7 @@ I am ice breaker
 {{replace}}
 ```
 
-| <img src="https://github-readme-svg.vercel.app/api/v1/svg/icon?value=ChromeFilled" alt="Website Icon" /> My Website                              | <img src="https://github-readme-svg.vercel.app/api/v1/svg/icon?value=WechatOutlined" alt="Wechat Icon" />WeChat                                                   |
+| <img src="https://github-readme-svg.vercel.app/api/v1/svg/icon?value=ChromeFilled&fill=%235193FB&size=24px" alt="Website Icon" /> My Website                              | <img src="https://github-readme-svg.vercel.app/api/v1/svg/icon?value=WechatOutlined&fill=%230DCB19&size=24px" alt="Wechat Icon" />WeChat                                                   |
 | ------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | <img width="160" height="160" src="https://github-readme-svg.vercel.app/api/v1/svg/qrcode?value=https://www.icebreaker.top/" alt="My Website" /> | <img width="160" height="160" src="https://github-readme-svg.vercel.app/api/v1/svg/qrcode?value=https://u.wechat.com/EAVzgOGBnATKcePfVWr_QyQ" alt="My Website" /> |
 

@@ -9,9 +9,9 @@ I am ice breaker
 {{replace}}
 ```
 
-|My Website|---|
+|My Website|WeChat|
 |---|---|
-|<img src="https://github-readme-svg.vercel.app/api/v1/svg/qrcode?value=https://www.icebreaker.top/" alt="My Website" />|---|
+|<img src="https://github-readme-svg.vercel.app/api/v1/svg/qrcode?value=https://www.icebreaker.top/" alt="My Website" />|<img src="https://github-readme-svg.vercel.app/api/v1/svg/qrcode?value=https://u.wechat.com/EAVzgOGBnATKcePfVWr_QyQ" alt="My Website" />|
 
 <img src="https://github-readme-svg.vercel.app/api/v1/svg/road" alt="My endless road" />
 

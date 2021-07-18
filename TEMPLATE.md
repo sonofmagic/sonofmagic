@@ -5,7 +5,7 @@ I am ice breaker
 - 💬 Ask me about : `Vue`,`Nuxt`,`React`,`Mini Program`,`Nodejs`,`Serverless`...
 - 📫 How to reach me: [My Home Page](https://icebreaker.top/)
 
-| <img src="https://github-readme-svg.vercel.app/api/v1/svg/icon?value=ChromeFilled&fill=%235193FB&size=24px" alt="Website Icon" /> My Website     | <img src="https://github-readme-svg.vercel.app/api/v1/svg/icon?value=WechatOutlined&fill=%230DCB19&size=24px" alt="Wechat Icon" />WeChat                          |
+|<a href="https://www.icebreaker.top/" target="_blank"><img src="https://github-readme-svg.vercel.app/api/v1/svg/icon?value=ChromeFilled&fill=%235193FB&size=24px" alt="Website Icon" /></a> | <a href="https://u.wechat.com/EAVzgOGBnATKcePfVWr_QyQ" target="_blank"><img src="https://github-readme-svg.vercel.app/api/v1/svg/icon?value=WechatOutlined&fill=%230DCB19&size=24px" alt="Wechat Icon" /></a> |
 | ------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | <img width="160" height="160" src="https://github-readme-svg.vercel.app/api/v1/svg/qrcode?value=https://www.icebreaker.top/" alt="My Website" /> | <img width="160" height="160" src="https://github-readme-svg.vercel.app/api/v1/svg/qrcode?value=https://u.wechat.com/EAVzgOGBnATKcePfVWr_QyQ" alt="My Website" /> |
 

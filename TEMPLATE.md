@@ -2,7 +2,7 @@
 
 I am ice breaker
 
-- 💬 Ask me about : Vue , Nuxt ,Node ,Serverless...
+- 💬 Ask me about : `Vue`,`Nuxt`,`React`,`Mini Program`,`Nodejs`,`Serverless`...
 - 📫 How to reach me: [My Home Page](https://icebreaker.top/)
 
 | <img src="https://github-readme-svg.vercel.app/api/v1/svg/icon?value=ChromeFilled&fill=%235193FB&size=24px" alt="Website Icon" /> My Website     | <img src="https://github-readme-svg.vercel.app/api/v1/svg/icon?value=WechatOutlined&fill=%230DCB19&size=24px" alt="Wechat Icon" />WeChat                          |

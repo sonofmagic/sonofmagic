@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'TEMPLATE.md'
   schedule:
     # 时区是UTC世界，我们中国在东八区，所以要加8
     # 下面指我们这的凌晨5点

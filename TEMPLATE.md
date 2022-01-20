@@ -33,6 +33,4 @@ Host by [`tencent cloud scf`](https://cloud.tencent.com/) and [`vercel`](https:/
 
 <img src="https://service-dn7d96xv-1257725330.sh.apigw.tencentcs.com/api/v1/img/chart/demo" alt="My custom chart">
 
-{{icebreakerSvg}}
-
 </details>

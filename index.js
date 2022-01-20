@@ -21,13 +21,13 @@ const Font = require('ascii-art-font')
     })
   ])
 
-  const icebreakerSvg = await fsp.readFile('./icebreaker.svg', 'utf-8')
+  // const icebreakerSvg = await fsp.readFile('./icebreaker.svg', 'utf-8')
   // markdown 一行后面加2个空格后换行是小换行，直接换行是大换行
   // .split('\n').join('  \n')
   const matrix = template
     .replace(/{{replace}}/g, (o1 + o2).trimEnd())
     .replace(/{{date}}/g, moment)
-    .replace(/{{icebreakerSvg}}/g, icebreakerSvg)
+    // .replace(/{{icebreakerSvg}}/g, icebreakerSvg)
 
   // const result = ansi.map(matrix, (chr, codes, rowcol, pos, shortcircuit) => {
   //   // console.log(chr, codes, rowcol, pos, shortcircuit)

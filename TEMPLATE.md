@@ -3,6 +3,7 @@
 I am ice breaker
 
 - 💬 Ask me about : `Vue`,`Nuxt`,`React`,`Mini Program`,`Nodejs`,`Serverless`...
+- 🚀 Here list **all** my [`public repositories`](https://github.com/sonofmagic/public-repos-hub)
 - 📫 How to reach me:
 
 <a href="https://www.icebreaker.top/" target="_blank">![My Home Page](https://github-readme-svg.vercel.app/api/v1/svg/captcha?value=Click%20here!%20https://icebreaker.top/&n=0&w=600)</a>

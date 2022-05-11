@@ -5,7 +5,7 @@ I am ice breaker
 - 💬 Ask me about : `Vue`,`Nuxtjs`,`React`,`Nextjs`,`Nestjs`,`D3`,`Mini Program`,`Nodejs`,`Serverless`...
 - 🚀 Here list **all** my [`public repositories`](https://github.com/sonofmagic/public-repos-hub)
 - 📫 How to reach me:
-  1. `npx yangqiming`
+  1. `npx yangqiming@latest`
   2. [`icebreaker.top`](https://icebreaker.top/)
 
 

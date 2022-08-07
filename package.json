@@ -19,15 +19,15 @@
   },
   "homepage": "https://github.com/sonofmagic/sonofmagic#readme",
   "devDependencies": {
-    "eslint": "^8.7.0",
-    "eslint-config-standard": "^16.0.3",
-    "eslint-plugin-import": "^2.25.4",
-    "eslint-plugin-node": "^11.1.0",
+    "eslint": "^8.21.0",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-n": "^15.2.4",
     "eslint-plugin-promise": "^6.0.0"
   },
   "dependencies": {
     "ascii-art-ansi": "^1.4.1",
     "ascii-art-font": "^1.0.2",
-    "dayjs": "^1.10.7"
+    "dayjs": "^1.11.4"
   }
 }

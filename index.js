@@ -3,16 +3,16 @@ const fsp = require('fs').promises
 const path = require('path')
 const dayjs = require('dayjs')
 const Font = require('ascii-art-font')
+const { markdownTable } = require('./mdt');
+// const ansi = require('ascii-art-ansi')
 
-  // const ansi = require('ascii-art-ansi')
-
-  ; (async () => {
+(async () => {
   const now = dayjs()
   const today = now.format('YYYY-MM-DD')
   const moment = now.format('YYYY-MM-DD HH:mm:ss')
   /**
-       * @type {String} output
-       */
+   * @type {String} output
+   */
   const [o1, o2, template] = await Promise.all([
     Font.create('UTC :', 'Doom'),
     Font.create(today, 'Doom'),
@@ -27,7 +27,27 @@ const Font = require('ascii-art-font')
   const matrix = template
     .replace(/{{replace}}/g, (o1 + o2).trimEnd())
     .replace(/{{date}}/g, moment)
-    // .replace(/{{icebreakerSvg}}/g, icebreakerSvg)
+    .replace(
+      /{{table}}/g,
+      markdownTable(
+        [
+          [
+            '<a href="https://www.icebreaker.top/" target="_blank"><img src="assets/svg/chorme.svg" alt="Website Icon" /></a>',
+            '<a href="https://u.wechat.com/EAVzgOGBnATKcePfVWr_QyQ" target="_blank"><img src="assets/svg/wechat.svg" alt="Wechat Icon" /></a>',
+            '<div style="display: flex;align-items: center;"><img width="24" style="margin-right:8px" src="assets/svg/weapp.svg" alt="Wechat Miniprogram Icon" />破冰客</div>',
+            '<div style="display: flex;align-items: center;"> <img width="24" style="margin-right:8px" src="assets/svg/weapp.svg" alt="Wechat Icon" />程序员名片 </div>'
+          ],
+          [
+            '<img width="160" height="160" src="https://github-readme-svg.vercel.app/api/v1/svg/qrcode?value=https://www.icebreaker.top/" alt="My Website" />',
+            '<img width="160" height="160" src="https://github-readme-svg.vercel.app/api/v1/svg/qrcode?value=https://u.wechat.com/EAVzgOGBnATKcePfVWr_QyQ" alt="My Wechat" />',
+            '<img width="160" height="160" src="https://github-readme-svg.vercel.app/api/v1/svg/qrcode?value=https://mp.weixin.qq.com/a/~QCyvHLpi7gWkTTw_D45LNg~~" alt="My Miniprogram Blog" />',
+            '<img width="160" height="160" src="https://github-readme-svg.vercel.app/api/v1/svg/qrcode?value=https://mp.weixin.qq.com/a/~wCmPXG4P6LVtnyOobH53KQ~~" alt="Programer Card" />'
+          ]
+        ],
+        { align: ['c', 'c', 'c', 'c'] }
+      )
+    )
+  // .replace(/{{icebreakerSvg}}/g, icebreakerSvg)
 
   // const result = ansi.map(matrix, (chr, codes, rowcol, pos, shortcircuit) => {
   //   // console.log(chr, codes, rowcol, pos, shortcircuit)

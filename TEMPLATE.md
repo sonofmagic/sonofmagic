@@ -1,7 +1,7 @@
 <p align="center">
   <samp>
-  <a href="https://icebreaker.top">icebreaker.top</a>
-  <pre>npx sonofmagic@latest</pre>
+  <a href="https://icebreaker.top">icebreaker.top</a> |
+  <a href="https://www.npmjs.com/package/sonofmagic">npx sonofmagic@latest</a>
   </samp>
 </p>
 

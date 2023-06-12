@@ -27,7 +27,7 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           # 要装就装最新稳定版
-          node-version: '14'
+          node-version: '18'
           cache: 'yarn'
       - name: generate README.md
         run: yarn install --prod && yarn start

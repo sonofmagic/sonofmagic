@@ -37,7 +37,7 @@ const { markdownTable } = require('./mdt');
 
           ],
           [
-            '<img width="160" height="160" src="https://github-readme-svg.vercel.app/api/v1/svg/qrcode?value=https://www.icebreaker.top/" alt="My Website" />',
+            '<img width="160" height="160" src="https://github-readme-svg.vercel.app/api/v1/svg/qrcode?value=https://www.icebreaker.top&type=func&qrcodeType=round&posType=planet&posColor=%23000" alt="My Website" />',
             '<img width="160" height="160" src="https://github-readme-svg.vercel.app/api/v1/svg/qrcode?value=https://u.wechat.com/EAVzgOGBnATKcePfVWr_QyQ&type=circle&posColor=%23000" alt="My Wechat" />'
 
           ]
@@ -56,9 +56,9 @@ const { markdownTable } = require('./mdt');
         [
 
           '<img width="160" height="160" src="https://github-readme-svg.vercel.app/api/v1/svg/qrcode?value=https://mp.weixin.qq.com/a/~QCyvHLpi7gWkTTw_D45LNg~~&type=image&posColor=%23000" alt="My Miniprogram Blog" />',
-          '<img width="160" height="160" src="https://github-readme-svg.vercel.app/api/v1/svg/qrcode?value=https://mp.weixin.qq.com/a/~wCmPXG4P6LVtnyOobH53KQ~~&type=func&qrcodeType=round&posType=planet&posColor=%23000" alt="Programer Card" />',
-          '<img width="160" height="160" src="https://github-readme-svg.vercel.app/api/v1/svg/qrcode?value=https://mp.weixin.qq.com/a/~Z3ufw44yiwSSRapyxRmuqQ~~&type=imagefill&qrcodeType=round&posType=planet&posColor=%23000" alt="@icestack/ui" />',
-          '<img width="160" height="160" src="https://github-readme-svg.vercel.app/api/v1/svg/qrcode?value=https://mp.weixin.qq.com/a/~tAmA0dVOj3_-d2zmZ0mZqQ~~&type=line&qrcodeType=round&posType=planet&posColor=%23000" alt="@icestack/ui" />'
+          '<img width="160" height="160" src="https://github-readme-svg.vercel.app/api/v1/svg/qrcode?value=https://mp.weixin.qq.com/a/~wCmPXG4P6LVtnyOobH53KQ~~&type=image&posColor=%23000" alt="Programer Card" />',
+          '<img width="160" height="160" src="https://github-readme-svg.vercel.app/api/v1/svg/qrcode?value=https://mp.weixin.qq.com/a/~Z3ufw44yiwSSRapyxRmuqQ~~&type=image&posColor=%23000" alt="@icestack/ui" />',
+          '<img width="160" height="160" src="https://github-readme-svg.vercel.app/api/v1/svg/qrcode?value=https://mp.weixin.qq.com/a/~Z3ufw44yiwSSRapyxRmuqQ~~&type=image&posColor=%23000" alt="@icestack/ui" />'
         ]
       ],
       { align: ['c', 'c', 'c', 'c'] }

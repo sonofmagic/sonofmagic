@@ -33,20 +33,36 @@ const { markdownTable } = require('./mdt');
         [
           [
             '<a href="https://www.icebreaker.top/" target="_blank"><img src="assets/svg/chorme.svg" alt="Website Icon" /></a>',
-            '<a href="https://u.wechat.com/EAVzgOGBnATKcePfVWr_QyQ" target="_blank"><img src="assets/svg/wechat.svg" alt="Wechat Icon" /></a>',
-            '<div style="display: flex;align-items: center;"><img width="24" style="margin-right:8px" src="assets/svg/weapp.svg" alt="Wechat Miniprogram Icon" />破冰客</div>',
-            '<div style="display: flex;align-items: center;"> <img width="24" style="margin-right:8px" src="assets/svg/weapp.svg" alt="Wechat Icon" />程序员名片 </div>'
+            '<a href="https://u.wechat.com/EAVzgOGBnATKcePfVWr_QyQ" target="_blank"><img src="assets/svg/wechat.svg" alt="Wechat Icon" /></a>'
+
           ],
           [
             '<img width="160" height="160" src="https://github-readme-svg.vercel.app/api/v1/svg/qrcode?value=https://www.icebreaker.top/" alt="My Website" />',
-            '<img width="160" height="160" src="https://github-readme-svg.vercel.app/api/v1/svg/qrcode?value=https://u.wechat.com/EAVzgOGBnATKcePfVWr_QyQ&type=circle&posColor=%23000" alt="My Wechat" />',
-            '<img width="160" height="160" src="https://github-readme-svg.vercel.app/api/v1/svg/qrcode?value=https://mp.weixin.qq.com/a/~QCyvHLpi7gWkTTw_D45LNg~~&type=image&posColor=%23000" alt="My Miniprogram Blog" />',
-            '<img width="160" height="160" src="https://github-readme-svg.vercel.app/api/v1/svg/qrcode?value=https://mp.weixin.qq.com/a/~wCmPXG4P6LVtnyOobH53KQ~~&type=func&qrcodeType=round&posType=planet&posColor=%23000" alt="Programer Card" />'
+            '<img width="160" height="160" src="https://github-readme-svg.vercel.app/api/v1/svg/qrcode?value=https://u.wechat.com/EAVzgOGBnATKcePfVWr_QyQ&type=circle&posColor=%23000" alt="My Wechat" />'
+
           ]
         ],
         { align: ['c', 'c', 'c', 'c'] }
       )
-    )
+    ).replace(/{{mpTable}}/g, markdownTable(
+      [
+        [
+
+          '<div style="display: flex;align-items: center;"> 破冰客 </div>',
+          '<div style="display: flex;align-items: center;"> 程序员名片 </div>',
+          '<div style="display: flex;align-items: center;"> @icestack/ui </div>',
+          '<div style="display: flex;align-items: center;"> tailwindcss </div>'
+        ],
+        [
+
+          '<img width="160" height="160" src="https://github-readme-svg.vercel.app/api/v1/svg/qrcode?value=https://mp.weixin.qq.com/a/~QCyvHLpi7gWkTTw_D45LNg~~&type=image&posColor=%23000" alt="My Miniprogram Blog" />',
+          '<img width="160" height="160" src="https://github-readme-svg.vercel.app/api/v1/svg/qrcode?value=https://mp.weixin.qq.com/a/~wCmPXG4P6LVtnyOobH53KQ~~&type=func&qrcodeType=round&posType=planet&posColor=%23000" alt="Programer Card" />',
+          '<img width="160" height="160" src="https://github-readme-svg.vercel.app/api/v1/svg/qrcode?value=https://mp.weixin.qq.com/a/~Z3ufw44yiwSSRapyxRmuqQ~~&type=func&qrcodeType=round&posType=planet&posColor=%23000" alt="@icestack/ui" />',
+          '<img width="160" height="160" src="https://github-readme-svg.vercel.app/api/v1/svg/qrcode?value=https://mp.weixin.qq.com/a/~tAmA0dVOj3_-d2zmZ0mZqQ~~&type=func&qrcodeType=round&posType=planet&posColor=%23000" alt="@icestack/ui" />'
+        ]
+      ],
+      { align: ['c', 'c', 'c', 'c'] }
+    ))
   // .replace(/{{icebreakerSvg}}/g, icebreakerSvg)
 
   // const result = ansi.map(matrix, (chr, codes, rowcol, pos, shortcircuit) => {

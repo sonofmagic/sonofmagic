@@ -50,7 +50,7 @@ const { markdownTable } = require('./mdt');
 
           '<div style="display: flex;align-items: center;"> 破冰客 </div>',
           '<div style="display: flex;align-items: center;"> 程序员名片 </div>',
-          '<div style="display: flex;align-items: center;"> @icestack/ui </div>',
+          '<div style="display: flex;align-items: center;"> IceStack </div>',
           '<div style="display: flex;align-items: center;"> tailwindcss </div>'
         ],
         [

@@ -1,33 +1,31 @@
 {
   "name": "sonofmagic",
+  "type": "module",
   "version": "1.0.0",
-  "description": "<!--\r **sonofmagic/sonofmagic** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.",
-  "main": "index.js",
-  "scripts": {
-    "start": "node ./",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "description": "sonofmagic's GitHub profile.",
+  "author": "sonofmagic",
+  "license": "ISC",
+  "homepage": "https://github.com/sonofmagic/sonofmagic#readme",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/sonofmagic/sonofmagic.git"
   },
-  "keywords": [],
-  "author": "sonofmagic",
-  "license": "ISC",
   "bugs": {
     "url": "https://github.com/sonofmagic/sonofmagic/issues"
   },
-  "homepage": "https://github.com/sonofmagic/sonofmagic#readme",
-  "devDependencies": {
-    "eslint": "^8.54.0",
-    "eslint-config-standard": "^17.1.0",
-    "eslint-plugin-import": "^2.29.0",
-    "eslint-plugin-n": "^16.3.1",
-    "eslint-plugin-promise": "^6.1.1"
+  "keywords": [],
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./"
   },
   "dependencies": {
     "ascii-art-ansi": "^1.4.1",
     "ascii-art-font": "^1.0.2",
-    "dayjs": "^1.11.10"
+    "dayjs": "^1.11.10",
+    "markdown-table": "^3.0.4"
+  },
+  "devDependencies": {
+    "@icebreakers/eslint-config": "^0.7.7",
+    "eslint": "^9.17.0"
   }
 }

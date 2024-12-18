@@ -32,7 +32,7 @@ jobs:
       - name: generate README.md
         run: yarn install --prod && yarn start
       - name: git commit files
-        uses: EndBug/add-and-commit@v7
+        uses: EndBug/add-and-commit@v9
         with:
           author_name: icebreaker-bot
           author_email: 1324318532@qq.com

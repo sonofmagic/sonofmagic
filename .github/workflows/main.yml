@@ -24,7 +24,7 @@ jobs:
       # git啥的
       - uses: actions/checkout@v2
       # 安装node
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v4
         with:
           # 要装就装最新稳定版
           node-version: '18'

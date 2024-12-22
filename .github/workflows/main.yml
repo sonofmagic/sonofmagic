@@ -22,17 +22,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # git啥的
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
       # 安装node
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v4
         with:
-          # 要装就装最新稳定版
-          node-version: '18'
-          cache: 'yarn'
-      - name: generate README.md
-        run: yarn install --prod && yarn start
+          node-version: '22'
+          cache: 'pnpm'
+      - name: Install dependencies
+        run: pnpm install
+      - name: Generate README.md
+        run: pnpm start
       - name: git commit files
-        uses: EndBug/add-and-commit@v7
+        uses: EndBug/add-and-commit@v9
         with:
           author_name: icebreaker-bot
           author_email: 1324318532@qq.com

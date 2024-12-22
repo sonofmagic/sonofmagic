@@ -1,10 +1,11 @@
 {
   "name": "sonofmagic",
   "type": "module",
-  "version": "1.0.0",
+  "version": "2.0.0",
+  "packageManager": "pnpm@9.15.1",
   "description": "sonofmagic's GitHub profile.",
   "author": "sonofmagic",
-  "license": "ISC",
+  "license": "MIT",
   "homepage": "https://github.com/sonofmagic/sonofmagic#readme",
   "repository": {
     "type": "git",

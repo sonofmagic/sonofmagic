@@ -19,7 +19,7 @@ import { markdownTable } from 'markdown-table'
   const [o1, o2, template] = await Promise.all([
     Font.create('UTC :', 'Doom'),
     Font.create(today, 'Doom'),
-    fsp.readFile(path.resolve(__dirname, 'TEMPLATE.md'), {
+    fsp.readFile(path.resolve(import.meta.dirname, 'TEMPLATE.md'), {
       encoding: 'utf-8',
     }),
   ])
@@ -75,5 +75,5 @@ import { markdownTable } from 'markdown-table'
   //   return char
   // })
 
-  await fsp.writeFile(path.resolve(__dirname, 'README.md'), matrix)
+  await fsp.writeFile(path.resolve(import.meta.dirname, 'README.md'), matrix)
 })()

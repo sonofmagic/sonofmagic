@@ -5,19 +5,16 @@ import chalk from 'chalk'
 import dayjs from 'dayjs'
 import * as emoji from 'node-emoji'
 import prompts from 'prompts'
-
 import QRCode from 'qrcode'
 import { isUnicodeSupported } from './support'
 
-// const isSupported = isUnicodeSupported()
-// console.log(`[isSupported]:${isSupported}`)
 async function generateQrcode(input: string) {
   const opt: QRCodeToStringOptions & { small: boolean } = {
     type: 'terminal',
     errorCorrectionLevel: 'L',
     version: 3,
     scale: 1,
-    small: isUnicodeSupported,
+    small: isUnicodeSupported(),
   }
   const str = await QRCode.toString(input, opt as QRCodeToStringOptions)
   return str

@@ -7,9 +7,10 @@ import { optionsData, profileData } from './constants'
 import { Dic, i18next, init, t } from './i18n'
 import { createProjectsTree } from './project'
 import { getRepoList } from './repos'
-import { isUnicodeSupported } from './support'
+import { isUnicodeSupported as _isUnicodeSupported } from './support'
 import { boxen, chalk, emoji, generateQrcode, prompts } from './util'
 
+const isUnicodeSupported = _isUnicodeSupported()
 const log = console.log
 
 const { nickname } = profileData

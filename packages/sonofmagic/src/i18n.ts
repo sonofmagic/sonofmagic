@@ -15,17 +15,5 @@ export async function init() {
 }
 
 export const t = i18next.t
-// type tParameters = Parameters<typeof i18next.t>
-
-// export function t(
-//   key: tParameters[0],
-//   options?: tParameters[1],
-// ) {
-//   if (options === undefined) {
-//     return i18next.t(key)
-//   }
-//   return i18next.t(key, options)
-
-// }
 
 export { Dic, i18next }

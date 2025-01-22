@@ -2,18 +2,13 @@ import fs from 'node:fs'
 import path from 'node:path'
 import process from 'node:process'
 import readline from 'node:readline'
-// @ts-ignore
-import { Form } from 'enquirer'
 import ora from 'ora'
-// import { playMusicByUrl } from './play'
 import { optionsData, profileData } from './constants'
 import { Dic, i18next, init, t } from './i18n'
-import { createIssue } from './post-clue'
 import { createProjectsTree } from './project'
 import { getRepoList } from './repos'
 import { isUnicodeSupported } from './support'
 import { boxen, chalk, emoji, generateQrcode, prompts } from './util'
-// const isGithubCi = Boolean(process.env.GITHUB_CI)
 
 const log = console.log
 
@@ -285,50 +280,7 @@ export async function main() {
           log(rows.join(''))
         },
         [options.leaveMsg]: async () => {
-          const formValue = {
-            title: '',
-            body: '',
-          }
 
-          const prompt = new Form({
-            name: 'issue',
-            message: t(Dic.leaveMeMessage.prompt.message),
-            choices: [
-              { name: 'title', message: t(Dic.leaveMeMessage.prompt.choices.title), initial: formValue.title },
-              { name: 'body', message: t(Dic.leaveMeMessage.prompt.choices.body), initial: formValue.body },
-            ],
-
-            validate: (value: typeof formValue) => {
-              if (!value.title) {
-                return t(Dic.leaveMeMessage.prompt.validate.required.title)
-              }
-              if (!value.body) {
-                return t(Dic.leaveMeMessage.prompt.validate.required.body)
-              }
-              return true
-            },
-          })
-          try {
-            const res = await prompt.run()
-            formValue.body = res.body
-            formValue.title = res.title
-            const spinner = ora({
-              spinner: 'soccerHeader',
-              text: t(Dic.leaveMeMessage.prompt.loading.text),
-            }).start()
-            try {
-              await createIssue(formValue)
-              log(`\n${chalk.greenBright(t(Dic.leaveMeMessage.prompt.successMsg))}`)
-            }
-            catch {
-            }
-            finally {
-              spinner.stop()
-            }
-          }
-          catch {
-            // ctrl+c
-          }
         },
         [options.changeLanguage]: async () => {
           const choices = [
@@ -367,7 +319,7 @@ export async function main() {
         //     await playMusicByUrl(song.url)
         //   }
         // }
-      // eslint-disable-next-line ts/no-unsafe-function-type
+        // eslint-disable-next-line ts/no-unsafe-function-type
       }).reduce<Record<(typeof choices)[number]['value'], Function>>((acc, [key, fn]) => {
         acc[key] = () => {
           initial = idxMap[key] ?? 0
@@ -413,10 +365,3 @@ export async function main() {
     console.error(error)
   }
 }
-// @ts-ignore
-if (!__TEST__) {
-  main()
-}
-// ;(async () => {
-
-// })()

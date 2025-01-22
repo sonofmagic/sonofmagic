@@ -135,6 +135,9 @@ importers:
       boxen:
         specifier: ^8.0.1
         version: 8.0.1
+      enquirer:
+        specifier: ^2.4.1
+        version: 2.4.1
       i18next:
         specifier: ^24.2.1
         version: 24.2.1(typescript@5.7.3)

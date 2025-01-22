@@ -15,15 +15,6 @@ export const profileData: {
   startWorkDay,
 }
 
-export const songsData = [
-  {
-    title: 'MagicWaltz',
-    description: 'The Legend of 1900',
-    value: 'MagicWaltz',
-    url: 'https://static.icebreaker.top/audio/MagicWaltz.m4a',
-  },
-]
-
 export const optionsData = {
   profile: 'profile',
   contact: 'contact',

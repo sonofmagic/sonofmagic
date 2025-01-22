@@ -1,13 +1,8 @@
-// require('dotenv').config()
-import fsp from 'node:fs/promises'
-import path from 'node:path'
 import Font from 'ascii-art-font'
 import dayjs from 'dayjs'
+import fs from 'fs-extra'
 import { markdownTable } from 'markdown-table'
-
-// const ansi = require('ascii-art-ansi')
-
-;
+import path from 'pathe'
 
 (async () => {
   const now = dayjs()
@@ -19,12 +14,11 @@ import { markdownTable } from 'markdown-table'
   const [o1, o2, template] = await Promise.all([
     Font.create('UTC :', 'Doom'),
     Font.create(today, 'Doom'),
-    fsp.readFile(path.resolve(import.meta.dirname, 'TEMPLATE.md'), {
+    fs.readFile(path.resolve(import.meta.dirname, 'TEMPLATE.md'), {
       encoding: 'utf-8',
     }),
   ])
 
-  // const icebreakerSvg = await fsp.readFile('./icebreaker.svg', 'utf-8')
   // markdown 一行后面加2个空格后换行是小换行，直接换行是大换行
   // .split('\n').join('  \n')
   const matrix = template
@@ -67,13 +61,6 @@ import { markdownTable } from 'markdown-table'
       ],
       { align: ['c', 'c', 'c', 'c'] },
     ))
-  // .replace(/{{icebreakerSvg}}/g, icebreakerSvg)
 
-  // const result = ansi.map(matrix, (chr, codes, rowcol, pos, shortcircuit) => {
-  //   // console.log(chr, codes, rowcol, pos, shortcircuit)
-  //   const char = ansi.Codes(chr, 'yellow')
-  //   return char
-  // })
-
-  await fsp.writeFile(path.resolve(import.meta.dirname, 'README.md'), matrix)
+  await fs.writeFile(path.resolve(import.meta.dirname, 'README.md'), matrix)
 })()

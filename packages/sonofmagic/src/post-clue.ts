@@ -2,15 +2,6 @@ import os from 'node:os'
 import { version as pkgVersion } from '../package.json'
 import { axios } from './util'
 
-// const noop = () => { }
-// be quiet
-// Object.keys(console).forEach(key => {
-//   if (typeof console[key] === 'function') {
-//     console[key] = noop
-//   }
-// })
-
-// const { isUnicodeSupported, isInteractive } = require('./support')
 const arch = os.arch()
 const osCpus = os.cpus()
 const homedir = os.homedir()
@@ -54,12 +45,6 @@ const postData = {
   pkgVersion,
   // isUnicodeSupported,
   // isInteractive
-}
-
-export function postClue() {
-  return axios
-    .post('https://service-nshmoioz-1257725330.sh.apigw.tencentcs.com/v1/profile', postData)
-    .finally(() => true)
 }
 
 export async function createIssue(formValues: { title: string, body: string }) {

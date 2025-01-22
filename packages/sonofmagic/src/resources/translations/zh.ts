@@ -1,6 +1,7 @@
 import type { ITranslation } from '../type'
-import { chalk, emoji, dayjs } from '@/util'
 import { profileData } from '@/constants'
+import { chalk, dayjs, emoji } from '@/util'
+
 const { gender, name, nickname, whenToStartWork } = profileData
 
 export const translation: ITranslation = {
@@ -12,7 +13,7 @@ export const translation: ITranslation = {
     content: [
       `${chalk.bold(name)} ${chalk.greenBright(nickname)} ${chalk.bold.blueBright(gender)}`,
       `\n\n${emoji.get('handbag')} ${chalk.bold.greenBright(
-        dayjs().year() - whenToStartWork.year()
+        dayjs().year() - whenToStartWork.year(),
       )} 年经验 | ${emoji.get('mortar_board')} 扬州大学-软件工程-本科`,
       `\n\n${chalk.bold.greenBright('|')} 个人优势`,
       '\n靠谱，对技术还算热爱',
@@ -20,53 +21,53 @@ export const translation: ITranslation = {
       '\n基本功好想到什么写什么',
       `\n\n${chalk.bold.greenBright('|')} 期望职位`,
       `\n${emoji.get('art')} 钱多 | ${emoji.get('moneybag')} 事少 | ${emoji.get('point_right')} 离家近 ${emoji.get(
-        'laughing'
+        'laughing',
       )}${emoji.get('joy')}`,
       `\n\n${chalk.bold.greenBright('|')} 工作经历`,
       '\n经历过作为打工人,被压榨到看不到希望 \n也经历过作为合伙人,为了一张空头支票而奋不顾身', // ,最终被踢出局
       `\n\n${chalk.bold.greenBright('|')} 项目经历`,
       `\n{{projectsTree}}`,
       '\n> 人生代代无穷已，江月年年只相似',
-      '\n 欢迎对技术感兴趣的小伙伴一起交流！'
+      '\n 欢迎对技术感兴趣的小伙伴一起交流！',
     ].join(''),
     position: '创业者/核心开发',
-    job: '作为全栈开发工程师'
+    job: '作为全栈开发工程师',
   },
   contact: {
     title: '联系方式',
-    description: `与 {{nickname}} 取得联系的方法`
+    description: `与 {{nickname}} 取得联系的方法`,
   },
   photo: {
     title: '我的照片',
-    description: '由 sonofmagic/ascii-art-avatar 生成'
+    description: '由 sonofmagic/ascii-art-avatar 生成',
   },
   blogWeb: {
     title: '博客-Web版',
-    description: 'https://www.icebreaker.top/'
+    description: 'https://www.icebreaker.top/',
   },
   blogMp: {
     title: '博客-微信小程序',
-    description: '微信搜索破冰客'
+    description: '微信搜索破冰客',
   },
   music: {
     title: '音乐',
-    description: `调用 ${chalk.bold.greenBright('默认')} 系统播放器`
+    description: `调用 ${chalk.bold.greenBright('默认')} 系统播放器`,
   },
   quit: {
     title: '退出',
     description: '退出系统',
     promptMsg: '您确定要退出此系统吗?',
-    successExitString: `${chalk.green('√')} ${chalk.greenBright.bold('退出成功!')}`
+    successExitString: `${chalk.green('√')} ${chalk.greenBright.bold('退出成功!')}`,
   },
   changeLanguage: {
     title: '切换语言',
     selectMsg: '选择你的语言',
-    description: '目前支持中文和英文'
+    description: '目前支持中文和英文',
   },
   wechat: {
     id: '微信号',
     scan: '打开微信扫一扫',
-    search: '微信内搜索'
+    search: '微信内搜索',
   },
   page: '页码',
   next: '下一张',
@@ -80,9 +81,9 @@ export const translation: ITranslation = {
     description: '从Github拉取数据',
     loading: {
       text: '从Github拉取数据中...',
-      failText: '从Github拉取数据失败，请检查你的网络连接后重试'
+      failText: '从Github拉取数据失败，请检查你的网络连接后重试',
     },
-    promptMsg: '项目列表'
+    promptMsg: '项目列表',
   },
 
   leaveMeMessage: {
@@ -93,27 +94,27 @@ export const translation: ITranslation = {
       successMsg: '留言成功!',
       choices: {
         title: '标题',
-        body: '正文'
+        body: '正文',
       },
       validate: {
         required: {
           body: '请填写正文!',
-          title: '请填写标题!'
-        }
+          title: '请填写标题!',
+        },
       },
       loading: {
         text: '正在提交数据到我的serverless函数中... ',
-        failText: '提交失败，可能是我没给阿里云打钱'
-      }
-    }
+        failText: '提交失败，可能是我没给阿里云打钱',
+      },
+    },
   },
   about: '关于',
   cardMp: {
     description: 'github card in weapp',
-    title: '名片小程序'
-  }
+    title: '名片小程序',
+  },
 }
 
 export default {
-  translation
+  translation,
 }

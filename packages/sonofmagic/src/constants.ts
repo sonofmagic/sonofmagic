@@ -1,29 +1,5 @@
-// export default {
-//   name: '杨启明',
-//   nickname: 'ice breaker',
-//   gender: '男',
-//   startWorkDay: '2016-07-01',
-//   songs: [
-//     {
-//       title: 'MagicWaltz',
-//       description: 'The Legend of 1900',
-//       value: 'MagicWaltz',
-//       url: 'https://static.icebreaker.top/audio/MagicWaltz.m4a'
-//     }
-//   ],
-//   options: {
-//     profile: 'profile',
-//     contact: 'contact',
-//     // wechat: 'wechat',
-//     blogWeb: 'blogWeb',
-//     blogMp: 'blogMp',
-//     music: 'music',
-//     quit: 'quit',
-//     photo: 'photo',
-//     changeLanguage: 'changeLanguage'
-//   }
-// }
 import dayjs, { type Dayjs } from 'dayjs'
+
 const startWorkDay = '2016-07-01'
 export const profileData: {
   whenToStartWork: Dayjs
@@ -36,7 +12,7 @@ export const profileData: {
   name: '杨启明',
   nickname: 'ice breaker',
   gender: '男',
-  startWorkDay
+  startWorkDay,
 }
 
 export const songsData = [
@@ -44,8 +20,8 @@ export const songsData = [
     title: 'MagicWaltz',
     description: 'The Legend of 1900',
     value: 'MagicWaltz',
-    url: 'https://static.icebreaker.top/audio/MagicWaltz.m4a'
-  }
+    url: 'https://static.icebreaker.top/audio/MagicWaltz.m4a',
+  },
 ]
 
 export const optionsData = {
@@ -61,5 +37,5 @@ export const optionsData = {
   quit: 'quit',
   photo: 'photo',
   changeLanguage: 'changeLanguage',
-  myRepositories: 'myRepositories'
+  myRepositories: 'myRepositories',
 }

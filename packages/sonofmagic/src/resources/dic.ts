@@ -1,9 +1,9 @@
-// key is the value not the key
-import set from 'lodash/set'
 import { isComplexType } from '@/util'
+// key is the value not the key
+import { set } from 'es-toolkit/compat'
 
 function combine(k: string, p?: string) {
-  return p ? p + '.' + k : k
+  return p ? `${p}.${k}` : k
 }
 
 function setObjPath(dic: Record<string, unknown>, res: Record<string, unknown>, p?: string) {
@@ -15,7 +15,8 @@ function setObjPath(dic: Record<string, unknown>, res: Record<string, unknown>, 
 
     if (isComplexType(dic[k])) {
       setObjPath(dic[k] as Record<string, unknown>, res, combine(k, p))
-    } else {
+    }
+    else {
       set(res, combine(k, p), combine(k, p))
     }
   }
@@ -30,50 +31,50 @@ const Dic = {
     description: '',
     content: '',
     position: '',
-    job: ''
+    job: '',
   },
   contact: {
     title: '',
-    description: ''
+    description: '',
   },
 
   photo: {
     title: '',
-    description: ''
+    description: '',
   },
 
   cardMp: {
     title: '',
-    description: ''
+    description: '',
   },
 
   blogWeb: {
     title: '',
-    description: ''
+    description: '',
   },
 
   blogMp: {
     title: '',
-    description: ''
+    description: '',
   },
 
   music: {
     title: '',
-    description: ''
+    description: '',
   },
 
   quit: {
     title: '',
     description: '',
     promptMsg: '',
-    successExitString: ''
+    successExitString: '',
   },
 
   changeLanguage: { title: '', description: '', selectMsg: '' },
   wechat: {
     id: '',
     search: '',
-    scan: ''
+    scan: '',
   },
 
   page: '',
@@ -90,9 +91,9 @@ const Dic = {
     description: '',
     loading: {
       text: '',
-      failText: ''
+      failText: '',
     },
-    promptMsg: ''
+    promptMsg: '',
   },
 
   leaveMeMessage: {
@@ -102,22 +103,22 @@ const Dic = {
       message: '',
       choices: {
         title: '',
-        body: ''
+        body: '',
       },
       validate: {
         required: {
           title: '',
-          body: ''
-        }
+          body: '',
+        },
       },
       successMsg: '',
       loading: {
         text: '',
-        failText: ''
-      }
-    }
+        failText: '',
+      },
+    },
   },
-  about: 'about'
+  about: 'about',
 }
 
 function setDic(dic: typeof Dic) {

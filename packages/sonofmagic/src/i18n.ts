@@ -1,7 +1,8 @@
 import i18next from 'i18next'
+import { osLocale } from 'os-locale'
 import resources from './resources'
 import Dic from './resources/dic'
-import osLocale from 'os-locale'
+
 export async function init() {
   const locale = await osLocale()
   const lng = locale.startsWith('zh') ? 'zh' : 'en'
@@ -9,7 +10,7 @@ export async function init() {
     lng,
     returnNull: false,
     // debug: true,
-    resources
+    resources,
   })
 }
 
@@ -27,4 +28,4 @@ export const t = i18next.t
 
 // }
 
-export { i18next, Dic }
+export { Dic, i18next }

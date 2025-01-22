@@ -42,14 +42,20 @@
     "module": "./dist/index.js",
     "types": "./dist/index.d.ts"
   },
-  "devDependencies": {
-    "axios": "^1.7.9",
-    "boxen": "^8.0.1",
-    "node-emoji": "^2.2.0",
-    "prompts": "^2.4.2",
-    "qrcode": "^1.5.4"
-  },
   "dependencies": {
     "ora": "^8.1.1"
+  },
+  "devDependencies": {
+    "@types/prompts": "^2.4.9",
+    "@types/qrcode": "^1.5.5",
+    "axios": "^1.7.9",
+    "boxen": "^8.0.1",
+    "i18next": "^24.2.1",
+    "node-emoji": "^2.2.0",
+    "oo-ascii-tree": "^1.106.0",
+    "open": "^10.1.0",
+    "os-locale": "^6.0.2",
+    "prompts": "^2.4.2",
+    "qrcode": "^1.5.4"
   }
 }

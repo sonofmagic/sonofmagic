@@ -1,6 +1,7 @@
 import { AsciiTree } from 'oo-ascii-tree'
 import { t } from './i18n'
 import Dic from './resources/dic'
+
 export function createProjectsTree() {
   const tree = new AsciiTree(t(Dic.profile.position, { interpolation: { escapeValue: false } }))
 
@@ -12,8 +13,8 @@ export function createProjectsTree() {
       new AsciiTree('Vue / Nuxtjs'),
       new AsciiTree('Nestjs / Express / Koa'),
       new AsciiTree('Nodejs / Serverless'),
-      new AsciiTree('Uni-app / Tarojs / Weapp')
-    )
+      new AsciiTree('Uni-app / Tarojs / Weapp'),
+    ),
   )
 
   // tree.add(new AsciiTree('小程序', new AsciiTree('wepy'), new AsciiTree('uniapp')))

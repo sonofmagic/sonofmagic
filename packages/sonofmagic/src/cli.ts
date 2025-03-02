@@ -23,15 +23,6 @@ export async function main() {
   try {
     await init()
 
-    // try {
-    //   if (process.env.TRACE !== '0') {
-    //     const { postClue } = await import('./post-clue')
-    //     postClue().catch((err) => err)
-    //   }
-    // } catch (error) {
-    //   isGithubCi && console.error(error)
-    // }
-
     log(t(Dic.welcome, { nickname: icebreaker }))
     let ptr = 1
     let initial = 0

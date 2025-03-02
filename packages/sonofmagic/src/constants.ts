@@ -1,4 +1,5 @@
-import dayjs, { type Dayjs } from 'dayjs'
+import type { Dayjs } from 'dayjs'
+import dayjs from 'dayjs'
 
 const startWorkDay = '2016-07-01'
 export const profileData: {

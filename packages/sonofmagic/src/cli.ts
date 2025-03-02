@@ -8,7 +8,7 @@ import { Dic, i18next, init, t } from './i18n'
 import { createProjectsTree } from './project'
 import { getRepoList } from './repos'
 import { isUnicodeSupported as _isUnicodeSupported } from './support'
-import { boxen, chalk, emoji, generateQrcode, prompts } from './util'
+import { ansis, boxen, emoji, generateQrcode, prompts } from './util'
 
 const isUnicodeSupported = _isUnicodeSupported()
 const log = console.log
@@ -16,7 +16,7 @@ const log = console.log
 const { nickname } = profileData
 const options = optionsData
 
-const icebreaker = chalk.greenBright(nickname)
+const icebreaker = ansis.greenBright(nickname)
 // https://stackoverflow.com/questions/23548946/how-can-i-check-if-a-users-computer-supports-emoji
 
 export async function main() {
@@ -107,7 +107,7 @@ export async function main() {
           const qrcode = await generateQrcode('https://u.wechat.com/EAVzgOGBnATKcePfVWr_QyQ')
 
           const rows = [
-            `\n\n${chalk.bold.greenBright('|')} ${t(Dic.contact.title)}`,
+            `\n\n${ansis.bold.greenBright('|')} ${t(Dic.contact.title)}`,
             '\nGithub: sonofmagic',
             `\n${t(Dic.wechat.id)}:\n${boxen(qrcode, {
               borderStyle: 'round',
@@ -129,9 +129,9 @@ export async function main() {
               log('\n')
               log(photo)
               log(
-                `\n${t(Dic.page)}: ${idx + 1}/${total} ${t(Dic.prev)}: ${chalk.bold.greenBright('← ↑')} ${t(
+                `\n${t(Dic.page)}: ${idx + 1}/${total} ${t(Dic.prev)}: ${ansis.bold.greenBright('← ↑')} ${t(
                   Dic.next,
-                )}: ${chalk.bold.greenBright('→ ↓')} ${t(Dic.exit)}: ${chalk.bold.greenBright('ctrl + c')}`,
+                )}: ${ansis.bold.greenBright('→ ↓')} ${t(Dic.exit)}: ${ansis.bold.greenBright('ctrl + c')}`,
               )
             }
 
@@ -222,14 +222,14 @@ export async function main() {
           const webSiteUrl = 'https://icebreaker.top'
           const qrcode = await generateQrcode(webSiteUrl)
           const rows = [
-            `\n\n${chalk.bold.greenBright('|')} ${t(Dic.blogWeb.title)}`,
-            `\n${t(Dic.directAccess)}: ${chalk.greenBright.underline(webSiteUrl)}`,
+            `\n\n${ansis.bold.greenBright('|')} ${t(Dic.blogWeb.title)}`,
+            `\n${t(Dic.directAccess)}: ${ansis.greenBright.underline(webSiteUrl)}`,
             `\n${t(Dic.wechat.scan)}:\n${boxen(qrcode, {
               borderStyle: 'round',
               padding: 1,
               margin: 1,
             })}`,
-            // chalk.greenBright.underline(webSiteUrl)
+            // ansis.greenBright.underline(webSiteUrl)
           ]
           log(rows.join(''))
           // const { value } = await prompts({
@@ -247,8 +247,8 @@ export async function main() {
         [options.blogMp]: async () => {
           const qrcode = await generateQrcode('https://mp.weixin.qq.com/a/~QCyvHLpi7gWkTTw_D45LNg~~')
           const rows = [
-            `\n\n${chalk.bold.greenBright('|')} ${t(Dic.blogMp.title)}`,
-            `\n${t(Dic.wechat.search)}: ${chalk.bold.greenBright('破冰客')}`,
+            `\n\n${ansis.bold.greenBright('|')} ${t(Dic.blogMp.title)}`,
+            `\n${t(Dic.wechat.search)}: ${ansis.bold.greenBright('破冰客')}`,
             `\n${t(Dic.wechat.scan)}:\n${boxen(qrcode, {
               borderStyle: 'round',
               padding: 1,
@@ -260,14 +260,14 @@ export async function main() {
         [options.cardMp]: async () => {
           const qrcode = await generateQrcode('https://mp.weixin.qq.com/a/~wCmPXG4P6LVtnyOobH53KQ~~')
           const rows = [
-            `\n\n${chalk.bold.greenBright('|')} ${t(Dic.cardMp.title)}`,
-            `\n${t(Dic.wechat.search)}: ${chalk.bold.greenBright('程序员名片')}`,
+            `\n\n${ansis.bold.greenBright('|')} ${t(Dic.cardMp.title)}`,
+            `\n${t(Dic.wechat.search)}: ${ansis.bold.greenBright('程序员名片')}`,
             `\n${t(Dic.wechat.scan)}:\n${boxen(qrcode, {
               borderStyle: 'round',
               padding: 1,
               margin: 1,
             })}`,
-            `\nMy Card Short Link: ${chalk.bold.greenBright('#小程序://程序员名片/CJpMeOanmyzNyBJ')}`,
+            `\nMy Card Short Link: ${ansis.bold.greenBright('#小程序://程序员名片/CJpMeOanmyzNyBJ')}`,
           ]
           log(rows.join(''))
         },

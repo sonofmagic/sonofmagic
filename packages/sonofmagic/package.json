@@ -45,6 +45,7 @@
   "devDependencies": {
     "@types/prompts": "^2.4.9",
     "@types/qrcode": "^1.5.5",
+    "ansis": "^3.17.0",
     "axios": "^1.8.1",
     "boxen": "^8.0.1",
     "enquirer": "^2.4.1",

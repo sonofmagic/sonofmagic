@@ -1,7 +1,7 @@
 import type { QRCodeToStringOptions } from 'qrcode'
+import ansis from 'ansis'
 import axios from 'axios'
 import boxen from 'boxen'
-import chalk from 'chalk'
 import dayjs from 'dayjs'
 import * as emoji from 'node-emoji'
 import prompts from 'prompts'
@@ -37,4 +37,4 @@ export function isComplexType(value: unknown) {
   return !isPrimitivesType(value) && (typeof value === 'object' || typeof value === 'function' || Array.isArray(value))
 }
 
-export { axios, boxen, chalk, dayjs, emoji, generateQrcode, prompts }
+export { ansis, axios, boxen, dayjs, emoji, generateQrcode, prompts }

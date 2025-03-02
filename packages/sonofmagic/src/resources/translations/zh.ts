@@ -1,31 +1,31 @@
 import type { ITranslation } from '../type'
 import { profileData } from '@/constants'
-import { chalk, dayjs, emoji } from '@/util'
+import { ansis, dayjs, emoji } from '@/util'
 
 const { gender, name, nickname, whenToStartWork } = profileData
 
 export const translation: ITranslation = {
   welcome: '欢迎来到 {{nickname}} 信息管理系统',
-  promptMsg: `${chalk.greenBright('请选择')} 下列一个信息条目进行查询`,
+  promptMsg: `${ansis.greenBright('请选择')} 下列一个信息条目进行查询`,
   profile: {
     title: '个人信息',
     description: `展示 {{nickname}} 的个人信息`,
     content: [
-      `${chalk.bold(name)} ${chalk.greenBright(nickname)} ${chalk.bold.blueBright(gender)}`,
-      `\n\n${emoji.get('handbag')} ${chalk.bold.greenBright(
+      `${ansis.bold(name)} ${ansis.greenBright(nickname)} ${ansis.bold.blueBright(gender)}`,
+      `\n\n${emoji.get('handbag')} ${ansis.bold.greenBright(
         dayjs().year() - whenToStartWork.year(),
       )} 年经验 | ${emoji.get('mortar_board')} 扬州大学-软件工程-本科`,
-      `\n\n${chalk.bold.greenBright('|')} 个人优势`,
+      `\n\n${ansis.bold.greenBright('|')} 个人优势`,
       '\n靠谱，对技术还算热爱',
-      `\n\n${chalk.bold.greenBright('|')} 个人技能`,
+      `\n\n${ansis.bold.greenBright('|')} 个人技能`,
       '\n基本功好想到什么写什么',
-      `\n\n${chalk.bold.greenBright('|')} 期望职位`,
+      `\n\n${ansis.bold.greenBright('|')} 期望职位`,
       `\n${emoji.get('art')} 钱多 | ${emoji.get('moneybag')} 事少 | ${emoji.get('point_right')} 离家近 ${emoji.get(
         'laughing',
       )}${emoji.get('joy')}`,
-      `\n\n${chalk.bold.greenBright('|')} 工作经历`,
+      `\n\n${ansis.bold.greenBright('|')} 工作经历`,
       '\n经历过作为打工人,被压榨到看不到希望 \n也经历过作为合伙人,为了一张空头支票而奋不顾身', // ,最终被踢出局
-      `\n\n${chalk.bold.greenBright('|')} 项目经历`,
+      `\n\n${ansis.bold.greenBright('|')} 项目经历`,
       `\n{{projectsTree}}`,
       '\n> 人生代代无穷已，江月年年只相似',
       '\n 欢迎对技术感兴趣的小伙伴一起交流！',
@@ -51,13 +51,13 @@ export const translation: ITranslation = {
   },
   music: {
     title: '音乐',
-    description: `调用 ${chalk.bold.greenBright('默认')} 系统播放器`,
+    description: `调用 ${ansis.bold.greenBright('默认')} 系统播放器`,
   },
   quit: {
     title: '退出',
     description: '退出系统',
     promptMsg: '您确定要退出此系统吗?',
-    successExitString: `${chalk.green('√')} ${chalk.greenBright.bold('退出成功!')}`,
+    successExitString: `${ansis.green('√')} ${ansis.greenBright.bold('退出成功!')}`,
   },
   changeLanguage: {
     title: '切换语言',

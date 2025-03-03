@@ -14,12 +14,12 @@
 
 <summary>More Details</summary>
 
-<!-- <p style="display:flex;align-items:center;">
+<p style="display:flex;align-items:center;">
 <img width="24" style="margin-right:8px" src="assets/svg/weapp.svg" alt="Wechat Icon" />
 WeChat mini program(Weapp) / 微信小程序
 </p>
 
-{{mpTable}} -->
+{{mpTable}}
 
 ```
 {{replace}}

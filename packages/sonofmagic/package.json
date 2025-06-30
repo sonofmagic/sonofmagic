@@ -37,23 +37,26 @@
     "exports": {
       ".": {
         "types": "./dist/index.d.ts",
-        "import": "./dist/index.js",
-        "require": "./dist/index.cjs"
+        "default": "./dist/index.js"
       }
     },
-    "main": "./dist/index.cjs",
     "module": "./dist/index.js",
     "types": "./dist/index.d.ts",
     "bin": "./bin/sonofmagic.js"
   },
   "devDependencies": {
+    "@types/ink-testing-library": "^1.0.4",
     "@types/prompts": "^2.4.9",
     "@types/qrcode": "^1.5.5",
+    "@types/react": "^19.1.8",
     "ansis": "^4.1.0",
     "axios": "^1.10.0",
     "boxen": "^8.0.1",
     "enquirer": "^2.4.1",
+    "graphemer": "^1.4.0",
     "i18next": "^25.2.1",
+    "ink": "^6.0.1",
+    "ink-testing-library": "^4.0.0",
     "inquirer": "^12.6.3",
     "is-interactive": "^2.0.0",
     "is-unicode-supported": "^2.1.0",
@@ -63,6 +66,7 @@
     "ora": "^8.2.0",
     "os-locale": "^6.0.2",
     "prompts": "^2.4.2",
-    "qrcode": "^1.5.4"
+    "qrcode": "^1.5.4",
+    "react": "^19.1.0"
   }
 }

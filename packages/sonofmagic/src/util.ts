@@ -3,11 +3,19 @@ import process from 'node:process'
 import ansis from 'ansis'
 import boxen from 'boxen'
 import dayjs from 'dayjs'
+// import _Graphemer from 'graphemer'
 import * as emoji from 'node-emoji'
 import prompts from 'prompts'
 import QRCode from 'qrcode'
 import { isUnicodeSupported } from './support'
 
+export function _interopDefaultCompat(e: any) {
+  return e && typeof e === 'object' && 'default' in e ? e.default : e
+}
+
+// const Graphemer = _interopDefaultCompat(_Graphemer)
+
+// const splitter = new Graphemer()
 async function generateQrcode(input: string) {
   const opt: QRCodeToStringOptions & { small: boolean } = {
     type: 'terminal',
@@ -43,14 +51,8 @@ function sleep(ms: number): Promise<void> {
 
 // 使用 Intl.Segmenter 按“用户可见字符”分割（支持 emoji）
 function splitGraphemes(text: string): string[] {
-  if (Intl.Segmenter) {
-    const segmenter = new Intl.Segmenter('en', { granularity: 'grapheme' })
-    return Array.from(segmenter.segment(text), seg => seg.segment)
-  }
-  else {
-    // fallback（不完美）
-    return Array.from(text)
-  }
+  const segmenter = new Intl.Segmenter('en', { granularity: 'grapheme' })
+  return Array.from(segmenter.segment(text), seg => seg.segment)
 }
 
 async function typeWriter(text: string, speed: number = 30): Promise<void> {

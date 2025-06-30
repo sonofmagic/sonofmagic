@@ -18,7 +18,10 @@
   "exports": {
     ".": "./src/index.ts"
   },
+  "bin": "./dev/bin.js",
   "files": [
+    "assets",
+    "bin",
     "dist"
   ],
   "scripts": {
@@ -40,22 +43,23 @@
     },
     "main": "./dist/index.cjs",
     "module": "./dist/index.js",
-    "types": "./dist/index.d.ts"
+    "types": "./dist/index.d.ts",
+    "bin": "./bin/sonofmagic.js"
   },
   "devDependencies": {
     "@types/prompts": "^2.4.9",
     "@types/qrcode": "^1.5.5",
-    "ansis": "^3.17.0",
-    "axios": "^1.8.1",
+    "ansis": "^4.1.0",
+    "axios": "^1.10.0",
     "boxen": "^8.0.1",
     "enquirer": "^2.4.1",
-    "i18next": "^24.2.2",
-    "inquirer": "^12.4.2",
+    "i18next": "^25.2.1",
+    "inquirer": "^12.6.3",
     "is-interactive": "^2.0.0",
     "is-unicode-supported": "^2.1.0",
     "node-emoji": "^2.2.0",
-    "oo-ascii-tree": "^1.108.0",
-    "open": "^10.1.0",
+    "oo-ascii-tree": "^1.112.0",
+    "open": "^10.1.2",
     "ora": "^8.2.0",
     "os-locale": "^6.0.2",
     "prompts": "^2.4.2",

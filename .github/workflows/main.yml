@@ -1,12 +1,12 @@
-name: 'Change Date Everyday'
+name: Change Date Everyday
 
 on:
   push:
     branches:
       - main
     paths:
-      - 'TEMPLATE.md'
-      - 'index.js'
+      - TEMPLATE.md
+      - index.js
   schedule:
     # 时区是UTC世界，我们中国在东八区，所以要加8
     # 下面指我们这的凌晨5点
@@ -31,7 +31,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-          cache: 'pnpm'
+          cache: pnpm
       - name: Install dependencies
         run: pnpm install
       - name: Generate README.md

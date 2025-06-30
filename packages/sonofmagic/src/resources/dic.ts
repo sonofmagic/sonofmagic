@@ -1,6 +1,5 @@
-import { isComplexType } from '@/util'
-// key is the value not the key
 import { set } from 'es-toolkit/compat'
+import { isComplexType } from '@/util'
 
 function combine(k: string, p?: string) {
   return p ? `${p}.${k}` : k

@@ -3,15 +3,17 @@ import path from 'node:path'
 import process from 'node:process'
 import readline from 'node:readline'
 import ora from 'ora'
-import { optionsData, profileData } from '../constants'
-import { Dic, i18next, init, t } from '../i18n'
-import { createProjectsTree } from '../project'
-import { getRepoList } from '../repos'
-import { isUnicodeSupported as _isUnicodeSupported } from '../support'
-import { ansis, boxen, emoji, generateQrcode, prompts } from '../util'
+import { optionsData, profileData } from './constants'
+import { Dic, i18next, init, t } from './i18n'
+import { createProjectsTree } from './project'
+import { getRepoList } from './repos'
+import { isUnicodeSupported as _isUnicodeSupported } from './support'
+import { ansis, boxen, emoji, generateQrcode, prompts, typeWriterLines } from './util'
 
 const isUnicodeSupported = _isUnicodeSupported()
 const log = console.log
+
+const __dirname = path.dirname(new URL(import.meta.url).pathname)
 
 const { nickname } = profileData
 const options = optionsData
@@ -88,20 +90,20 @@ export async function main() {
       }, {})
 
       const fnMap = Object.entries({
-        [options.profile]: () => {
-          log(
-            boxen(
-              t(Dic.profile.content, {
-                projectsTree: createProjectsTree().toString(),
-                interpolation: { escapeValue: false },
-              }),
-              {
-                borderStyle: 'round',
-                padding: 1,
-                margin: 1,
-              },
-            ),
-          )
+        [options.profile]: async () => {
+          const rows = boxen(
+            t(Dic.profile.content, {
+              projectsTree: createProjectsTree().toString(),
+              interpolation: { escapeValue: false },
+            }),
+            {
+              borderStyle: 'round',
+              padding: 1,
+              margin: 1,
+            },
+          ).split('\n')
+          // log(rows)
+          await typeWriterLines(rows, 0, 0)
         },
         [options.contact]: async () => {
           const qrcode = await generateQrcode('https://u.wechat.com/EAVzgOGBnATKcePfVWr_QyQ')
@@ -109,13 +111,14 @@ export async function main() {
           const rows = [
             `\n\n${ansis.bold.greenBright('|')} ${t(Dic.contact.title)}`,
             '\nGithub: sonofmagic',
-            `\n${t(Dic.wechat.id)}:\n${boxen(qrcode, {
-              borderStyle: 'round',
-              padding: 1,
-              margin: 1,
-            })}`,
+            `\n${t(Dic.wechat.id)}:`,
           ]
-          log(rows.join(''))
+          await typeWriterLines(rows)
+          log(`\n${boxen(qrcode, {
+            borderStyle: 'round',
+            padding: 1,
+            margin: 1,
+          })}`)
         },
         [options.photo]: async () => {
           await new Promise((resolve) => {

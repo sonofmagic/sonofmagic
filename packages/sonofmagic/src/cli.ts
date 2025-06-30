@@ -1,3 +1,3 @@
-import { main } from './cli/program'
+import { main } from './program'
 
 main()

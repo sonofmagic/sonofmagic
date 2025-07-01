@@ -1,16 +1,22 @@
 {
   "name": "cli",
+  "type": "module",
   "version": "1.0.0",
   "private": true,
   "description": "",
   "author": "ice breaker <1324318532@qq.com>",
   "keywords": [],
-  "main": "index.js",
+  "main": "index.jsx",
   "scripts": {
-    "dev": "tsx index.ts",
-    "start": "sonofmagic"
+    "dev": "tsx index.tsx",
+    "start": "sonofmagic",
+    "build": "tsup"
   },
+  "dependencies": {},
   "devDependencies": {
+    "@types/react": "^19.1.8",
+    "ink": "^6.0.1",
+    "react": "^19.1.0",
     "sonofmagic": "workspace:*"
   }
 }

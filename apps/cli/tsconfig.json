@@ -1,6 +1,7 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
+    "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
       "@/*": [
@@ -9,6 +10,6 @@
     }
   },
   "include": [
-    "index.ts"
+    "index.tsx"
   ]
 }

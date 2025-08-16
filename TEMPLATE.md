@@ -1,3 +1,5 @@
+<img src="https://github-readme-svg.vercel.app/api/v1/svg/road?cartype=normal&p=center" alt="超越自我,永无止境" />
+
 <p align="center">
   <samp>
   <a href="https://icebreaker.top" target="_blank">icebreaker.top</a> |
@@ -6,13 +8,11 @@
   </samp>
 </p>
 
-{{table}}
-
-<img src="https://github-readme-svg.vercel.app/api/v1/svg/road?cartype=normal&p=center" alt="超越自我,永无止境" />
-
 <details>
 
 <summary>More Details</summary>
+
+{{table}}
 
 <p style="display:flex;align-items:center;">
 <img width="24" style="margin-right:8px" src="assets/svg/weapp.svg" alt="Wechat Icon" />

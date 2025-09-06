@@ -8,14 +8,11 @@
   "keywords": [],
   "main": "index.jsx",
   "scripts": {
-    "dev": "tsx index.tsx",
     "start": "sonofmagic",
-    "build": "tsup"
+    "start2": "yangqiming"
   },
   "devDependencies": {
-    "@types/react": "^19.1.12",
-    "ink": "^6.2.3",
-    "react": "^19.1.1",
-    "sonofmagic": "workspace:*"
+    "sonofmagic": "workspace:*",
+    "yangqiming": "workspace:*"
   }
 }

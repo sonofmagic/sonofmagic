@@ -1,0 +1,61 @@
+{
+  "name": "@icebreakers/profile",
+  "type": "module",
+  "version": "0.0.0",
+  "description": "icebreaker's profile",
+  "author": "ice breaker <1324318532@qq.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sonofmagic/sonofmagic.git",
+    "directory": "packages/profile"
+  },
+  "bugs": {
+    "url": "https://github.com/sonofmagic/sonofmagic/issues"
+  },
+  "keywords": [],
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "assets",
+    "bin",
+    "dist"
+  ],
+  "scripts": {
+    "dev": "tsup --watch --sourcemap",
+    "build": "tsup",
+    "test": "vitest run",
+    "test:dev": "vitest",
+    "release": "pnpm publish",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
+  },
+  "devDependencies": {
+    "@types/ink-testing-library": "^1.0.4",
+    "@types/prompts": "^2.4.9",
+    "@types/qrcode": "^1.5.5",
+    "ansis": "^4.1.0",
+    "axios": "^1.11.0",
+    "boxen": "^8.0.1",
+    "enquirer": "^2.4.1",
+    "graphemer": "^1.4.0",
+    "i18next": "^25.5.2",
+    "inquirer": "^12.9.4",
+    "is-interactive": "^2.0.0",
+    "is-unicode-supported": "^2.1.0",
+    "node-emoji": "^2.2.0",
+    "oo-ascii-tree": "^1.114.1",
+    "open": "^10.2.0",
+    "ora": "^8.2.0",
+    "os-locale": "^6.0.2",
+    "prompts": "^2.4.2",
+    "qrcode": "^1.5.4"
+  }
+}

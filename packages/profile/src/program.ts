@@ -131,6 +131,7 @@ export async function main() {
               })
               log('\n')
               log(photo)
+              // await typeWriterLines(splitParagraphByLines(photo), 0, 0, 0)
               log(
                 `\n${t(Dic.page)}: ${idx + 1}/${total} ${t(Dic.prev)}: ${ansis.bold.greenBright('← ↑')} ${t(
                   Dic.next,

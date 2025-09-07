@@ -55,11 +55,11 @@ function splitGraphemes(text: string): string[] {
   return Array.from(segmenter.segment(text), seg => seg.segment)
 }
 
-async function typeWriter(text: string, speed: number = 30): Promise<void> {
+async function typeWriter(text: string, speed: number = 30, randomSeed = 5): Promise<void> {
   const chars = splitGraphemes(text)
   for (let i = 0; i < chars.length; i++) {
     process.stdout.write(chars[i])
-    await sleep(speed + Math.random() * 20) // 更真实打字节奏
+    await sleep(speed + Math.random() * randomSeed) // 更真实打字节奏
   }
   process.stdout.write('\n')
 }
@@ -67,12 +67,27 @@ async function typeWriter(text: string, speed: number = 30): Promise<void> {
 export async function typeWriterLines(
   lines: string[],
   speed: number = 30,
-  lineDelay: number = 300,
+  lineDelay: number = 200,
+  randomSeed = 5,
 ): Promise<void> {
   for (const line of lines) {
-    await typeWriter(line, speed)
+    await typeWriter(line, speed, randomSeed)
     await sleep(lineDelay)
   }
 }
 
-export { ansis, boxen, dayjs, emoji, generateQrcode, prompts }
+function splitParagraphByLines(text: string, linesPerGroup = 5) {
+  // 先把段落按行切分
+  const lines = text.split('\n')
+  const result = []
+
+  for (let i = 0; i < lines.length; i += linesPerGroup) {
+    // 每5行合并成一个字符串
+    const group = lines.slice(i, i + linesPerGroup).join('\n')
+    result.push(group)
+  }
+
+  return result
+}
+
+export { ansis, boxen, dayjs, emoji, generateQrcode, prompts, splitParagraphByLines }

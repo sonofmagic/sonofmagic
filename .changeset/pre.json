@@ -1,9 +1,0 @@
-{
-  "mode": "exit",
-  "tag": "alpha",
-  "initialVersions": {
-    "cli": "1.0.0",
-    "sonofmagic": "0.0.0"
-  },
-  "changesets": []
-}

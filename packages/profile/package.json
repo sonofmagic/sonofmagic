@@ -1,6 +1,5 @@
 {
   "name": "@icebreakers/profile",
-  "type": "module",
   "version": "0.0.0",
   "description": "icebreaker's profile",
   "author": "ice breaker <1324318532@qq.com>",
@@ -13,7 +12,15 @@
   "bugs": {
     "url": "https://github.com/sonofmagic/sonofmagic/issues"
   },
-  "keywords": [],
+  "keywords": [
+    "icebreaker",
+    "sonofmagic",
+    "yangqiming",
+    "profile",
+    "profile-icebreaker",
+    "resume",
+    "i18n"
+  ],
   "sideEffects": false,
   "exports": {
     ".": {
@@ -21,7 +28,7 @@
       "default": "./dist/index.js"
     }
   },
-  "module": "./dist/index.js",
+  "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": [
     "assets",

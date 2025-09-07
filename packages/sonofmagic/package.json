@@ -1,8 +1,7 @@
 {
   "name": "sonofmagic",
-  "type": "module",
-  "version": "0.0.0",
-  "description": "tsup package template",
+  "version": "1.2.3",
+  "description": "https://github.com/sonofmagic",
   "author": "ice breaker <1324318532@qq.com>",
   "license": "MIT",
   "repository": {
@@ -13,7 +12,15 @@
   "bugs": {
     "url": "https://github.com/sonofmagic/sonofmagic/issues"
   },
-  "keywords": [],
+  "keywords": [
+    "icebreaker",
+    "sonofmagic",
+    "yangqiming",
+    "profile",
+    "profile-icebreaker",
+    "resume",
+    "i18n"
+  ],
   "sideEffects": false,
   "exports": {
     ".": {

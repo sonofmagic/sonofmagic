@@ -37,7 +37,7 @@
   ],
   "scripts": {
     "dev": "tsup --watch --sourcemap",
-    "build": "tsup",
+    "build": "tsup --minify",
     "test": "vitest run",
     "test:dev": "vitest",
     "release": "pnpm publish",

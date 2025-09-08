@@ -1,5 +1,11 @@
 # @icebreakers/profile
 
+## 1.0.1
+
+### Patch Changes
+
+- [`632ccf6`](https://github.com/sonofmagic/sonofmagic/commit/632ccf64657b750742b722ba540556bc63f957c1) Thanks [@sonofmagic](https://github.com/sonofmagic)! - chore: improve photo switch
+
 ## 1.0.0
 
 ### Major Changes

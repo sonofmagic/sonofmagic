@@ -8,7 +8,7 @@ import { Dic, i18next, init, t } from './i18n'
 import { createProjectsTree } from './project'
 import { getRepoList } from './repos'
 import { isUnicodeSupported as _isUnicodeSupported } from './support'
-import { ansis, boxen, emoji, generateQrcode, prompts, typeWriterLines } from './util'
+import { ansis, boxen, emoji, generateQrcode, prompts, sleep, splitParagraphByLines, typeWriterLines } from './util'
 
 const isUnicodeSupported = _isUnicodeSupported()
 const log = console.log
@@ -121,35 +121,54 @@ export async function main() {
           })}`)
         },
         [options.photo]: async () => {
-          await new Promise((resolve) => {
-            const total = 6
-            let idx = 0
-            const showPhoto = (idx = 0) => {
-              // process.stdout.clearLine(1)
-              const photo = fs.readFileSync(path.resolve(__dirname, `../assets/photos/${idx}.txt`), {
+          const total = 6
+          let idx = 0
+          let loading = false
+          const photoCache: string[] = []
+          const showPhoto = async (idx = 0) => {
+            loading = true
+            let photo = photoCache[idx]
+            if (!photo) {
+              photo = fs.readFileSync(path.resolve(__dirname, `../assets/photos/${idx}.txt`), {
                 encoding: 'utf-8',
               })
-              log('\n')
-              log(photo)
-              // await typeWriterLines(splitParagraphByLines(photo), 0, 0, 0)
-              log(
-                `\n${t(Dic.page)}: ${idx + 1}/${total} ${t(Dic.prev)}: ${ansis.bold.greenBright('← ↑')} ${t(
-                  Dic.next,
-                )}: ${ansis.bold.greenBright('→ ↓')} ${t(Dic.exit)}: ${ansis.bold.greenBright('ctrl + c')}`,
-              )
+              photoCache[idx] = photo
             }
 
+            log('\n')
+
+            for (const rows of splitParagraphByLines(photo)) {
+              log(rows)
+              await sleep(100)
+            }
+
+            // log(photo)
+            // await typeWriterLines(splitParagraphByLines(photo), 0, 0, 0)
+            log(
+              `\n${t(Dic.page)}: ${idx + 1}/${total} ${t(Dic.prev)}: ${ansis.bold.greenBright('← ↑')} ${t(
+                Dic.next,
+              )}: ${ansis.bold.greenBright('→ ↓')} ${t(Dic.exit)}: ${ansis.bold.greenBright('ctrl + c')}`,
+            )
+
+            loading = false
+          }
+          await new Promise((resolve) => {
             showPhoto(idx)
             const rl = readline.createInterface({
               input: process.stdin,
               output: process.stdout,
             })
             const onKeypress = function (_str: any, key: { name: 'right' | 'left' | 'up' | 'down' }) {
+              // 如果正在加载，则不响应键盘事件
+              if (loading) {
+                return
+              }
               if (key.name === 'right' || key.name === 'down') {
                 idx++
                 if (idx >= total) {
                   idx -= total
                 }
+
                 showPhoto(idx)
               }
               if (key.name === 'left' || key.name === 'up') {

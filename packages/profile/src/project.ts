@@ -9,24 +9,15 @@ export function createProjectsTree() {
     new AsciiTree(
       t(Dic.profile.job),
 
-      new AsciiTree('React / Nextjs / Umi'),
+      new AsciiTree('Vite / Webpack'),
+      new AsciiTree('Babel / Postcss / HtmlParser / Eslint / Stylelint'),
       new AsciiTree('Vue / Nuxtjs'),
-      new AsciiTree('Nestjs / Express / Koa'),
+      new AsciiTree('React / Nextjs'),
+      new AsciiTree('Hono / Nestjs / Express / Koa'),
       new AsciiTree('Nodejs / Serverless'),
       new AsciiTree('Uni-app / Tarojs / Weapp'),
     ),
   )
-
-  // tree.add(new AsciiTree('小程序', new AsciiTree('wepy'), new AsciiTree('uniapp')))
-
-  // tree.add(
-  //   new AsciiTree(
-  //     '实时通讯IM',
-  //     new AsciiTree('websocket'),
-  //     new AsciiTree('socket.io'),
-  //     new AsciiTree('nodejs')
-  //   )
-  // )
 
   return tree
 }

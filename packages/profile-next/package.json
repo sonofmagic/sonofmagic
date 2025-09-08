@@ -1,10 +1,16 @@
 {
   "name": "@icebreakers/profile-next",
-  "type": "module",
   "version": "0.0.0",
   "private": true,
   "license": "MIT",
-  "bin": "dist/cli.js",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "files": [
     "dist"
   ],
@@ -19,7 +25,7 @@
     "test:dev": "vitest"
   },
   "dependencies": {
-    "ink": "^6.2.3",
+    "ink": "^6.3.0",
     "react": "^19.1.1"
   },
   "devDependencies": {

@@ -45,7 +45,6 @@
     "lint:fix": "eslint . --fix"
   },
   "devDependencies": {
-    "@types/ink-testing-library": "^1.0.4",
     "@types/prompts": "^2.4.9",
     "@types/qrcode": "^1.5.5",
     "ansis": "^4.1.0",

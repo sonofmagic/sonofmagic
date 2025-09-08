@@ -1,0 +1,32 @@
+{
+  "name": "@icebreakers/profile-next",
+  "type": "module",
+  "version": "0.0.0",
+  "private": true,
+  "license": "MIT",
+  "bin": "dist/cli.js",
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=16"
+  },
+  "scripts": {
+    "start": "tsx src/index.tsx",
+    "build": "tsup",
+    "dev": "tsup --watch --sourcemap",
+    "test": "vitest run",
+    "test:dev": "vitest"
+  },
+  "dependencies": {
+    "ink": "^6.2.3",
+    "react": "^19.1.1"
+  },
+  "devDependencies": {
+    "@types/ink": "^2.0.3",
+    "@types/ink-testing-library": "^1.0.4",
+    "@types/react": "^19.1.12",
+    "chalk": "^5.2.0",
+    "ink-testing-library": "^4.0.0"
+  }
+}

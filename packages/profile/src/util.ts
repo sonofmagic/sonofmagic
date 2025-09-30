@@ -3,19 +3,11 @@ import process from 'node:process'
 import ansis from 'ansis'
 import boxen from 'boxen'
 import dayjs from 'dayjs'
-// import _Graphemer from 'graphemer'
 import * as emoji from 'node-emoji'
 import prompts from 'prompts'
 import QRCode from 'qrcode'
 import { isUnicodeSupported } from './support'
 
-export function _interopDefaultCompat(e: any) {
-  return e && typeof e === 'object' && 'default' in e ? e.default : e
-}
-
-// const Graphemer = _interopDefaultCompat(_Graphemer)
-
-// const splitter = new Graphemer()
 async function generateQrcode(input: string) {
   const opt: QRCodeToStringOptions & { small: boolean } = {
     type: 'terminal',

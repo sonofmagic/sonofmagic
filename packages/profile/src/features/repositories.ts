@@ -14,6 +14,18 @@ interface Selection {
   url: string
 }
 
+interface RepoChoice {
+  title: string
+  description?: string
+  value: Selection
+}
+
+const iconCache = new Map<boolean, {
+  starIcon: string
+  forkIcon: string
+}>()
+let openModulePromise: Promise<typeof import('open')> | null = null
+
 export async function showRepositoryPrompt(options: RepositoryPromptOptions) {
   const spinner = ora({
     spinner: 'soccerHeader',
@@ -43,6 +55,7 @@ export async function showRepositoryPrompt(options: RepositoryPromptOptions) {
 async function promptLoop(repos: RepoSummary[], isUnicodeSupported: boolean) {
   let initial = 0
   let keepPrompt = true
+  const baseChoices = buildRepoChoices(repos, isUnicodeSupported)
 
   while (keepPrompt) {
     await prompts(
@@ -50,21 +63,13 @@ async function promptLoop(repos: RepoSummary[], isUnicodeSupported: boolean) {
         type: 'autocomplete',
         name: 'selection',
         message: t(Dic.myRepositories.promptMsg),
-        choices: repos.map((repo, idx) => ({
-          title: formatRepositoryLabel(repo, isUnicodeSupported),
-          description: repo.description ?? undefined,
-          value: {
-            url: repo.html_url,
-            index: idx,
-          },
-        })),
+        choices: baseChoices.map(choice => ({ ...choice })),
         initial,
       },
       {
         async onSubmit(_prompt, selection: Selection) {
           initial = selection.index
-          const mod = await import('open')
-          await mod.default(selection.url)
+          await openRepository(selection.url)
         },
         onCancel() {
           keepPrompt = false
@@ -74,9 +79,47 @@ async function promptLoop(repos: RepoSummary[], isUnicodeSupported: boolean) {
   }
 }
 
+function buildRepoChoices(repos: RepoSummary[], isUnicodeSupported: boolean): RepoChoice[] {
+  return repos.map((repo, index) => ({
+    title: formatRepositoryLabel(repo, isUnicodeSupported),
+    description: repo.description ?? undefined,
+    value: {
+      url: repo.html_url,
+      index,
+    },
+  }))
+}
+
+async function openRepository(url: string) {
+  if (!openModulePromise) {
+    openModulePromise = import('open')
+  }
+  const mod = await openModulePromise
+  await mod.default(url)
+}
+
+function getRepositoryIcons(isUnicodeSupported: boolean) {
+  const cached = iconCache.get(isUnicodeSupported)
+  if (cached) {
+    return cached
+  }
+
+  const icons = isUnicodeSupported
+    ? {
+        starIcon: emoji.get('star') ?? '★',
+        forkIcon: emoji.get('fork_and_knife') ?? '🍴',
+      }
+    : {
+        starIcon: 'star',
+        forkIcon: 'fork',
+      }
+
+  iconCache.set(isUnicodeSupported, icons)
+  return icons
+}
+
 function formatRepositoryLabel(repo: RepoSummary, isUnicodeSupported: boolean) {
-  const starIcon = isUnicodeSupported ? emoji.get('star') : 'star'
-  const forkIcon = isUnicodeSupported ? emoji.get('fork_and_knife') : 'fork'
+  const { starIcon, forkIcon } = getRepositoryIcons(isUnicodeSupported)
   return `${repo.name} (${starIcon}:${repo.stargazers_count} ${forkIcon}:${repo.forks_count})`
 }
 

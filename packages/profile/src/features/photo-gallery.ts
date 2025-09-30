@@ -2,11 +2,12 @@ import fs from 'node:fs/promises'
 import path from 'node:path'
 import process from 'node:process'
 import readline from 'node:readline'
+import { assetPaths } from '../constants'
 import { Dic, t } from '../i18n'
 import { ansis, sleep, splitParagraphByLines } from '../util'
 
 const log = console.log
-const defaultPhotoDir = path.resolve(__dirname, '../../assets/photos')
+const defaultPhotoDir = assetPaths.photosDir
 const photoCache = new Map<string, string>()
 
 interface PhotoGalleryOptions {

@@ -1,7 +1,14 @@
-import { describe, expect, it } from 'vitest'
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import { photoGalleryInternal } from '@/features/photo-gallery'
 import { repositoryInternal } from '@/features/repositories'
+import { changeLanguage, Dic, getCurrentLanguage, getSupportedLanguages, init, t } from '@/i18n'
+import { menuInternal } from '@/menu'
 import { emoji, isComplexType, isPrimitivesType, splitParagraphByLines } from '@/util'
+
+function stripAnsi(input: string): string {
+  // eslint-disable-next-line no-control-regex
+  return input.replace(/\u001B\[[0-9;]*[A-Z]/gi, '')
+}
 
 describe('utility guards', () => {
   it('detects primitive values', () => {
@@ -55,5 +62,70 @@ describe('repository helpers', () => {
     }
     expect(formatRepositoryLabel(repo, true)).toContain(emoji.get('star'))
     expect(formatRepositoryLabel(repo, true)).toContain(emoji.get('fork_and_knife'))
+  })
+})
+
+describe('i18n manager', () => {
+  beforeAll(async () => {
+    await init('en')
+  })
+
+  afterAll(async () => {
+    await changeLanguage('en')
+  })
+
+  it('exposes supported languages', () => {
+    expect(getSupportedLanguages()).toEqual(['zh', 'en'])
+  })
+
+  it('provides translations after initialization', async () => {
+    expect(t(Dic.quit.title)).toBe('Sign out')
+
+    await changeLanguage('zh')
+    expect(getCurrentLanguage()).toBe('zh')
+    expect(t(Dic.quit.title)).toBe('退出')
+
+    await changeLanguage('en')
+  })
+})
+
+describe('profile sections', () => {
+  beforeAll(async () => {
+    await changeLanguage('zh')
+  })
+
+  afterAll(async () => {
+    await changeLanguage('en')
+  })
+
+  it('builds sections with non-empty lines', () => {
+    const sections = menuInternal.buildProfileSections()
+    expect(sections).toHaveLength(7)
+    sections.forEach((section) => {
+      expect(section.lines.length).toBeGreaterThan(0)
+      section.lines.forEach((line) => {
+        expect(stripAnsi(line).trim()).not.toBe('')
+      })
+    })
+  })
+
+  it('splits expectation into multiple bullet lines', () => {
+    const sections = menuInternal.buildProfileSections()
+    const expectation = sections.find(section => section.title.includes('理想合作'))
+    expect(expectation).toBeDefined()
+    expect(expectation?.lines).toHaveLength(3)
+  })
+
+  it('reflects deep toolbelt details in english', async () => {
+    await changeLanguage('en')
+    const sections = menuInternal.buildProfileSections()
+    const toolbelt = sections.find(section => section.title.includes('Toolbelt'))
+    expect(toolbelt).toBeDefined()
+    const normalized = stripAnsi(toolbelt!.lines.join(' '))
+    expect(normalized).toContain('Cloudflare Workers')
+    expect(normalized).toContain('Hono')
+    expect(normalized).toContain('Rolldown')
+    expect(normalized).toContain('Turborepo')
+    await changeLanguage('zh')
   })
 })

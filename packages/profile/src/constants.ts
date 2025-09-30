@@ -1,4 +1,5 @@
 import type { Dayjs } from 'dayjs'
+import path from 'node:path'
 import dayjs from 'dayjs'
 
 const startWorkDay = '2016-07-01'
@@ -31,3 +32,7 @@ export const optionsData = {
   changeLanguage: 'changeLanguage',
   myRepositories: 'myRepositories',
 }
+
+export const assetPaths = {
+  photosDir: path.resolve(__dirname, '../assets/photos'),
+} as const

@@ -4,7 +4,7 @@ import { optionsData, profileData } from './constants'
 import { Dic, init, t } from './i18n'
 import { buildMenuItems } from './menu'
 import { isUnicodeSupported as detectUnicodeSupport } from './support'
-import { ansis, prompts } from './util'
+import { ansis, dayjs, displayHeroBanner, prompts } from './util'
 
 const isUnicodeSupported = detectUnicodeSupport()
 const log = console.log
@@ -13,7 +13,8 @@ export async function main() {
   try {
     await init()
 
-    const { nickname } = profileData
+    const { nickname, whenToStartWork, name } = profileData
+    const experienceYears = Math.max(0, dayjs().diff(whenToStartWork, 'year'))
     const icebreaker = ansis.greenBright(nickname)
     const context: MenuContext = {
       icebreaker,
@@ -21,7 +22,26 @@ export async function main() {
       isUnicodeSupported,
     }
 
-    log(t(Dic.welcome, { nickname: icebreaker }))
+    const accent = t(Dic.heroBanner.accent, {
+      years: experienceYears,
+      position: t(Dic.profile.position),
+    }) as string
+
+    const taglineText = t(Dic.heroBanner.tagline) as string
+    const taglineLines = taglineText
+      .split('\n')
+      .map(line => line.trim())
+      .filter(Boolean)
+
+    await displayHeroBanner({
+      title: nickname.toUpperCase(),
+      subtitle: t(Dic.welcome, { nickname: name }) as string,
+      subtitleColor: value => ansis.bold.whiteBright(value),
+      accent,
+      accentColor: value => ansis.bold.yellowBright(value),
+      tagline: taglineLines,
+      taglineColor: null,
+    })
 
     let continueLoop = true
     let initial = 0
@@ -53,7 +73,7 @@ export async function main() {
       }
 
       initial = Math.max(0, selectedIndex)
-      const shouldContinue = await menuItems[selectedIndex].handler()
+      const shouldContinue = await handleMenuSelection(menuItems[selectedIndex].value, context)
       if (shouldContinue === false) {
         continueLoop = false
       }
@@ -70,6 +90,47 @@ function mapMenuItems(menuItems: MenuItem[]) {
     description: item.description,
     value: item.value,
   }))
+}
+
+async function handleMenuSelection(value: string, context: MenuContext) {
+  const menuItems = buildMenuItems(context)
+  const target = menuItems.find(item => item.value === value)
+  if (!target) {
+    return true
+  }
+
+  const result = await target.handler()
+
+  if (value === context.options.changeLanguage) {
+    const { nickname, whenToStartWork, name } = profileData
+    const experienceYears = Math.max(0, dayjs().diff(whenToStartWork, 'year'))
+    const accent = t(Dic.heroBanner.accent, {
+      years: experienceYears,
+      position: t(Dic.profile.position),
+    }) as string
+
+    const taglineText = t(Dic.heroBanner.tagline) as string
+    const taglineLines = taglineText
+      .split('\n')
+      .map(line => line.trim())
+      .filter(Boolean)
+
+    await displayHeroBanner({
+      title: nickname.toUpperCase(),
+      subtitle: t(Dic.welcome, { nickname: name }) as string,
+      subtitleColor: value => ansis.bold.whiteBright(value),
+      accent,
+      accentColor: value => ansis.bold.yellowBright(value),
+      tagline: taglineLines,
+      taglineColor: null,
+    })
+  }
+
+  if (result === false) {
+    return false
+  }
+
+  return true
 }
 
 async function confirmExit() {

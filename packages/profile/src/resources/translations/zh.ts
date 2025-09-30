@@ -5,11 +5,11 @@ import { ansis, dayjs, emoji } from '@/util'
 const { gender, name, nickname, whenToStartWork } = profileData
 
 export const translation: ITranslation = {
-  welcome: '欢迎来到 {{nickname}} 信息管理系统',
-  promptMsg: `${ansis.greenBright('请选择')} 下列一个信息条目进行查询`,
+  welcome: '欢迎来到 {{nickname}} 的互动式履历',
+  promptMsg: `${ansis.greenBright('请选择')} 想深入了解的板块`,
   profile: {
     title: '个人信息',
-    description: `展示 {{nickname}} 的个人信息`,
+    description: `快速浏览 {{nickname}} 的核心信息`,
     content: [
       `${ansis.bold(name)} ${ansis.greenBright(nickname)} ${ansis.bold.blueBright(gender)}`,
       `\n\n${emoji.get('handbag')} ${ansis.bold.greenBright(
@@ -32,6 +32,47 @@ export const translation: ITranslation = {
     ].join(''),
     position: '创业者/核心开发',
     job: '作为全栈开发工程师',
+    summaryTitle: '个人简介',
+    summary: [
+      `${ansis.bold(name)} ${ansis.greenBright(nickname)} ${ansis.bold.blueBright(gender)}`,
+      `${emoji.get('handbag')} ${ansis.bold.greenBright(dayjs().year() - whenToStartWork.year())} 年产品与工程经验 | ${emoji.get('mortar_board')} 扬州大学 · 软件工程`,
+    ].join('\n'),
+    strengthsTitle: '个人优势',
+    strengths: [
+      `${emoji.get('sparkles')} 长期保持工程热情，关注质量与体验`,
+      `${emoji.get('memo')} 擅长知识沉淀与分享，持续输出开源项目`,
+      `${emoji.get('rocket')} 结果导向，能在快节奏中稳住交付节奏`,
+    ].join('\n'),
+    skillsTitle: '技术栈',
+    skills: [
+      `${emoji.get('satellite')} Node.js · Cloudflare Workers · Edge Runtime · Deno Deploy`,
+      `${emoji.get('gear')} Hono / Express / NestJS · Serverless API · BFF`,
+      `${emoji.get('hammer')} Vite / Webpack / Rollup / Rolldown · Turborepo / Nx · Vitest / Playwright`,
+      `${emoji.get('computer')} SSR / SSG · 微前端 · Vue / React · 微信小程序 (Taro / Uni-app)`,
+      `${emoji.get('chart_with_upwards_trend')} 性能 & 观测：Bundle Analyze · Lighthouse · RUM · Grafana`,
+    ].join('\n'),
+    expectationTitle: '理想合作',
+    expectation: [
+      `${emoji.get('handshake')} 互信协作，彼此成就`,
+      `${emoji.get('hourglass')} 尊重节奏，成果导向`,
+      `${emoji.get('point_right')} 工作生活平衡 ${emoji.get('laughing')}${emoji.get('joy')}`,
+    ].join('\n'),
+    experienceTitle: '经历撷英',
+    experience: [
+      '穿梭于大型团队与创业团队，熟悉 0-1 / 1-N 的产品推进',
+      '曾作为合伙人负责核心交付，对业务指标与团队成长同样关注',
+    ].join('\n'),
+    projectsTitle: '项目树',
+    projects: '{{projectsTree}}',
+    closingTitle: '更多交流',
+    closing: [
+      '欢迎聊聊工程实践、产品体验与团队建设',
+      '“人生代代无穷已，江月年年只相似。”',
+    ].join('\n'),
+  },
+  heroBanner: {
+    accent: '{{years}} 年产品与工程经验 | {{position}}',
+    tagline: 'Node.js · Web · 云原生\n热爱分享与开源，期待和你破冰~',
   },
   contact: {
     title: '联系方式',

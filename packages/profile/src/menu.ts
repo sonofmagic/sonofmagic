@@ -1,8 +1,9 @@
+import type { SupportedLanguage } from './i18n'
 import { showPhotoGallery } from './features/photo-gallery'
 import { showRepositoryPrompt } from './features/repositories'
-import { Dic, i18next, t } from './i18n'
+import { changeLanguage, Dic, getCurrentLanguage, getSupportedLanguages, t } from './i18n'
 import { createProjectsTree } from './project'
-import { ansis, boxen, generateQrcode, prompts, typeWriterLines } from './util'
+import { animateQrcodeBox, ansis, boxen, generateQrcode, prompts, sleep, typeWriterLines } from './util'
 
 export interface MenuContext {
   icebreaker: string
@@ -41,18 +42,8 @@ function createProfileItem(context: MenuContext): MenuItem {
     title: t(Dic.profile.title),
     description: t(Dic.profile.description, { nickname: icebreaker }),
     async handler() {
-      const content = t(Dic.profile.content, {
-        projectsTree: createProjectsTree().toString(),
-        interpolation: { escapeValue: false },
-      })
-
-      const rows = boxen(content, {
-        borderStyle: 'round',
-        padding: 1,
-        margin: 1,
-      }).split('\n')
-
-      await typeWriterLines(rows, 0, 0)
+      const sections = buildProfileSections()
+      await renderProfileSections(sections)
     },
   }
 }
@@ -65,13 +56,15 @@ function createContactItem(context: MenuContext): MenuItem {
     description: t(Dic.contact.description, { nickname: icebreaker }),
     async handler() {
       const qrcode = await generateQrcode('https://u.wechat.com/EAVzgOGBnATKcePfVWr_QyQ')
-      const rows = [
+      const lines = [
         headingLine(t(Dic.contact.title)),
-        '\nGithub: sonofmagic',
-        `\n${t(Dic.wechat.id)}:`,
+        '',
+        'Github: sonofmagic',
+        '',
+        `${t(Dic.wechat.id)}:`,
       ]
-      await typeWriterLines(rows)
-      logQrcode(qrcode)
+      await typeWriterLines(lines, 12, 90, 4)
+      await animateQrcodeBox(qrcode)
     },
   }
 }
@@ -108,12 +101,15 @@ function createBlogWebItem(context: MenuContext): MenuItem {
     async handler() {
       const webSiteUrl = 'https://icebreaker.top'
       const qrcode = await generateQrcode(webSiteUrl)
-      const rows = [
+      const lines = [
         headingLine(t(Dic.blogWeb.title)),
-        `\n${t(Dic.directAccess)}: ${ansis.greenBright.underline(webSiteUrl)}`,
-        `\n${t(Dic.wechat.scan)}:\n${renderQrcodeBox(qrcode)}`,
+        '',
+        `${t(Dic.directAccess)}: ${ansis.greenBright.underline(webSiteUrl)}`,
+        '',
+        `${t(Dic.wechat.scan)}:`,
       ]
-      console.log(rows.join(''))
+      await typeWriterLines(lines, 12, 90, 4)
+      await animateQrcodeBox(qrcode)
     },
   }
 }
@@ -125,12 +121,15 @@ function createBlogMpItem(context: MenuContext): MenuItem {
     description: t(Dic.blogMp.description),
     async handler() {
       const qrcode = await generateQrcode('https://mp.weixin.qq.com/a/~QCyvHLpi7gWkTTw_D45LNg~~')
-      const rows = [
+      const lines = [
         headingLine(t(Dic.blogMp.title)),
-        `\n${t(Dic.wechat.search)}: ${ansis.bold.greenBright('破冰客')}`,
-        `\n${t(Dic.wechat.scan)}:\n${renderQrcodeBox(qrcode)}`,
+        '',
+        `${t(Dic.wechat.search)}: ${ansis.bold.greenBright('破冰客')}`,
+        '',
+        `${t(Dic.wechat.scan)}:`,
       ]
-      console.log(rows.join(''))
+      await typeWriterLines(lines, 12, 90, 4)
+      await animateQrcodeBox(qrcode)
     },
   }
 }
@@ -142,13 +141,16 @@ function createCardMpItem(context: MenuContext): MenuItem {
     description: t(Dic.cardMp.description),
     async handler() {
       const qrcode = await generateQrcode('https://mp.weixin.qq.com/a/~wCmPXG4P6LVtnyOobH53KQ~~')
-      const rows = [
+      const lines = [
         headingLine(t(Dic.cardMp.title)),
-        `\n${t(Dic.wechat.search)}: ${ansis.bold.greenBright('程序员名片')}`,
-        `\n${t(Dic.wechat.scan)}:\n${renderQrcodeBox(qrcode)}`,
-        `\nMy Card Short Link: ${ansis.bold.greenBright('#小程序://程序员名片/CJpMeOanmyzNyBJ')}`,
+        '',
+        `${t(Dic.wechat.search)}: ${ansis.bold.greenBright('程序员名片')}`,
+        '',
+        `${t(Dic.wechat.scan)}:`,
       ]
-      console.log(rows.join(''))
+      await typeWriterLines(lines, 12, 90, 4)
+      await animateQrcodeBox(qrcode)
+      console.log(`\nMy Card Short Link: ${ansis.bold.greenBright('#小程序://程序员名片/CJpMeOanmyzNyBJ')}`)
     },
   }
 }
@@ -159,25 +161,32 @@ function createChangeLanguageItem(context: MenuContext): MenuItem {
     title: t(Dic.changeLanguage.title),
     description: t(Dic.changeLanguage.description),
     async handler() {
-      const choices = [
-        {
-          title: 'English',
-          value: 'en',
-        },
-        {
-          title: '中文',
-          value: 'zh',
-        },
-      ]
+      const languages = getSupportedLanguages()
+      const labelMap: Record<SupportedLanguage, string> = {
+        en: 'English',
+        zh: '中文',
+      }
+      const choices = languages.map(language => ({
+        title: labelMap[language],
+        value: language,
+      }))
+
+      const currentLanguage = getCurrentLanguage()
+      const initialIndex = Math.max(
+        0,
+        choices.findIndex(choice => currentLanguage.startsWith(choice.value)),
+      )
+
       const response = await prompts({
         type: 'select',
         name: 'lang',
         message: t(Dic.changeLanguage.selectMsg),
         choices,
-        initial: choices.findIndex(choice => i18next.language.startsWith(choice.value)),
+        initial: initialIndex,
       })
-      if (response?.lang) {
-        await i18next.changeLanguage(response.lang)
+      const selectedLanguage = response?.lang as SupportedLanguage | undefined
+      if (selectedLanguage) {
+        await changeLanguage(selectedLanguage)
       }
     },
   }
@@ -199,14 +208,80 @@ function headingLine(title: string) {
   return `\n\n${ansis.bold.greenBright('|')} ${title}`
 }
 
-function renderQrcodeBox(qrcode: string) {
-  return boxen(qrcode, {
-    borderStyle: 'round',
-    padding: 1,
-    margin: 1,
+interface ProfileSection {
+  title: string
+  lines: string[]
+}
+
+function buildProfileSections(): ProfileSection[] {
+  const sectionConfigs: Array<{ titleKey: string, bodyKey: string, params?: Record<string, unknown> }> = [
+    { titleKey: Dic.profile.summaryTitle, bodyKey: Dic.profile.summary },
+    { titleKey: Dic.profile.strengthsTitle, bodyKey: Dic.profile.strengths },
+    { titleKey: Dic.profile.skillsTitle, bodyKey: Dic.profile.skills },
+    { titleKey: Dic.profile.expectationTitle, bodyKey: Dic.profile.expectation },
+    { titleKey: Dic.profile.experienceTitle, bodyKey: Dic.profile.experience },
+    {
+      titleKey: Dic.profile.projectsTitle,
+      bodyKey: Dic.profile.projects,
+      params: {
+        projectsTree: createProjectsTree().toString(),
+      },
+    },
+    { titleKey: Dic.profile.closingTitle, bodyKey: Dic.profile.closing },
+  ]
+
+  return sectionConfigs.map(({ titleKey, bodyKey, params }) => {
+    const title = t(titleKey) as string
+    const content = t(bodyKey, {
+      ...(params ?? {}),
+      interpolation: { escapeValue: false },
+    }) as string
+    const lines = content
+      .split('\n')
+      .map(line => line.trimEnd())
+      .filter(line => line.length > 0)
+
+    return {
+      title,
+      lines,
+    }
   })
 }
 
-function logQrcode(qrcode: string) {
-  console.log(`\n${renderQrcodeBox(qrcode)}`)
+async function renderProfileSections(sections: ProfileSection[]) {
+  const palettes: Array<{ border: string, header: (value: string) => string, body: (value: string) => string }> = [
+    { border: 'cyan', header: ansis.cyanBright.bold, body: ansis.whiteBright },
+    { border: 'magenta', header: ansis.magentaBright.bold, body: ansis.white },
+    { border: 'blue', header: ansis.blueBright.bold, body: ansis.white },
+    { border: 'green', header: ansis.greenBright.bold, body: ansis.white },
+    { border: 'yellow', header: ansis.yellowBright.bold, body: ansis.white },
+    { border: 'red', header: ansis.redBright.bold, body: ansis.white },
+  ]
+
+  for (let i = 0; i < sections.length; i++) {
+    const section = sections[i]
+    const palette = palettes[i % palettes.length]
+    const header = palette.header(`✦ ${section.title}`)
+    const body = section.lines.map(line => palette.body(`  ${line}`)).join('\n')
+
+    const card = boxen(`${header}\n\n${body}`, {
+      borderStyle: 'round',
+      borderColor: palette.border,
+      padding: { top: 1, bottom: 1, left: 2, right: 2 },
+      margin: { top: 0, bottom: 0, left: 0, right: 0 },
+    })
+
+    const lines = card.split('\n')
+    console.log('')
+    await typeWriterLines(lines, 4, 0, 1)
+    if (i < sections.length - 1) {
+      console.log('')
+      await sleep(80)
+    }
+  }
+}
+
+/** @internal */
+export const menuInternal = {
+  buildProfileSections,
 }

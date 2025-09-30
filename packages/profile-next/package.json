@@ -25,11 +25,11 @@
     "test:dev": "vitest"
   },
   "dependencies": {
-    "ink": "^6.3.0",
+    "ink": "^6.3.1",
     "react": "^19.1.1"
   },
   "devDependencies": {
-    "@types/react": "^19.1.12",
+    "@types/react": "^19.1.16",
     "chalk": "5.6.2",
     "ink-testing-library": "^4.0.0"
   }

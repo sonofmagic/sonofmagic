@@ -1,5 +1,12 @@
 # yangqiming
 
+## 3.0.2
+
+### Patch Changes
+
+- Updated dependencies [[`2577559`](https://github.com/sonofmagic/sonofmagic/commit/2577559a7c603abc0e1288f5dc209ee1cffe6390)]:
+  - @icebreakers/profile@1.0.2
+
 ## 3.0.1
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # @icebreakers/profile
 
+## 1.0.2
+
+### Patch Changes
+
+- [`2577559`](https://github.com/sonofmagic/sonofmagic/commit/2577559a7c603abc0e1288f5dc209ee1cffe6390) Thanks [@sonofmagic](https://github.com/sonofmagic)! - chore: update 20251001
+
 ## 1.0.1
 
 ### Patch Changes

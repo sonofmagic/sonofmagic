@@ -3,7 +3,7 @@
 <p align="center">
   <samp>
   <a href="https://icebreaker.top" target="_blank">icebreaker.top</a> |
-  <a href="https://www.npmjs.com/package/sonofmagic" target="_blank">npx sonofmagic@latest</a> |
+  <a href="https://www.npmjs.com/package/sonofmagic" target="_blank">npx -y sonofmagic@latest</a> |
   <a href="https://github.com/sonofmagic/sponsors" target="_blank">sponsor/赞助</a>
   </samp>
 </p>
@@ -21,9 +21,9 @@
 WeChat mini program(Weapp) / 微信小程序
 </p>
 
-|                                                                          <div style="display: flex;align-items: center;"> 破冰客 </div>                                                                          |                                                                       <div style="display: flex;align-items: center;"> 程序员名片 </div>                                                                      |                                                                    <div style="display: flex;align-items: center;"> IceStack </div>                                                                    |                                                                   <div style="display: flex;align-items: center;"> tailwindcss </div>                                                                  |
-| :-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-| <img width="160" height="160" src="https://github-readme-svg.vercel.app/api/v1/svg/qrcode?value=https://mp.weixin.qq.com/a/~QCyvHLpi7gWkTTw_D45LNg~~&type=image&posColor=%23000" alt="My Miniprogram Blog" /> | <img width="160" height="160" src="https://github-readme-svg.vercel.app/api/v1/svg/qrcode?value=https://mp.weixin.qq.com/a/~wCmPXG4P6LVtnyOobH53KQ~~&type=image&posColor=%23000" alt="Programer Card" /> | <img width="160" height="160" src="https://github-readme-svg.vercel.app/api/v1/svg/qrcode?value=https://mp.weixin.qq.com/a/~Z3ufw44yiwSSRapyxRmuqQ~~&type=image&posColor=%23000" alt="@icestack/ui" /> | <img width="160" height="160" src="https://github-readme-svg.vercel.app/api/v1/svg/qrcode?value=https://mp.weixin.qq.com/a/~Z3ufw44yiwSSRapyxRmuqQ~~&type=image&posColor=%23000" alt="@icestack/ui" /> |
+|                                                                    <div style="display: flex;align-items: center;"> 破冰客 </div>                                                                   |                                                                    <div style="display: flex;align-items: center;"> 程序员名片 </div>                                                                   |                                                                    <div style="display: flex;align-items: center;"> IceStack </div>                                                                    |                                                                     <div style="display: flex;align-items: center;"> tailwindcss </div>                                                                     |
+| :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+| <img width="160" height="160" src="https://github-readme-svg.vercel.app/api/v1/svg/qrcode?value=https://mp.weixin.qq.com/a/~QCyvHLpi7gWkTTw_D45LNg~~&type=image&posColor=%23000" alt="破冰客小程序" /> | <img width="160" height="160" src="https://github-readme-svg.vercel.app/api/v1/svg/qrcode?value=https://mp.weixin.qq.com/a/~wCmPXG4P6LVtnyOobH53KQ~~&type=image&posColor=%23000" alt="程序员名片小程序" /> | <img width="160" height="160" src="https://github-readme-svg.vercel.app/api/v1/svg/qrcode?value=https://mp.weixin.qq.com/a/~Z3ufw44yiwSSRapyxRmuqQ~~&type=image&posColor=%23000" alt="IceStack 小程序" /> | <img width="160" height="160" src="https://github-readme-svg.vercel.app/api/v1/svg/qrcode?value=https://mp.weixin.qq.com/a/~Z3ufw44yiwSSRapyxRmuqQ~~&type=image&posColor=%23000" alt="tailwindcss 主题小程序" /> |
 
 ```
  _   _  _____  _____     
@@ -42,7 +42,7 @@ WeChat mini program(Weapp) / 微信小程序
 \_____/ \___/ \_____/\____/         \___/ \___/          \___/ \___/
 ```
 
-auto generated by Github Actions at 2025-10-01 01:57:54
+auto generated by Github Actions at 2025-10-01 15:23:33
 
 Powered by [`sonofmagic/github-readme-svg`](https://github.com/sonofmagic/github-readme-svg), [`sonofmagic/ascii-art-avatar`](https://github.com/sonofmagic/ascii-art-avatar) and [`sonofmagic/yangqiming`](https://github.com/sonofmagic/yangqiming)
 

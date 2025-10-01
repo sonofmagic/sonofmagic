@@ -52,7 +52,7 @@
     "boxen": "^8.0.1",
     "enquirer": "^2.4.1",
     "graphemer": "^1.4.0",
-    "i18next": "^25.5.2",
+    "i18next": "^25.5.3",
     "inquirer": "^12.9.6",
     "is-interactive": "^2.0.0",
     "is-unicode-supported": "^2.1.0",

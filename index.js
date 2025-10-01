@@ -1,66 +1,129 @@
+import process from 'node:process'
+import { fileURLToPath } from 'node:url'
 import Font from 'ascii-art-font'
 import dayjs from 'dayjs'
 import fs from 'fs-extra'
 import { markdownTable } from 'markdown-table'
 import path from 'pathe'
 
-(async () => {
-  const now = dayjs()
-  const today = now.format('YYYY-MM-DD')
-  const moment = now.format('YYYY-MM-DD HH:mm:ss')
-  /**
-   * @type {string} output
-   */
-  const [o1, o2, template] = await Promise.all([
+const currentDir = fileURLToPath(new URL('.', import.meta.url))
+const templatePath = path.resolve(currentDir, 'TEMPLATE.md')
+const outputPath = path.resolve(currentDir, 'README.md')
+
+const contactEntries = [
+  {
+    href: 'https://www.icebreaker.top/',
+    iconSrc: 'assets/svg/chorme.svg',
+    iconAlt: 'Website Icon',
+    qrSrc:
+      'https://github-readme-svg.vercel.app/api/v1/svg/qrcode?value=https://www.icebreaker.top&type=func&qrcodeType=round&posType=planet&posColor=%23000',
+    qrAlt: 'My Website',
+  },
+  {
+    href: 'https://u.wechat.com/EAVzgOGBnATKcePfVWr_QyQ',
+    iconSrc: 'assets/svg/wechat.svg',
+    iconAlt: 'Wechat Icon',
+    qrSrc:
+      'https://github-readme-svg.vercel.app/api/v1/svg/qrcode?value=https://u.wechat.com/EAVzgOGBnATKcePfVWr_QyQ&type=circle&posColor=%23000',
+    qrAlt: 'My Wechat',
+  },
+]
+
+const miniPrograms = [
+  {
+    name: '破冰客',
+    qrSrc:
+      'https://github-readme-svg.vercel.app/api/v1/svg/qrcode?value=https://mp.weixin.qq.com/a/~QCyvHLpi7gWkTTw_D45LNg~~&type=image&posColor=%23000',
+    qrAlt: '破冰客小程序',
+  },
+  {
+    name: '程序员名片',
+    qrSrc:
+      'https://github-readme-svg.vercel.app/api/v1/svg/qrcode?value=https://mp.weixin.qq.com/a/~wCmPXG4P6LVtnyOobH53KQ~~&type=image&posColor=%23000',
+    qrAlt: '程序员名片小程序',
+  },
+  {
+    name: 'IceStack',
+    qrSrc:
+      'https://github-readme-svg.vercel.app/api/v1/svg/qrcode?value=https://mp.weixin.qq.com/a/~Z3ufw44yiwSSRapyxRmuqQ~~&type=image&posColor=%23000',
+    qrAlt: 'IceStack 小程序',
+  },
+  {
+    name: 'tailwindcss',
+    qrSrc:
+      'https://github-readme-svg.vercel.app/api/v1/svg/qrcode?value=https://mp.weixin.qq.com/a/~Z3ufw44yiwSSRapyxRmuqQ~~&type=image&posColor=%23000',
+    qrAlt: 'tailwindcss 主题小程序',
+  },
+]
+
+const QR_IMAGE_SIZE = 160
+
+const centerAlign = columns => Array.from({ length: columns }, () => 'c')
+
+function buildContactTable(entries) {
+  return markdownTable(
+    [
+      entries.map(
+        entry =>
+          `<a href="${entry.href}" target="_blank"><img src="${entry.iconSrc}" alt="${entry.iconAlt}" /></a>`,
+      ),
+      entries.map(
+        entry =>
+          `<img width="${QR_IMAGE_SIZE}" height="${QR_IMAGE_SIZE}" src="${entry.qrSrc}" alt="${entry.qrAlt}" />`,
+      ),
+    ],
+    { align: centerAlign(entries.length) },
+  )
+}
+
+function buildMiniProgramTable(entries) {
+  return markdownTable(
+    [
+      entries.map(entry => `<div style="display: flex;align-items: center;"> ${entry.name} </div>`),
+      entries.map(
+        entry =>
+          `<img width="${QR_IMAGE_SIZE}" height="${QR_IMAGE_SIZE}" src="${entry.qrSrc}" alt="${entry.qrAlt}" />`,
+      ),
+    ],
+    { align: centerAlign(entries.length) },
+  )
+}
+
+async function buildAsciiClock(now) {
+  const [utcLabel, utcDate] = await Promise.all([
     Font.create('UTC :', 'Doom'),
-    Font.create(today, 'Doom'),
-    fs.readFile(path.resolve(import.meta.dirname, 'TEMPLATE.md'), {
-      encoding: 'utf-8',
-    }),
+    Font.create(now.format('YYYY-MM-DD'), 'Doom'),
   ])
 
-  // markdown 一行后面加2个空格后换行是小换行，直接换行是大换行
-  // .split('\n').join('  \n')
-  const matrix = template
-    .replace(/\{\{replace\}\}/g, (o1 + o2).trimEnd())
-    .replace(/\{\{date\}\}/g, moment)
-    .replace(
-      /\{\{table\}\}/g,
-      markdownTable(
-        [
-          [
-            '<a href="https://www.icebreaker.top/" target="_blank"><img src="assets/svg/chorme.svg" alt="Website Icon" /></a>',
-            '<a href="https://u.wechat.com/EAVzgOGBnATKcePfVWr_QyQ" target="_blank"><img src="assets/svg/wechat.svg" alt="Wechat Icon" /></a>',
+  return `${utcLabel}${utcDate}`.trimEnd()
+}
 
-          ],
-          [
-            '<img width="160" height="160" src="https://github-readme-svg.vercel.app/api/v1/svg/qrcode?value=https://www.icebreaker.top&type=func&qrcodeType=round&posType=planet&posColor=%23000" alt="My Website" />',
-            '<img width="160" height="160" src="https://github-readme-svg.vercel.app/api/v1/svg/qrcode?value=https://u.wechat.com/EAVzgOGBnATKcePfVWr_QyQ&type=circle&posColor=%23000" alt="My Wechat" />',
+async function generateReadme() {
+  const now = dayjs()
+  const template = await fs.readFile(templatePath, { encoding: 'utf-8' })
+  const asciiClock = await buildAsciiClock(now)
 
-          ],
-        ],
-        { align: ['c', 'c', 'c', 'c'] },
-      ),
-    )
-    .replace(/\{\{mpTable\}\}/g, markdownTable(
-      [
-        [
+  const contactTable = buildContactTable(contactEntries)
+  const miniProgramTable = buildMiniProgramTable(miniPrograms)
+  const generatedAt = now.format('YYYY-MM-DD HH:mm:ss')
 
-          '<div style="display: flex;align-items: center;"> 破冰客 </div>',
-          '<div style="display: flex;align-items: center;"> 程序员名片 </div>',
-          '<div style="display: flex;align-items: center;"> IceStack </div>',
-          '<div style="display: flex;align-items: center;"> tailwindcss </div>',
-        ],
-        [
+  const readme = template
+    .replaceAll('{{replace}}', asciiClock)
+    .replaceAll('{{date}}', generatedAt)
+    .replaceAll('{{table}}', contactTable)
+    .replaceAll('{{mpTable}}', miniProgramTable)
 
-          '<img width="160" height="160" src="https://github-readme-svg.vercel.app/api/v1/svg/qrcode?value=https://mp.weixin.qq.com/a/~QCyvHLpi7gWkTTw_D45LNg~~&type=image&posColor=%23000" alt="My Miniprogram Blog" />',
-          '<img width="160" height="160" src="https://github-readme-svg.vercel.app/api/v1/svg/qrcode?value=https://mp.weixin.qq.com/a/~wCmPXG4P6LVtnyOobH53KQ~~&type=image&posColor=%23000" alt="Programer Card" />',
-          '<img width="160" height="160" src="https://github-readme-svg.vercel.app/api/v1/svg/qrcode?value=https://mp.weixin.qq.com/a/~Z3ufw44yiwSSRapyxRmuqQ~~&type=image&posColor=%23000" alt="@icestack/ui" />',
-          '<img width="160" height="160" src="https://github-readme-svg.vercel.app/api/v1/svg/qrcode?value=https://mp.weixin.qq.com/a/~Z3ufw44yiwSSRapyxRmuqQ~~&type=image&posColor=%23000" alt="@icestack/ui" />',
-        ],
-      ],
-      { align: ['c', 'c', 'c', 'c'] },
-    ))
+  await fs.writeFile(outputPath, readme)
+}
 
-  await fs.writeFile(path.resolve(import.meta.dirname, 'README.md'), matrix)
-})()
+async function main() {
+  try {
+    await generateReadme()
+  }
+  catch (error) {
+    console.error('Failed to generate README:', error)
+    process.exitCode = 1
+  }
+}
+
+void main()

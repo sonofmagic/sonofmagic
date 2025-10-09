@@ -1,5 +1,11 @@
 # @icebreakers/profile
 
+## 1.1.0
+
+### Minor Changes
+
+- [`efff63e`](https://github.com/sonofmagic/sonofmagic/commit/efff63e3f82452dd98a65b7c7f0af255dc895aff) Thanks [@sonofmagic](https://github.com/sonofmagic)! - Add automatic light/dark terminal theming plus logging helpers that satisfy lint rules.
+
 ## 1.0.2
 
 ### Patch Changes

@@ -1,5 +1,12 @@
 # sonofmagic
 
+## 2.0.3
+
+### Patch Changes
+
+- Updated dependencies [[`efff63e`](https://github.com/sonofmagic/sonofmagic/commit/efff63e3f82452dd98a65b7c7f0af255dc895aff)]:
+  - @icebreakers/profile@1.1.0
+
 ## 2.0.2
 
 ### Patch Changes

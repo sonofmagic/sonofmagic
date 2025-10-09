@@ -1,9 +1,10 @@
 import type { ITranslation } from '../type'
 import { profileData } from '@/constants'
-import { ansis, dayjs, emoji } from '@/util'
+import { ansis, dayjs, emoji, profileTheme } from '@/util'
 import { translation as zhTranslation } from './zh'
 
 const { name, nickname, whenToStartWork } = profileData
+const theme = profileTheme
 
 function cloneTranslation(source: ITranslation): ITranslation {
   return JSON.parse(JSON.stringify(source)) as ITranslation
@@ -13,7 +14,7 @@ export const translation: ITranslation = (() => {
   const base = cloneTranslation(zhTranslation)
 
   base.welcome = 'Welcome to the {{nickname}} profile console'
-  base.promptMsg = `${ansis.greenBright('Please choose')} an item below to continue`
+  base.promptMsg = `${theme.colors.prompt('Please choose')} an item below to continue`
 
   base.profile = {
     ...base.profile,
@@ -23,9 +24,9 @@ export const translation: ITranslation = (() => {
     position: 'Entrepreneur / Core Developer',
     summaryTitle: 'Snapshot',
     summary: [
-      `${ansis.bold(name)} (${ansis.greenBright(nickname)})`,
-      `${emoji.get('handbag')} ${ansis.bold.greenBright(
-        dayjs().year() - whenToStartWork.year(),
+      `${ansis.bold(name)} (${theme.colors.primary(nickname)})`,
+      `${emoji.get('handbag')} ${theme.colors.primaryStrong(
+        `${dayjs().year() - whenToStartWork.year()}`,
       )}+ years in product & engineering | ${emoji.get('mortar_board')} Yangzhou University · Software Engineering`,
     ].join('\n'),
     strengthsTitle: 'Strengths',
@@ -89,14 +90,14 @@ export const translation: ITranslation = (() => {
 
   base.music = {
     title: 'Music',
-    description: `Launch the ${ansis.bold.greenBright('default')} system player`,
+    description: `Launch the ${theme.colors.primaryStrong('default')} system player`,
   }
 
   base.quit = {
     title: 'Sign out',
     description: 'Leave the console',
     promptMsg: 'Are you sure you want to exit?',
-    successExitString: `${ansis.green('√')} ${ansis.greenBright.bold('Exit succeeded!')}`,
+    successExitString: `${theme.colors.success('√')} ${theme.colors.successStrong('Exit succeeded!')}`,
   }
 
   base.changeLanguage = {

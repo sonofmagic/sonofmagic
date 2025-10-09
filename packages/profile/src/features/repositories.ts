@@ -1,5 +1,6 @@
 import ora from 'ora'
 import { Dic, t } from '../i18n'
+import { consoleWarn as warn } from '../logger'
 import { getRepoList } from '../repos'
 import { emoji, prompts } from '../util'
 
@@ -26,30 +27,48 @@ const iconCache = new Map<boolean, {
 }>()
 let openModulePromise: Promise<typeof import('open')> | null = null
 
-export async function showRepositoryPrompt(options: RepositoryPromptOptions) {
-  const spinner = ora({
-    spinner: 'soccerHeader',
-    text: t(Dic.myRepositories.loading.text),
-  }).start()
-
-  let repos: Awaited<ReturnType<typeof getRepoList>> = []
-  try {
-    repos = await getRepoList()
-  }
-  catch {
-    spinner.stop()
-    console.warn(t(Dic.myRepositories.loading.failText))
-    return
+function getRepositoryIcons(isUnicodeSupported: boolean) {
+  const cached = iconCache.get(isUnicodeSupported)
+  if (cached) {
+    return cached
   }
 
-  spinner.stop()
+  const icons = isUnicodeSupported
+    ? {
+        starIcon: emoji.get('star') ?? '★',
+        forkIcon: emoji.get('fork_and_knife') ?? '🍴',
+      }
+    : {
+        starIcon: 'star',
+        forkIcon: 'fork',
+      }
 
-  if (!repos.length) {
-    console.warn(t(Dic.myRepositories.loading.failText))
-    return
+  iconCache.set(isUnicodeSupported, icons)
+  return icons
+}
+
+function formatRepositoryLabel(repo: RepoSummary, isUnicodeSupported: boolean) {
+  const { starIcon, forkIcon } = getRepositoryIcons(isUnicodeSupported)
+  return `${repo.name} (${starIcon}:${repo.stargazers_count} ${forkIcon}:${repo.forks_count})`
+}
+
+function buildRepoChoices(repos: RepoSummary[], isUnicodeSupported: boolean): RepoChoice[] {
+  return repos.map((repo, index) => ({
+    title: formatRepositoryLabel(repo, isUnicodeSupported),
+    description: repo.description ?? undefined,
+    value: {
+      url: repo.html_url,
+      index,
+    },
+  }))
+}
+
+async function openRepository(url: string) {
+  if (!openModulePromise) {
+    openModulePromise = import('open')
   }
-
-  await promptLoop(repos, options.isUnicodeSupported)
+  const mod = await openModulePromise
+  await mod.default(url)
 }
 
 async function promptLoop(repos: RepoSummary[], isUnicodeSupported: boolean) {
@@ -79,48 +98,30 @@ async function promptLoop(repos: RepoSummary[], isUnicodeSupported: boolean) {
   }
 }
 
-function buildRepoChoices(repos: RepoSummary[], isUnicodeSupported: boolean): RepoChoice[] {
-  return repos.map((repo, index) => ({
-    title: formatRepositoryLabel(repo, isUnicodeSupported),
-    description: repo.description ?? undefined,
-    value: {
-      url: repo.html_url,
-      index,
-    },
-  }))
-}
+export async function showRepositoryPrompt(options: RepositoryPromptOptions) {
+  const spinner = ora({
+    spinner: 'soccerHeader',
+    text: t(Dic.myRepositories.loading.text),
+  }).start()
 
-async function openRepository(url: string) {
-  if (!openModulePromise) {
-    openModulePromise = import('open')
+  let repos: Awaited<ReturnType<typeof getRepoList>> = []
+  try {
+    repos = await getRepoList()
   }
-  const mod = await openModulePromise
-  await mod.default(url)
-}
-
-function getRepositoryIcons(isUnicodeSupported: boolean) {
-  const cached = iconCache.get(isUnicodeSupported)
-  if (cached) {
-    return cached
+  catch {
+    spinner.stop()
+    warn(t(Dic.myRepositories.loading.failText))
+    return
   }
 
-  const icons = isUnicodeSupported
-    ? {
-        starIcon: emoji.get('star') ?? '★',
-        forkIcon: emoji.get('fork_and_knife') ?? '🍴',
-      }
-    : {
-        starIcon: 'star',
-        forkIcon: 'fork',
-      }
+  spinner.stop()
 
-  iconCache.set(isUnicodeSupported, icons)
-  return icons
-}
+  if (!repos.length) {
+    warn(t(Dic.myRepositories.loading.failText))
+    return
+  }
 
-function formatRepositoryLabel(repo: RepoSummary, isUnicodeSupported: boolean) {
-  const { starIcon, forkIcon } = getRepositoryIcons(isUnicodeSupported)
-  return `${repo.name} (${starIcon}:${repo.stargazers_count} ${forkIcon}:${repo.forks_count})`
+  await promptLoop(repos, options.isUnicodeSupported)
 }
 
 /** @internal */

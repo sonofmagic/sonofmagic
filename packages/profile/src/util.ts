@@ -1,5 +1,6 @@
 import type { Options as BoxenOptions } from 'boxen'
 import type { QRCodeToStringOptions } from 'qrcode'
+import type { Colorizer } from './theme'
 import process from 'node:process'
 import readline from 'node:readline'
 import ansis from 'ansis'
@@ -8,7 +9,9 @@ import dayjs from 'dayjs'
 import * as emoji from 'node-emoji'
 import prompts from 'prompts'
 import QRCode from 'qrcode'
+import { consoleLog as log } from './logger'
 import { isUnicodeSupported } from './support'
+import { profileTheme } from './theme'
 
 const unicodeSupported = isUnicodeSupported()
 const qrcodeCache = new Map<string, string>()
@@ -125,8 +128,6 @@ export async function typeWriterLines(
   }
 }
 
-type Colorizer = (value: string) => string
-
 export interface QrcodeAnimationOptions {
   frameDelay?: number
   settleDelay?: number
@@ -144,12 +145,29 @@ export function renderQrcodeBox(qrcode: string, options: BoxenOptions = {}) {
   })
 }
 
+function renderAnimatedFrame(stream: NodeJS.WriteStream, frameLines: string[], previousLineCount: number) {
+  if (!stream.isTTY) {
+    stream.write(`${frameLines.join('\n')}\n`)
+    return frameLines.length
+  }
+
+  if (previousLineCount > 0) {
+    readline.moveCursor(stream, 0, -previousLineCount)
+    readline.cursorTo(stream, 0)
+    readline.clearScreenDown(stream)
+  }
+
+  stream.write(frameLines.join('\n'))
+  stream.write('\n')
+  return frameLines.length
+}
+
 export async function animateQrcodeBox(qrcode: string, options: QrcodeAnimationOptions = {}) {
   const stream = process.stdout
   const frameDelay = options.frameDelay ?? 24
   const settleDelay = options.settleDelay ?? 150
-  const highlightColor = options.highlightColor ?? ansis.greenBright
-  const baseColor = options.baseColor ?? ((value: string) => ansis.green(value))
+  const highlightColor = options.highlightColor ?? profileTheme.colors.qrcode.highlight
+  const baseColor = options.baseColor ?? profileTheme.colors.qrcode.base
 
   const boxed = renderQrcodeBox(qrcode, options.boxenOptions)
   const lines = boxed.split('\n')
@@ -193,23 +211,6 @@ export async function animateQrcodeBox(qrcode: string, options: QrcodeAnimationO
   }
 }
 
-function renderAnimatedFrame(stream: NodeJS.WriteStream, frameLines: string[], previousLineCount: number) {
-  if (!stream.isTTY) {
-    stream.write(`${frameLines.join('\n')}\n`)
-    return frameLines.length
-  }
-
-  if (previousLineCount > 0) {
-    readline.moveCursor(stream, 0, -previousLineCount)
-    readline.cursorTo(stream, 0)
-    readline.clearScreenDown(stream)
-  }
-
-  stream.write(frameLines.join('\n'))
-  stream.write('\n')
-  return frameLines.length
-}
-
 function applyPalette(text: string, palette: Colorizer[]) {
   if (!palette.length) {
     return text
@@ -231,22 +232,19 @@ export interface HeroBannerOptions {
   accentColor?: Colorizer
   taglineColor?: Colorizer | null
   subtitleColor?: Colorizer
+  palette?: Colorizer[]
+  borderColor?: string
 }
 
 export async function displayHeroBanner(options: HeroBannerOptions) {
-  const palette: Colorizer[] = [
-    ansis.magentaBright.bold,
-    ansis.blueBright.bold,
-    ansis.cyanBright.bold,
-    ansis.greenBright.bold,
-  ]
-
+  const theme = profileTheme
+  const palette = options.palette ?? theme.colors.hero.palette
   const title = applyPalette(options.title, palette)
-  const subtitleColorizer = options.subtitleColor ?? ansis.bold.white
+  const subtitleColorizer = options.subtitleColor ?? theme.colors.hero.subtitle
   const subtitle = options.subtitle ? subtitleColorizer(options.subtitle) : undefined
-  const accentColorizer = options.accentColor ?? ansis.yellowBright
+  const accentColorizer = options.accentColor ?? theme.colors.hero.accent
   const accent = options.accent ? accentColorizer(options.accent) : undefined
-  const taglineColorizer = options.taglineColor === null ? undefined : options.taglineColor ?? ansis.dim
+  const taglineColorizer = options.taglineColor === null ? undefined : options.taglineColor ?? theme.colors.hero.tagline
   const bodyLines = options.tagline?.map(line => (taglineColorizer ? taglineColorizer(line) : line)) ?? []
 
   const bannerContent = [title]
@@ -264,11 +262,11 @@ export async function displayHeroBanner(options: HeroBannerOptions) {
     borderStyle: 'double',
     padding: { top: 1, bottom: 1, left: 3, right: 3 },
     margin: 1,
-    borderColor: 'cyan',
+    borderColor: options.borderColor ?? theme.colors.hero.borderColor,
   })
 
   if (!process.stdout.isTTY) {
-    console.log(boxed)
+    log(boxed)
     return
   }
 
@@ -290,4 +288,4 @@ function splitParagraphByLines(text: string, linesPerGroup = 5) {
   return result
 }
 
-export { ansis, boxen, dayjs, emoji, generateQrcode, prompts, splitParagraphByLines }
+export { ansis, boxen, dayjs, emoji, generateQrcode, profileTheme, prompts, splitParagraphByLines }

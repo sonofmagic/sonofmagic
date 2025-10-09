@@ -2,8 +2,9 @@ import type { SupportedLanguage } from './i18n'
 import { showPhotoGallery } from './features/photo-gallery'
 import { showRepositoryPrompt } from './features/repositories'
 import { changeLanguage, Dic, getCurrentLanguage, getSupportedLanguages, t } from './i18n'
+import { consoleLog as log } from './logger'
 import { createProjectsTree } from './project'
-import { animateQrcodeBox, ansis, boxen, generateQrcode, prompts, sleep, typeWriterLines } from './util'
+import { animateQrcodeBox, boxen, generateQrcode, profileTheme, prompts, sleep, typeWriterLines } from './util'
 
 export interface MenuContext {
   icebreaker: string
@@ -21,18 +22,74 @@ export interface MenuItem {
   handler: MenuHandler
 }
 
-export function buildMenuItems(context: MenuContext): MenuItem[] {
-  return [
-    createProfileItem(context),
-    createContactItem(context),
-    createPhotoItem(context),
-    createRepositoriesItem(context),
-    createBlogWebItem(context),
-    createBlogMpItem(context),
-    createCardMpItem(context),
-    createChangeLanguageItem(context),
-    createQuitItem(context),
+interface ProfileSection {
+  title: string
+  lines: string[]
+}
+
+function headingLine(title: string) {
+  return `\n\n${profileTheme.colors.heading('|')} ${title}`
+}
+
+function buildProfileSections(): ProfileSection[] {
+  const sectionConfigs: Array<{ titleKey: string, bodyKey: string, params?: Record<string, unknown> }> = [
+    { titleKey: Dic.profile.summaryTitle, bodyKey: Dic.profile.summary },
+    { titleKey: Dic.profile.strengthsTitle, bodyKey: Dic.profile.strengths },
+    { titleKey: Dic.profile.skillsTitle, bodyKey: Dic.profile.skills },
+    { titleKey: Dic.profile.expectationTitle, bodyKey: Dic.profile.expectation },
+    { titleKey: Dic.profile.experienceTitle, bodyKey: Dic.profile.experience },
+    {
+      titleKey: Dic.profile.projectsTitle,
+      bodyKey: Dic.profile.projects,
+      params: {
+        projectsTree: createProjectsTree().toString(),
+      },
+    },
+    { titleKey: Dic.profile.closingTitle, bodyKey: Dic.profile.closing },
   ]
+
+  return sectionConfigs.map(({ titleKey, bodyKey, params }) => {
+    const title = t(titleKey) as string
+    const content = t(bodyKey, {
+      ...(params ?? {}),
+      interpolation: { escapeValue: false },
+    }) as string
+    const lines = content
+      .split('\n')
+      .map(line => line.trimEnd())
+      .filter(line => line.length > 0)
+
+    return {
+      title,
+      lines,
+    }
+  })
+}
+
+async function renderProfileSections(sections: ProfileSection[]) {
+  const palettes = profileTheme.colors.menu.palettes
+
+  for (let i = 0; i < sections.length; i++) {
+    const section = sections[i]
+    const palette = palettes[i % palettes.length]
+    const header = palette.header(`✦ ${section.title}`)
+    const body = section.lines.map(line => palette.body(`  ${line}`)).join('\n')
+
+    const card = boxen(`${header}\n\n${body}`, {
+      borderStyle: 'round',
+      borderColor: palette.border,
+      padding: { top: 1, bottom: 1, left: 2, right: 2 },
+      margin: { top: 0, bottom: 0, left: 0, right: 0 },
+    })
+
+    const lines = card.split('\n')
+    log('')
+    await typeWriterLines(lines, 4, 0, 1)
+    if (i < sections.length - 1) {
+      log('')
+      await sleep(80)
+    }
+  }
 }
 
 function createProfileItem(context: MenuContext): MenuItem {
@@ -104,7 +161,7 @@ function createBlogWebItem(context: MenuContext): MenuItem {
       const lines = [
         headingLine(t(Dic.blogWeb.title)),
         '',
-        `${t(Dic.directAccess)}: ${ansis.greenBright.underline(webSiteUrl)}`,
+        `${t(Dic.directAccess)}: ${profileTheme.colors.link(webSiteUrl)}`,
         '',
         `${t(Dic.wechat.scan)}:`,
       ]
@@ -124,7 +181,7 @@ function createBlogMpItem(context: MenuContext): MenuItem {
       const lines = [
         headingLine(t(Dic.blogMp.title)),
         '',
-        `${t(Dic.wechat.search)}: ${ansis.bold.greenBright('破冰客')}`,
+        `${t(Dic.wechat.search)}: ${profileTheme.colors.primaryStrong('破冰客')}`,
         '',
         `${t(Dic.wechat.scan)}:`,
       ]
@@ -144,13 +201,13 @@ function createCardMpItem(context: MenuContext): MenuItem {
       const lines = [
         headingLine(t(Dic.cardMp.title)),
         '',
-        `${t(Dic.wechat.search)}: ${ansis.bold.greenBright('程序员名片')}`,
+        `${t(Dic.wechat.search)}: ${profileTheme.colors.primaryStrong('程序员名片')}`,
         '',
         `${t(Dic.wechat.scan)}:`,
       ]
       await typeWriterLines(lines, 12, 90, 4)
       await animateQrcodeBox(qrcode)
-      console.log(`\nMy Card Short Link: ${ansis.bold.greenBright('#小程序://程序员名片/CJpMeOanmyzNyBJ')}`)
+      log(`\nMy Card Short Link: ${profileTheme.colors.primaryStrong('#小程序://程序员名片/CJpMeOanmyzNyBJ')}`)
     },
   }
 }
@@ -198,87 +255,24 @@ function createQuitItem(context: MenuContext): MenuItem {
     title: t(Dic.quit.title),
     description: t(Dic.quit.description),
     async handler() {
-      console.log(t(Dic.quit.successExitString))
+      log(t(Dic.quit.successExitString))
       return false
     },
   }
 }
 
-function headingLine(title: string) {
-  return `\n\n${ansis.bold.greenBright('|')} ${title}`
-}
-
-interface ProfileSection {
-  title: string
-  lines: string[]
-}
-
-function buildProfileSections(): ProfileSection[] {
-  const sectionConfigs: Array<{ titleKey: string, bodyKey: string, params?: Record<string, unknown> }> = [
-    { titleKey: Dic.profile.summaryTitle, bodyKey: Dic.profile.summary },
-    { titleKey: Dic.profile.strengthsTitle, bodyKey: Dic.profile.strengths },
-    { titleKey: Dic.profile.skillsTitle, bodyKey: Dic.profile.skills },
-    { titleKey: Dic.profile.expectationTitle, bodyKey: Dic.profile.expectation },
-    { titleKey: Dic.profile.experienceTitle, bodyKey: Dic.profile.experience },
-    {
-      titleKey: Dic.profile.projectsTitle,
-      bodyKey: Dic.profile.projects,
-      params: {
-        projectsTree: createProjectsTree().toString(),
-      },
-    },
-    { titleKey: Dic.profile.closingTitle, bodyKey: Dic.profile.closing },
+export function buildMenuItems(context: MenuContext): MenuItem[] {
+  return [
+    createProfileItem(context),
+    createContactItem(context),
+    createPhotoItem(context),
+    createRepositoriesItem(context),
+    createBlogWebItem(context),
+    createBlogMpItem(context),
+    createCardMpItem(context),
+    createChangeLanguageItem(context),
+    createQuitItem(context),
   ]
-
-  return sectionConfigs.map(({ titleKey, bodyKey, params }) => {
-    const title = t(titleKey) as string
-    const content = t(bodyKey, {
-      ...(params ?? {}),
-      interpolation: { escapeValue: false },
-    }) as string
-    const lines = content
-      .split('\n')
-      .map(line => line.trimEnd())
-      .filter(line => line.length > 0)
-
-    return {
-      title,
-      lines,
-    }
-  })
-}
-
-async function renderProfileSections(sections: ProfileSection[]) {
-  const palettes: Array<{ border: string, header: (value: string) => string, body: (value: string) => string }> = [
-    { border: 'cyan', header: ansis.cyanBright.bold, body: ansis.whiteBright },
-    { border: 'magenta', header: ansis.magentaBright.bold, body: ansis.white },
-    { border: 'blue', header: ansis.blueBright.bold, body: ansis.white },
-    { border: 'green', header: ansis.greenBright.bold, body: ansis.white },
-    { border: 'yellow', header: ansis.yellowBright.bold, body: ansis.white },
-    { border: 'red', header: ansis.redBright.bold, body: ansis.white },
-  ]
-
-  for (let i = 0; i < sections.length; i++) {
-    const section = sections[i]
-    const palette = palettes[i % palettes.length]
-    const header = palette.header(`✦ ${section.title}`)
-    const body = section.lines.map(line => palette.body(`  ${line}`)).join('\n')
-
-    const card = boxen(`${header}\n\n${body}`, {
-      borderStyle: 'round',
-      borderColor: palette.border,
-      padding: { top: 1, bottom: 1, left: 2, right: 2 },
-      margin: { top: 0, bottom: 0, left: 0, right: 0 },
-    })
-
-    const lines = card.split('\n')
-    console.log('')
-    await typeWriterLines(lines, 4, 0, 1)
-    if (i < sections.length - 1) {
-      console.log('')
-      await sleep(80)
-    }
-  }
 }
 
 /** @internal */

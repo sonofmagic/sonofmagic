@@ -111,7 +111,8 @@ describe('profile sections', () => {
 
   it('splits expectation into multiple bullet lines', () => {
     const sections = menuInternal.buildProfileSections()
-    const expectation = sections.find(section => section.title.includes('理想合作'))
+    const expectationTitle = t(Dic.profile.expectationTitle) as string
+    const expectation = sections.find(section => section.title === expectationTitle)
     expect(expectation).toBeDefined()
     expect(expectation?.lines).toHaveLength(3)
   })
@@ -119,13 +120,14 @@ describe('profile sections', () => {
   it('reflects deep toolbelt details in english', async () => {
     await changeLanguage('en')
     const sections = menuInternal.buildProfileSections()
-    const toolbelt = sections.find(section => section.title.includes('Toolbelt'))
+    const skillsTitle = t(Dic.profile.skillsTitle) as string
+    const toolbelt = sections.find(section => section.title === skillsTitle)
     expect(toolbelt).toBeDefined()
     const normalized = stripAnsi(toolbelt!.lines.join(' '))
     expect(normalized).toContain('Cloudflare Workers')
     expect(normalized).toContain('Hono')
     expect(normalized).toContain('Rolldown')
-    expect(normalized).toContain('Turborepo')
+    expect(normalized).toContain('monorepo automation')
     await changeLanguage('zh')
   })
 })

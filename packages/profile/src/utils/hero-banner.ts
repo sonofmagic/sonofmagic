@@ -13,6 +13,9 @@ function applyPalette(text: string, palette: Colorizer[]) {
   return chars
     .map((char, index) => {
       const colorize = palette[index % palette.length]
+      if (!colorize) {
+        return char
+      }
       return colorize(char)
     })
     .join('')

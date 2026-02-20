@@ -31,7 +31,9 @@ export const optionsData = {
   photo: 'photo',
   changeLanguage: 'changeLanguage',
   myRepositories: 'myRepositories',
-}
+} as const
+
+export type ProfileOptions = typeof optionsData
 
 export const assetPaths = {
   photosDir: path.resolve(__dirname, '../assets/photos'),

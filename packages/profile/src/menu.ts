@@ -1,3 +1,4 @@
+import type { ProfileOptions } from './constants'
 import type { SupportedLanguage } from './i18n'
 import { showPhotoGallery } from './features/photo-gallery'
 import { showRepositoryPrompt } from './features/repositories'
@@ -8,7 +9,7 @@ import { animateQrcodeBox, boxen, generateQrcode, profileTheme, prompts, sleep, 
 
 export interface MenuContext {
   icebreaker: string
-  options: Record<string, string>
+  options: ProfileOptions
   isUnicodeSupported: boolean
 }
 

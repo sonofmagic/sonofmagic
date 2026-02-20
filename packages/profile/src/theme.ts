@@ -119,13 +119,20 @@ function detectThemeFromColorFgbg(): TerminalThemeMode | null {
   }
 
   const backgroundCandidate = parts[parts.length - 1]
+  if (backgroundCandidate === undefined) {
+    return null
+  }
+
   const detected = classifyColorCode(backgroundCandidate)
   if (detected) {
     return detected
   }
 
   if (parts.length >= 2) {
-    return classifyColorCode(parts[1])
+    const fallbackCandidate = parts[1]
+    if (fallbackCandidate !== undefined) {
+      return classifyColorCode(fallbackCandidate)
+    }
   }
 
   return null

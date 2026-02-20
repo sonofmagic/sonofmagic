@@ -129,8 +129,13 @@ export async function main() {
         continue
       }
 
+      const selectedItem = menuItems[selectedIndex]
+      if (!selectedItem) {
+        continue
+      }
+
       initial = Math.max(0, selectedIndex)
-      const shouldContinue = await handleMenuSelection(menuItems[selectedIndex].value, context)
+      const shouldContinue = await handleMenuSelection(selectedItem.value, context)
       if (shouldContinue === false) {
         continueLoop = false
       }

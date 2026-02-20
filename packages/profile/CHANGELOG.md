@@ -1,5 +1,14 @@
 # @icebreakers/profile
 
+## 1.1.1
+
+### Patch Changes
+
+- 🐛 **Refresh the profile console content with privacy-safe public identity details and a more professional bilingual narrative.** [`41d9c20`](https://github.com/sonofmagic/sonofmagic/commit/41d9c20361257d2e0c223402ece020eb4c240c88) by @sonofmagic
+  - redact personal/private contact exposure and keep only public channels
+  - enrich Chinese and English profile copy using public information from icebreaker.top
+  - refine project timeline, highlighted repositories, and toolchain focus descriptions
+
 ## 1.1.0
 
 ### Minor Changes

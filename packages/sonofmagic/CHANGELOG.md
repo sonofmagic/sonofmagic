@@ -1,5 +1,12 @@
 # sonofmagic
 
+## 2.0.4
+
+### Patch Changes
+
+- 📦 **Dependencies** [`41d9c20`](https://github.com/sonofmagic/sonofmagic/commit/41d9c20361257d2e0c223402ece020eb4c240c88)
+  → `@icebreakers/profile@1.1.1`
+
 ## 2.0.3
 
 ### Patch Changes

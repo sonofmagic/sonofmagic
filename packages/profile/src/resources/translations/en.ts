@@ -13,79 +13,81 @@ function cloneTranslation(source: ITranslation): ITranslation {
 export const translation: ITranslation = (() => {
   const base = cloneTranslation(zhTranslation)
 
-  base.welcome = 'Welcome to the {{nickname}} profile console'
-  base.promptMsg = `${theme.colors.prompt('Please choose')} an item below to continue`
+  base.welcome = 'Welcome to the {{nickname}} engineering profile terminal'
+  base.promptMsg = `${theme.colors.prompt('Please choose')} a module to continue`
 
   base.profile = {
     ...base.profile,
-    title: 'Personal Information',
-    description: `Preview {{nickname}}'s core highlights`,
-    job: 'Full-stack engineer',
-    position: 'Entrepreneur / Core Developer',
-    summaryTitle: 'Snapshot',
+    title: 'Engineering Profile',
+    description: 'Focused on WeChat mini-program workflows, frontend build systems, and deployment automation',
+    job: 'As a platform engineering and full-stack architecture engineer',
+    position: 'Staff+ Full-stack Architect / Technical Lead',
+    summaryTitle: 'Summary',
     summary: [
-      `${ansis.bold(name)} (${theme.colors.primary(nickname)})`,
+      `${ansis.bold(name)} · ${theme.colors.primaryStrong(nickname)}`,
       `${emoji.get('handbag')} ${theme.colors.primaryStrong(
         `${dayjs().year() - whenToStartWork.year()}`,
-      )}+ years in product & engineering | ${emoji.get('mortar_board')} Yangzhou University · Software Engineering`,
+      )}+ years in product & engineering | ${emoji.get('sparkles')} production tooling + DX metrics + release automation`,
     ].join('\n'),
-    strengthsTitle: 'Strengths',
+    strengthsTitle: 'Core strengths',
     strengths: [
-      `${emoji.get('sparkles')} Energised by engineering craft, focused on quality & UX`,
-      `${emoji.get('memo')} Knowledge amplifier with continuous open-source deliveries`,
-      `${emoji.get('rocket')} Outcome-driven, steady even under fast-paced delivery`,
+      `${emoji.get('rocket')} Long-term maintainer of mini-program ecosystem tooling with production adoption`,
+      `${emoji.get('memo')} Improves delivery certainty through DX metrics and automated release workflows`,
+      `${emoji.get('chart_with_upwards_trend')} Continuously optimizes reliability, performance, and engineering throughput`,
     ].join('\n'),
-    skillsTitle: 'Toolbelt',
+    skillsTitle: 'Tech stack',
     skills: [
-      `${emoji.get('satellite')} Node.js · Cloudflare Workers · Edge Runtime · Deno Deploy`,
-      `${emoji.get('gear')} Hono / Express / NestJS · Serverless APIs · BFF`,
-      `${emoji.get('hammer')} Vite / Webpack / Rollup / Rolldown · Turborepo / Nx · Vitest / Playwright`,
-      `${emoji.get('computer')} SSR / SSG · Micro-frontend · Vue / React · Mini Programs (Taro / Uni-app)`,
-      `${emoji.get('chart_with_upwards_trend')} Performance & observability: Bundle Analyze · Lighthouse · RUM · Grafana`,
+      `${emoji.get('hammer')} Frontend engineering: Nuxt / Vue component systems / performance reviews / React`,
+      `${emoji.get('gear')} Node.js platforms: Express / Koa / NestJS / Hono / API deployment`,
+      `${emoji.get('satellite')} Serverless operations: Cloudflare Workers / edge functions / scheduled jobs`,
+      `${emoji.get('computer')} Toolchain development: Tailwind transforms / Vite plugins / monorepo automation / DX metrics`,
+      `${emoji.get('chart_with_upwards_trend')} Build and compiler stack: Babel / PostCSS / Webpack / Vite / Rolldown / Rspack`,
     ].join('\n'),
-    expectationTitle: 'Ideal collaboration',
+    expectationTitle: 'Collaboration style',
     expectation: [
-      `${emoji.get('handshake')} Mutual trust and shared wins`,
-      `${emoji.get('hourglass')} Respectful cadence, outcome focused`,
-      `${emoji.get('point_right')} Healthy work-life balance ${emoji.get('laughing')}${emoji.get('joy')}`,
+      `${emoji.get('handshake')} Shared goals, transparent trust, accountable outcomes`,
+      `${emoji.get('hourglass')} Respectful cadence with high-quality review loops`,
+      `${emoji.get('point_right')} Long-term engineering mindset`,
     ].join('\n'),
     experienceTitle: 'Experience highlights',
     experience: [
-      'Navigated both enterprise and startup teams, versed in 0→1 and 1→N delivery',
-      'Former partner owning core delivery, balancing product metrics and team growth',
+      '2016 → now: publishing open-source tooling for mini-program workflows and build pipelines',
+      '2021 → now: maintaining weapp-tailwindcss for Tailwind utility compilation in WeChat projects',
+      '2024 → now: shipping weapp-vite to align mini-program projects with modern frontend stacks',
+      '2026 → now: launching mokup, a file-based mock toolkit for Vite, CLI builds, and runtime adapters',
     ].join('\n'),
     projectsTitle: 'Project tree',
     projects: '{{projectsTree}}',
     closingTitle: 'Let’s connect',
     closing: [
-      'Let’s talk engineering practice, product experience, and team empowerment',
-      '“Life flows on, yet the moon over the river returns each year.”',
+      'Open to discussions on platform engineering, cross-platform architecture, performance, and team practices.',
+      'Public channels: GitHub / Juejin / Blog / X.',
     ].join('\n'),
   }
 
   base.heroBanner = {
     accent: '{{years}}+ years in product & engineering | {{position}}',
-    tagline: 'Node.js · Web · Cloud Native\nPowered by sharing and open source — ready to break the ice!',
+    tagline: 'TypeScript · Web · Cloud Native\nArchitecture-minded, delivery-focused, quality-first.',
   }
 
   base.contact = {
-    title: 'Contact',
-    description: `How to reach {{nickname}}`,
+    title: 'Public Contacts',
+    description: 'Reach out via GitHub, Juejin, blog, and X',
   }
 
   base.photo = {
-    title: 'Portrait',
+    title: 'Visual Profile',
     description: 'Generated with sonofmagic/ascii-art-avatar',
   }
 
   base.blogWeb = {
-    title: 'Blog · Website',
-    description: 'https://www.icebreaker.top/',
+    title: 'Tech Homepage',
+    description: 'Public technical website and long-term writings',
   }
 
   base.blogMp = {
-    title: 'Blog - WeChat Mini Program',
-    description: 'Search "破冰客" inside WeChat',
+    title: 'Project Index',
+    description: 'Entry point for open-source projects and technical topics',
   }
 
   base.music = {
@@ -95,7 +97,7 @@ export const translation: ITranslation = (() => {
 
   base.quit = {
     title: 'Sign out',
-    description: 'Leave the console',
+    description: 'Leave the terminal UI',
     promptMsg: 'Are you sure you want to exit?',
     successExitString: `${theme.colors.success('√')} ${theme.colors.successStrong('Exit succeeded!')}`,
   }
@@ -107,9 +109,9 @@ export const translation: ITranslation = (() => {
   }
 
   base.wechat = {
-    id: 'WeChat ID',
-    scan: 'Open WeChat and scan',
-    search: 'Search in WeChat',
+    id: 'Public channel',
+    scan: 'Scan to open',
+    search: 'Search in portal',
   }
 
   base.page = 'page'
@@ -122,10 +124,10 @@ export const translation: ITranslation = (() => {
 
   base.myRepositories = {
     title: 'Open-source projects',
-    description: 'Fetched from GitHub',
+    description: 'Highlighted: weapp-tailwindcss / weapp-vite / mokup',
     loading: {
       text: 'Fetching repositories from GitHub...',
-      failText: 'Request failed - please check the network connection and retry.',
+      failText: 'Request failed - please check your network connection and retry.',
     },
     promptMsg: 'Repositories',
   }
@@ -147,7 +149,7 @@ export const translation: ITranslation = (() => {
       },
       loading: {
         text: 'Posting the message to my serverless function...',
-        failText: 'Submission failed - maybe I forgot to top up Aliyun.',
+        failText: 'Submission failed - please try again later.',
       },
       successMsg: 'Message sent successfully!',
     },
@@ -155,8 +157,8 @@ export const translation: ITranslation = (() => {
 
   base.about = 'About'
   base.cardMp = {
-    title: 'Developer card mini app',
-    description: 'GitHub business card in WeChat mini program',
+    title: 'Developer Card',
+    description: 'Public developer profile',
   }
 
   return base

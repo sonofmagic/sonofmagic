@@ -28,6 +28,15 @@ interface ProfileSection {
   lines: string[]
 }
 
+const profileLinks = {
+  github: 'https://github.com/sonofmagic',
+  website: 'https://icebreaker.top',
+  repositories: 'https://github.com/sonofmagic?tab=repositories',
+  juejin: 'https://juejin.cn/user/1943592290496919',
+  blog: 'http://blog.icebreaker.top/',
+  x: 'https://x.com/sonofmagic95',
+} as const
+
 function headingLine(title: string) {
   return `\n\n${profileTheme.colors.heading('|')} ${title}`
 }
@@ -113,13 +122,16 @@ function createContactItem(context: MenuContext): MenuItem {
     title: t(Dic.contact.title),
     description: t(Dic.contact.description, { nickname: icebreaker }),
     async handler() {
-      const qrcode = await generateQrcode('https://u.wechat.com/EAVzgOGBnATKcePfVWr_QyQ')
+      const qrcode = await generateQrcode(profileLinks.github)
       const lines = [
         headingLine(t(Dic.contact.title)),
         '',
-        'Github: sonofmagic',
+        `GitHub: ${profileTheme.colors.link(profileLinks.github)}`,
+        `Juejin: ${profileTheme.colors.link(profileLinks.juejin)}`,
+        `Blog: ${profileTheme.colors.link(profileLinks.blog)}`,
+        `X: ${profileTheme.colors.link(profileLinks.x)}`,
         '',
-        `${t(Dic.wechat.id)}:`,
+        `${t(Dic.blogWeb.title)}: ${profileTheme.colors.link(profileLinks.website)}`,
       ]
       await typeWriterLines(lines, 12, 90, 4)
       await animateQrcodeBox(qrcode)
@@ -157,14 +169,13 @@ function createBlogWebItem(context: MenuContext): MenuItem {
     title: t(Dic.blogWeb.title),
     description: t(Dic.blogWeb.description),
     async handler() {
-      const webSiteUrl = 'https://icebreaker.top'
-      const qrcode = await generateQrcode(webSiteUrl)
+      const qrcode = await generateQrcode(profileLinks.website)
       const lines = [
         headingLine(t(Dic.blogWeb.title)),
         '',
-        `${t(Dic.directAccess)}: ${profileTheme.colors.link(webSiteUrl)}`,
+        `${t(Dic.directAccess)}: ${profileTheme.colors.link(profileLinks.website)}`,
         '',
-        `${t(Dic.wechat.scan)}:`,
+        'Scan to open in browser:',
       ]
       await typeWriterLines(lines, 12, 90, 4)
       await animateQrcodeBox(qrcode)
@@ -178,13 +189,13 @@ function createBlogMpItem(context: MenuContext): MenuItem {
     title: t(Dic.blogMp.title),
     description: t(Dic.blogMp.description),
     async handler() {
-      const qrcode = await generateQrcode('https://mp.weixin.qq.com/a/~QCyvHLpi7gWkTTw_D45LNg~~')
+      const qrcode = await generateQrcode(profileLinks.repositories)
       const lines = [
         headingLine(t(Dic.blogMp.title)),
         '',
-        `${t(Dic.wechat.search)}: ${profileTheme.colors.primaryStrong('破冰客')}`,
+        `${t(Dic.directAccess)}: ${profileTheme.colors.link(profileLinks.repositories)}`,
         '',
-        `${t(Dic.wechat.scan)}:`,
+        'Scan to open repository list:',
       ]
       await typeWriterLines(lines, 12, 90, 4)
       await animateQrcodeBox(qrcode)
@@ -198,17 +209,16 @@ function createCardMpItem(context: MenuContext): MenuItem {
     title: t(Dic.cardMp.title),
     description: t(Dic.cardMp.description),
     async handler() {
-      const qrcode = await generateQrcode('https://mp.weixin.qq.com/a/~wCmPXG4P6LVtnyOobH53KQ~~')
+      const qrcode = await generateQrcode(profileLinks.github)
       const lines = [
         headingLine(t(Dic.cardMp.title)),
         '',
-        `${t(Dic.wechat.search)}: ${profileTheme.colors.primaryStrong('程序员名片')}`,
+        `${t(Dic.directAccess)}: ${profileTheme.colors.link(profileLinks.github)}`,
         '',
-        `${t(Dic.wechat.scan)}:`,
+        'Scan for public profile:',
       ]
       await typeWriterLines(lines, 12, 90, 4)
       await animateQrcodeBox(qrcode)
-      log(`\nMy Card Short Link: ${profileTheme.colors.primaryStrong('#小程序://程序员名片/CJpMeOanmyzNyBJ')}`)
     },
   }
 }

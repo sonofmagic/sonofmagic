@@ -11,9 +11,9 @@ export const profileData: {
   startWorkDay: string
 } = {
   whenToStartWork: dayjs(startWorkDay),
-  name: '杨启明',
-  nickname: 'ice breaker',
-  gender: '男',
+  name: 'Icebreaker Lab',
+  nickname: 'icebreaker',
+  gender: 'private',
   startWorkDay,
 }
 

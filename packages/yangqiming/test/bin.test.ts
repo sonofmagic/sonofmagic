@@ -11,7 +11,7 @@ vi.mock('@icebreakers/profile', () => {
   return {
     runCli: runCliMock,
   }
-})
+}, { virtual: true })
 
 describe('yangqiming bin', () => {
   let previousArgv: string[]

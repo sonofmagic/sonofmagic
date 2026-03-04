@@ -21,7 +21,7 @@ WeChat mini program(Weapp) / 微信小程序
 
 {{mpTable}}
 
-```
+```text
 {{replace}}
 ```
 

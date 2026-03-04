@@ -1,7 +1,6 @@
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
 import Font from 'ascii-art-font'
-import dayjs from 'dayjs'
 import fs from 'fs-extra'
 import { markdownTable } from 'markdown-table'
 import path from 'pathe'
@@ -23,6 +22,7 @@ const contactEntries = [
     href: 'https://u.wechat.com/EAVzgOGBnATKcePfVWr_QyQ',
     iconSrc: 'assets/svg/wechat.svg',
     iconAlt: 'Wechat Icon',
+    iconNote: '备注: Github',
     qrSrc:
       'https://github-readme-svg.vercel.app/api/v1/svg/qrcode?value=https://u.wechat.com/EAVzgOGBnATKcePfVWr_QyQ&type=circle&posColor=%23000',
     qrAlt: 'My Wechat',
@@ -64,8 +64,14 @@ function buildContactTable(entries) {
   return markdownTable(
     [
       entries.map(
-        entry =>
-          `<a href="${entry.href}" target="_blank"><img src="${entry.iconSrc}" alt="${entry.iconAlt}" /></a>`,
+        (entry) => {
+          const iconLink
+            = `<a href="${entry.href}" target="_blank"><img src="${entry.iconSrc}" alt="${entry.iconAlt}" /></a>`
+          if (!entry.iconNote) {
+            return iconLink
+          }
+          return `<span style="display:inline-flex;align-items:center;gap:8px;">${iconLink}<span>${entry.iconNote}</span></span>`
+        },
       ),
       entries.map(
         entry =>
@@ -92,20 +98,24 @@ function buildMiniProgramTable(entries) {
 async function buildAsciiClock(now) {
   const [utcLabel, utcDate] = await Promise.all([
     Font.create('UTC :', 'Doom'),
-    Font.create(now.format('YYYY-MM-DD'), 'Doom'),
+    Font.create(now, 'Doom'),
   ])
 
   return `${utcLabel}${utcDate}`.trimEnd()
 }
 
+function getUtcDateString() {
+  return new Date().toISOString().slice(0, 10)
+}
+
 async function generateReadme() {
-  const now = dayjs()
+  const utcDate = getUtcDateString()
   const template = await fs.readFile(templatePath, { encoding: 'utf-8' })
-  const asciiClock = await buildAsciiClock(now)
+  const asciiClock = await buildAsciiClock(utcDate)
 
   const contactTable = buildContactTable(contactEntries)
   const miniProgramTable = buildMiniProgramTable(miniPrograms)
-  const generatedAt = now.format('YYYY-MM-DD HH:mm:ss')
+  const generatedAt = utcDate
 
   const readme = template
     .replaceAll('{{replace}}', asciiClock)
@@ -113,7 +123,11 @@ async function generateReadme() {
     .replaceAll('{{table}}', contactTable)
     .replaceAll('{{mpTable}}', miniProgramTable)
 
-  await fs.writeFile(outputPath, readme)
+  const existed = await fs.pathExists(outputPath)
+  const prevReadme = existed ? await fs.readFile(outputPath, { encoding: 'utf-8' }) : ''
+  if (prevReadme !== readme) {
+    await fs.writeFile(outputPath, readme)
+  }
 }
 
 async function main() {

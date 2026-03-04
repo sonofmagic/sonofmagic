@@ -16,6 +16,7 @@ vi.mock('@icebreakers/profile', () => {
 describe('sonofmagic bin', () => {
   let previousArgv: string[]
   let previousExitCode: typeof process.exitCode
+  let stderrWriteSpy: ReturnType<typeof vi.spyOn>
 
   beforeEach(() => {
     previousArgv = [...process.argv]
@@ -23,16 +24,19 @@ describe('sonofmagic bin', () => {
     process.argv = ['node', 'sonofmagic', 'links']
     process.exitCode = undefined
     runCliMock.mockReset()
-    runCliMock.mockResolvedValue(undefined)
+    stderrWriteSpy = vi.spyOn(process.stderr, 'write').mockImplementation(() => true)
     vi.resetModules()
   })
 
   afterEach(() => {
     process.argv = previousArgv
     process.exitCode = previousExitCode
+    stderrWriteSpy.mockRestore()
   })
 
   it('delegates to shared profile cli with package specific name', async () => {
+    runCliMock.mockResolvedValue(undefined)
+
     await import('../bin/index.js')
     await Promise.resolve()
 
@@ -41,5 +45,18 @@ describe('sonofmagic bin', () => {
       name: 'sonofmagic',
     })
     expect(process.exitCode).toBeUndefined()
+    expect(stderrWriteSpy).not.toHaveBeenCalled()
+  })
+
+  it('writes error to stderr and sets exit code when runCli fails', async () => {
+    runCliMock.mockRejectedValue(new Error('boom'))
+
+    await import('../bin/index.js')
+    await Promise.resolve()
+
+    expect(runCliMock).toHaveBeenCalledTimes(1)
+    expect(process.exitCode).toBe(1)
+    expect(stderrWriteSpy).toHaveBeenCalled()
+    expect(stderrWriteSpy.mock.calls[0]?.[0]).toContain('boom')
   })
 })

@@ -21,6 +21,26 @@ function fail(message) {
   process.exitCode = 1
 }
 
+function getProfileWorkspaceDependency(pkgJson) {
+  const dependencySets = [
+    pkgJson.dependencies,
+    pkgJson.devDependencies,
+    pkgJson.peerDependencies,
+    pkgJson.optionalDependencies,
+  ]
+
+  for (const dependencySet of dependencySets) {
+    if (dependencySet && typeof dependencySet === 'object') {
+      const value = dependencySet['@icebreakers/profile']
+      if (typeof value === 'string') {
+        return value
+      }
+    }
+  }
+
+  return null
+}
+
 function hasFixedGroup(config) {
   if (!Array.isArray(config.fixed)) {
     return false
@@ -61,6 +81,23 @@ async function main() {
   }
 
   const sharedVersion = versions[0][1]
+  const profileDependencySpecs = [
+    ['sonofmagic', getProfileWorkspaceDependency(sonofmagicPkg)],
+    ['yangqiming', getProfileWorkspaceDependency(yangqimingPkg)],
+  ]
+
+  let hasErrors = false
+  for (const [pkgName, dependencySpec] of profileDependencySpecs) {
+    if (dependencySpec !== 'workspace:*') {
+      fail(`${pkgName} must depend on @icebreakers/profile as workspace:* (received ${String(dependencySpec)})`)
+      hasErrors = true
+    }
+  }
+
+  if (hasErrors) {
+    return
+  }
+
   process.stdout.write(`[check:fixed-versions] ok (${sharedVersion})\n`)
 }
 

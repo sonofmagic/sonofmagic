@@ -42,7 +42,6 @@
     "node": "^20.19.0 || >=22.12.0"
   },
   "scripts": {
-    "stub": "unbuild --stub",
     "dev": "tsdown --watch --sourcemap",
     "build": "tsdown",
     "typecheck": "tsc --noEmit",

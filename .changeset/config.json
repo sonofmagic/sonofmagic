@@ -7,7 +7,13 @@
     }
   ],
   "commit": false,
-  "fixed": [],
+  "fixed": [
+    [
+      "@icebreakers/profile",
+      "sonofmagic",
+      "yangqiming"
+    ]
+  ],
   "linked": [],
   "access": "public",
   "baseBranch": "main",

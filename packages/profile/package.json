@@ -1,6 +1,6 @@
 {
   "name": "@icebreakers/profile",
-  "version": "1.1.1",
+  "version": "3.0.4",
   "description": "icebreaker's profile",
   "author": "ice breaker <1324318532@qq.com>",
   "license": "MIT",
@@ -25,16 +25,24 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "default": "./dist/index.js"
+      "import": "./dist/index.mjs",
+      "default": "./dist/index.mjs"
     }
   },
-  "main": "./dist/index.js",
+  "main": "./dist/index.mjs",
+  "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
+  "bin": {
+    "profile": "./bin/index.js"
+  },
   "files": [
     "assets",
     "bin",
     "dist"
   ],
+  "engines": {
+    "node": ">=20.19.0"
+  },
   "scripts": {
     "dev": "tsup --watch --sourcemap",
     "build": "tsup --minify",

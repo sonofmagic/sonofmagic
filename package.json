@@ -13,7 +13,7 @@
     "url": "https://github.com/sonofmagic/monorepo-template/issues"
   },
   "engines": {
-    "node": ">=20.0.0"
+    "node": ">=20.19.0"
   },
   "scripts": {
     "build": "turbo run build",

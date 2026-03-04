@@ -1,6 +1,6 @@
 {
   "name": "sonofmagic",
-  "version": "2.0.4",
+  "version": "3.0.4",
   "description": "https://github.com/sonofmagic",
   "author": "ice breaker <1324318532@qq.com>",
   "license": "MIT",
@@ -26,10 +26,10 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs"
+      "default": "./dist/index.mjs"
     }
   },
-  "main": "./dist/index.cjs",
+  "main": "./dist/index.mjs",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "bin": "./bin/index.js",
@@ -37,6 +37,9 @@
     "bin",
     "dist"
   ],
+  "engines": {
+    "node": ">=20.19.0"
+  },
   "scripts": {
     "stub": "unbuild --stub",
     "dev": "tsup --watch --sourcemap",

@@ -9,14 +9,14 @@ function setObjPath(dic: Record<string, unknown>, res: Record<string, unknown>, 
   const keys = Reflect.ownKeys(dic).filter((x) => {
     return typeof x === 'string'
   }) as string[]
-  for (let i = 0; i < keys.length; i++) {
-    const k = keys[i]
+  for (const key of keys) {
+    const value = dic[key]
 
-    if (isComplexType(dic[k])) {
-      setObjPath(dic[k] as Record<string, unknown>, res, combine(k, p))
+    if (isComplexType(value)) {
+      setObjPath(value as Record<string, unknown>, res, combine(key, p))
     }
     else {
-      set(res, combine(k, p), combine(k, p))
+      set(res, combine(key, p), combine(key, p))
     }
   }
 }

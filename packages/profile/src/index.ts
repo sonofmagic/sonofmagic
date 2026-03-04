@@ -1,3 +1,4 @@
+export * from './cli'
 export * from './constants'
 export * from './program'
 export * from './support'

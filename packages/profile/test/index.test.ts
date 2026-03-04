@@ -1,4 +1,5 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
+import { cliInternal } from '@/cli'
 import { photoGalleryInternal } from '@/features/photo-gallery'
 import { repositoryInternal } from '@/features/repositories'
 import { changeLanguage, Dic, getCurrentLanguage, getSupportedLanguages, init, t } from '@/i18n'
@@ -23,6 +24,37 @@ describe('utility guards', () => {
     expect(isComplexType({})).toBe(true)
     expect(isComplexType([])).toBe(true)
     expect(isComplexType(() => {})).toBe(true)
+  })
+})
+
+describe('cli helpers', () => {
+  const { findUnknownOptionKeys, formatOptionKey, resolveCliLanguage } = cliInternal
+
+  it('formats option keys consistently', () => {
+    expect(formatOptionKey('l')).toBe('-l')
+    expect(formatOptionKey('lang')).toBe('--lang')
+  })
+
+  it('detects unknown option keys', () => {
+    const options = {
+      '--': [],
+      'help': true,
+      'foo': true,
+      'lang': 'en',
+    }
+    const allowed = new Set(['help', 'lang'])
+    expect(findUnknownOptionKeys(options, allowed)).toEqual(['foo'])
+  })
+
+  it('normalizes supported language tags', () => {
+    expect(resolveCliLanguage('en')).toBe('en')
+    expect(resolveCliLanguage('EN-US')).toBe('en')
+    expect(resolveCliLanguage('zh_CN')).toBe('zh')
+    expect(resolveCliLanguage(undefined)).toBeUndefined()
+  })
+
+  it('rejects unsupported language tags', () => {
+    expect(() => resolveCliLanguage('jp')).toThrowError(/Unsupported language/)
   })
 })
 

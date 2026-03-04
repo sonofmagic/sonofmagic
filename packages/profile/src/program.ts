@@ -68,9 +68,13 @@ async function confirmExit() {
   return Boolean(value)
 }
 
-export async function main() {
+export interface MainOptions {
+  language?: string
+}
+
+export async function main(options?: MainOptions) {
   try {
-    await init()
+    await init(options?.language)
 
     const { nickname, whenToStartWork, name } = profileData
     const experienceYears = Math.max(0, dayjs().diff(whenToStartWork, 'year'))

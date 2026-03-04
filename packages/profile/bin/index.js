@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 
 const process = require('node:process')
-const { name, version } = require('../package.json')
+const { version } = require('../package.json')
 
 void (async () => {
-  const { runCli } = await import('@icebreakers/profile')
+  const { runCli } = await import('../dist/index.mjs')
   await runCli({
-    name,
+    name: 'profile',
     version,
   })
 })().catch((error) => {

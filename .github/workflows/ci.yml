@@ -43,6 +43,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Check fixed package versions
+        run: pnpm check:fixed-versions
+
       - name: Security Audit
         run: pnpm audit --audit-level=moderate
         continue-on-error: true

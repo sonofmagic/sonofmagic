@@ -1,10 +1,9 @@
-import type { Dayjs } from 'dayjs'
 import path from 'node:path'
 import dayjs from 'dayjs'
 
 const startWorkDay = '2016-07-01'
 export const profileData: {
-  whenToStartWork: Dayjs
+  whenToStartWork: ReturnType<typeof dayjs>
   name: string
   nickname: string
   gender: string

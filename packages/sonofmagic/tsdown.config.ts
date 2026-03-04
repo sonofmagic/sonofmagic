@@ -1,4 +1,4 @@
-import { createEsmNodeConfig } from '../../tsdown.shared.ts'
+import { createEsmNodeConfig } from '../../tsdown.shared.mjs'
 
 export default createEsmNodeConfig({
   entry: ['src/index.ts'],

@@ -11,7 +11,7 @@ vi.mock('../dist/index.mjs', () => {
   return {
     runCli: runCliMock,
   }
-}, { virtual: true })
+})
 
 describe('profile bin', () => {
   let previousArgv: string[]

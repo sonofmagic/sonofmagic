@@ -24,6 +24,7 @@
     "start": "tsx src/index.tsx",
     "build": "tsdown",
     "dev": "tsdown --watch --sourcemap",
+    "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:dev": "vitest"
   },

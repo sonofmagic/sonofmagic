@@ -33,7 +33,7 @@ async function loadRunCli() {
 }
 
 describe('runCli', () => {
-  let previousExitCode: number | undefined
+  let previousExitCode: typeof process.exitCode
   let infoSpy: ReturnType<typeof vi.spyOn>
 
   beforeEach(() => {

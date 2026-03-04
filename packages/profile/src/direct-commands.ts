@@ -53,7 +53,7 @@ async function buildSummaryLines(language?: SupportedLanguage) {
   ]
 }
 
-function assertNoExtraArgs(commandName: string, args: string[]) {
+function assertNoExtraArgs(commandName: string, args: readonly string[]) {
   if (args.length > 0) {
     throw new Error(`Unknown argument for command "${commandName}": ${args[0]}`)
   }
@@ -61,7 +61,7 @@ function assertNoExtraArgs(commandName: string, args: string[]) {
 
 export interface RunDirectCommandOptions {
   command: string
-  args: string[]
+  args: readonly string[]
   language?: SupportedLanguage
 }
 

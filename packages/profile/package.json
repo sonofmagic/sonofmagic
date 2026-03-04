@@ -47,6 +47,7 @@
   "scripts": {
     "dev": "tsdown --watch --sourcemap",
     "build": "tsdown --minify",
+    "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:dev": "vitest",
     "release": "pnpm publish",

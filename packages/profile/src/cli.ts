@@ -95,10 +95,13 @@ export async function runCli(runOptions: RunCliOptions = {}) {
     const matchedCommandName = cli.matchedCommand?.name
     if (matchedCommandName) {
       shouldOutputHelp = true
-      await runDirectCommand({
+      const directCommandOptions = {
         command: matchedCommandName,
         args: parsed.args,
-        language,
+        ...(language ? { language } : {}),
+      }
+      await runDirectCommand({
+        ...directCommandOptions,
       })
       return
     }

@@ -11,11 +11,11 @@ vi.mock('@icebreakers/profile', () => {
   return {
     runCli: runCliMock,
   }
-}, { virtual: true })
+})
 
 describe('yangqiming bin', () => {
   let previousArgv: string[]
-  let previousExitCode: number | undefined
+  let previousExitCode: typeof process.exitCode
 
   beforeEach(() => {
     previousArgv = [...process.argv]

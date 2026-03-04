@@ -70,10 +70,19 @@ function buildProfileSections(): ProfileSection[] {
 
 async function renderProfileSections(sections: ProfileSection[]) {
   const palettes = profileTheme.colors.menu.palettes
+  if (!palettes.length) {
+    return
+  }
 
   for (let i = 0; i < sections.length; i++) {
     const section = sections[i]
+    if (!section) {
+      continue
+    }
     const palette = palettes[i % palettes.length]
+    if (!palette) {
+      continue
+    }
     const header = palette.header(`✦ ${section.title}`)
     const body = section.lines.map(line => palette.body(`  ${line}`)).join('\n')
 

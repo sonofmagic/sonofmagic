@@ -45,6 +45,7 @@
     "stub": "unbuild --stub",
     "dev": "tsdown --watch --sourcemap",
     "build": "tsdown",
+    "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:dev": "vitest",
     "release": "pnpm publish",

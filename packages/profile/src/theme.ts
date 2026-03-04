@@ -104,7 +104,7 @@ function classifyColorCode(code: number): TerminalThemeMode | null {
 }
 
 function detectThemeFromColorFgbg(): TerminalThemeMode | null {
-  const value = process.env.COLORFGBG
+  const { COLORFGBG: value } = process.env
   if (!value) {
     return null
   }

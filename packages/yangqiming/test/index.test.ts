@@ -25,6 +25,8 @@ describe('build configuration', () => {
   it('builds esm output with mjs extension', () => {
     expect(config.format).toEqual(['esm'])
     expect(config.entry).toEqual(['src/index.ts'])
-    expect(config.outExtensions?.({ format: 'esm' } as never).js).toBe('.mjs')
+    const outputExtensions = config.outExtensions?.({ format: 'esm' } as never)
+    expect(outputExtensions).toBeDefined()
+    expect(outputExtensions?.js).toBe('.mjs')
   })
 })

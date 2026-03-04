@@ -6,6 +6,9 @@ import YAML from 'yaml'
 
 const ROOT_DIR = path.dirname(fileURLToPath(new URL(import.meta.url)))
 const WORKSPACE_FILE = path.resolve(ROOT_DIR, 'pnpm-workspace.yaml')
+const EXTRA_PROJECT_ROOTS = [
+  'scripts',
+] as const
 const CONFIG_FILENAMES = [
   'vitest.config.ts',
   'vitest.config.mts',
@@ -47,11 +50,12 @@ function loadProjectRootsFromWorkspace(): string[] {
       .map(extractBaseDirFromGlob)
       .filter((entry): entry is string => Boolean(entry))
 
-    return roots.length ? Array.from(new Set(roots)) : []
+    const mergedRoots = roots.concat(EXTRA_PROJECT_ROOTS)
+    return mergedRoots.length ? Array.from(new Set(mergedRoots)) : []
   }
   catch (error) {
     console.warn('[vitest] Failed to parse pnpm-workspace.yaml, no project roots will be used.', error)
-    return []
+    return [...EXTRA_PROJECT_ROOTS]
   }
 }
 

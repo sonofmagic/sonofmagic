@@ -1,0 +1,127 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`cli output snapshots > matches help output snapshot for profile 1`] = `
+"profile/3.0.4
+
+Usage:
+  $ profile [command] [options]
+
+Commands:
+  summary       Print profile summary and exit
+  links         Print all public links and exit
+  contact       Print contact links and exit
+  url <target>  Print a single public url and exit
+
+For more info, run any command with the \`--help\` flag:
+  $ profile summary --help
+  $ profile links --help
+  $ profile contact --help
+  $ profile url --help
+
+Options:
+  -l, --lang <language>  Specify language (zh|en) 
+  -h, --help             Display this message 
+  -v, --version          Display version number 
+
+Examples:
+$ profile summary --lang en
+$ profile links
+$ profile url github
+$ profile --lang en
+$ profile --lang zh"
+`;
+
+exports[`cli output snapshots > matches help output snapshot for sonofmagic 1`] = `
+"sonofmagic/3.0.4
+
+Usage:
+  $ sonofmagic [command] [options]
+
+Commands:
+  summary       Print profile summary and exit
+  links         Print all public links and exit
+  contact       Print contact links and exit
+  url <target>  Print a single public url and exit
+
+For more info, run any command with the \`--help\` flag:
+  $ sonofmagic summary --help
+  $ sonofmagic links --help
+  $ sonofmagic contact --help
+  $ sonofmagic url --help
+
+Options:
+  -l, --lang <language>  Specify language (zh|en) 
+  -h, --help             Display this message 
+  -v, --version          Display version number 
+
+Examples:
+$ sonofmagic summary --lang en
+$ sonofmagic links
+$ sonofmagic url github
+$ sonofmagic --lang en
+$ sonofmagic --lang zh"
+`;
+
+exports[`cli output snapshots > matches help output snapshot for yangqiming 1`] = `
+"yangqiming/3.0.4
+
+Usage:
+  $ yangqiming [command] [options]
+
+Commands:
+  summary       Print profile summary and exit
+  links         Print all public links and exit
+  contact       Print contact links and exit
+  url <target>  Print a single public url and exit
+
+For more info, run any command with the \`--help\` flag:
+  $ yangqiming summary --help
+  $ yangqiming links --help
+  $ yangqiming contact --help
+  $ yangqiming url --help
+
+Options:
+  -l, --lang <language>  Specify language (zh|en) 
+  -h, --help             Display this message 
+  -v, --version          Display version number 
+
+Examples:
+$ yangqiming summary --lang en
+$ yangqiming links
+$ yangqiming url github
+$ yangqiming --lang en
+$ yangqiming --lang zh"
+`;
+
+exports[`cli output snapshots > matches links output snapshot for profile 1`] = `
+"github: https://github.com/sonofmagic
+website: https://icebreaker.top
+repositories: https://github.com/sonofmagic?tab=repositories
+juejin: https://juejin.cn/user/1943592290496919
+blog: http://blog.icebreaker.top/
+x: https://x.com/sonofmagic95"
+`;
+
+exports[`cli output snapshots > matches links output snapshot for sonofmagic 1`] = `
+"github: https://github.com/sonofmagic
+website: https://icebreaker.top
+repositories: https://github.com/sonofmagic?tab=repositories
+juejin: https://juejin.cn/user/1943592290496919
+blog: http://blog.icebreaker.top/
+x: https://x.com/sonofmagic95"
+`;
+
+exports[`cli output snapshots > matches links output snapshot for yangqiming 1`] = `
+"github: https://github.com/sonofmagic
+website: https://icebreaker.top
+repositories: https://github.com/sonofmagic?tab=repositories
+juejin: https://juejin.cn/user/1943592290496919
+blog: http://blog.icebreaker.top/
+x: https://x.com/sonofmagic95"
+`;
+
+exports[`cli output snapshots > matches url output snapshot for profile 1`] = `"https://github.com/sonofmagic"`;
+
+exports[`cli output snapshots > matches url output snapshot for sonofmagic 1`] = `"https://github.com/sonofmagic"`;
+
+exports[`cli output snapshots > matches url output snapshot for yangqiming 1`] = `"https://github.com/sonofmagic"`;

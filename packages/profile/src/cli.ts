@@ -2,6 +2,7 @@ import type { SupportedLanguage } from './i18n'
 import process from 'node:process'
 import { cac } from 'cac'
 import packageJson from '../package.json'
+import { runDirectCommand } from './direct-commands'
 import { getSupportedLanguages } from './i18n'
 import { consoleError as errorLog } from './logger'
 import { main } from './program'
@@ -54,12 +55,19 @@ export async function runCli(runOptions: RunCliOptions = {}) {
   const cliVersion = runOptions.version ?? packageJson.version
 
   const cli = cac(cliName)
-  cli.usage('[options]')
+  cli.usage('[command] [options]')
+  cli.command('summary', 'Print profile summary and exit')
+  cli.command('links', 'Print all public links and exit')
+  cli.command('contact', 'Print contact links and exit')
+  cli.command('url <target>', 'Print a single public url and exit')
   cli.option('-l, --lang <language>', `Specify language (${getSupportedLanguages().join('|')})`)
   cli.help()
   if (cliVersion) {
     cli.version(cliVersion)
   }
+  cli.example(bin => `$ ${bin} summary --lang en`)
+  cli.example(bin => `$ ${bin} links`)
+  cli.example(bin => `$ ${bin} url github`)
   cli.example(bin => `$ ${bin} --lang en`)
   cli.example(bin => `$ ${bin} --lang zh`)
 
@@ -83,12 +91,23 @@ export async function runCli(runOptions: RunCliOptions = {}) {
       throw new Error(`Unknown option: ${formatOptionKey(unknownOptionKeys[0]!)}`)
     }
 
+    const language = resolveCliLanguage(parsed.options['lang'])
+    const matchedCommandName = cli.matchedCommand?.name
+    if (matchedCommandName) {
+      shouldOutputHelp = true
+      await runDirectCommand({
+        command: matchedCommandName,
+        args: parsed.args,
+        language,
+      })
+      return
+    }
+
     if (parsed.args.length > 0) {
       shouldOutputHelp = true
       throw new Error(`Unknown command: ${parsed.args.join(' ')}`)
     }
 
-    const language = resolveCliLanguage(parsed.options['lang'])
     await main(language ? { language } : undefined)
   }
   catch (error) {

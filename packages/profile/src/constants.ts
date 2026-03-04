@@ -34,6 +34,17 @@ export const optionsData = {
 
 export type ProfileOptions = typeof optionsData
 
+export const profileLinks = {
+  github: 'https://github.com/sonofmagic',
+  website: 'https://icebreaker.top',
+  repositories: 'https://github.com/sonofmagic?tab=repositories',
+  juejin: 'https://juejin.cn/user/1943592290496919',
+  blog: 'http://blog.icebreaker.top/',
+  x: 'https://x.com/sonofmagic95',
+} as const
+
+export type ProfileLinkKey = keyof typeof profileLinks
+
 export const assetPaths = {
   photosDir: path.resolve(__dirname, '../assets/photos'),
 } as const

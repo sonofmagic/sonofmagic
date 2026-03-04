@@ -1,10 +1,11 @@
 import process from 'node:process'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-const { mainMock, errorMock } = vi.hoisted(() => {
+const { mainMock, errorMock, directCommandMock } = vi.hoisted(() => {
   return {
     mainMock: vi.fn(),
     errorMock: vi.fn(),
+    directCommandMock: vi.fn(),
   }
 })
 
@@ -17,6 +18,12 @@ vi.mock('../src/program', () => {
 vi.mock('../src/logger', () => {
   return {
     consoleError: errorMock,
+  }
+})
+
+vi.mock('../src/direct-commands', () => {
+  return {
+    runDirectCommand: directCommandMock,
   }
 })
 
@@ -34,6 +41,7 @@ describe('runCli', () => {
     process.exitCode = undefined
     mainMock.mockReset()
     errorMock.mockReset()
+    directCommandMock.mockReset()
     infoSpy = vi.spyOn(console, 'info').mockImplementation(() => {})
   })
 
@@ -52,6 +60,7 @@ describe('runCli', () => {
 
     expect(mainMock).toHaveBeenCalledTimes(1)
     expect(mainMock).toHaveBeenCalledWith(undefined)
+    expect(directCommandMock).not.toHaveBeenCalled()
     expect(process.exitCode).toBeUndefined()
   })
 
@@ -65,6 +74,25 @@ describe('runCli', () => {
 
     expect(mainMock).toHaveBeenCalledTimes(1)
     expect(mainMock).toHaveBeenCalledWith({ language: 'en' })
+    expect(directCommandMock).not.toHaveBeenCalled()
+    expect(process.exitCode).toBeUndefined()
+  })
+
+  it('dispatches matched direct commands with resolved options', async () => {
+    const runCli = await loadRunCli()
+    await runCli({
+      argv: ['node', 'profile', 'summary', '--lang', 'EN-US'],
+      name: 'profile',
+      version: '3.0.4',
+    })
+
+    expect(mainMock).not.toHaveBeenCalled()
+    expect(directCommandMock).toHaveBeenCalledTimes(1)
+    expect(directCommandMock).toHaveBeenCalledWith({
+      command: 'summary',
+      args: [],
+      language: 'en',
+    })
     expect(process.exitCode).toBeUndefined()
   })
 
@@ -82,6 +110,7 @@ describe('runCli', () => {
     })
 
     expect(mainMock).not.toHaveBeenCalled()
+    expect(directCommandMock).not.toHaveBeenCalled()
     expect(process.exitCode).toBeUndefined()
   })
 
@@ -94,6 +123,7 @@ describe('runCli', () => {
     })
 
     expect(mainMock).not.toHaveBeenCalled()
+    expect(directCommandMock).not.toHaveBeenCalled()
     expect(errorMock).toHaveBeenCalledWith('Unknown option: --foo')
     expect(process.exitCode).toBe(1)
   })
@@ -107,7 +137,22 @@ describe('runCli', () => {
     })
 
     expect(mainMock).not.toHaveBeenCalled()
+    expect(directCommandMock).not.toHaveBeenCalled()
     expect(errorMock).toHaveBeenCalledWith('Unsupported language "jp". Supported languages: zh, en')
+    expect(process.exitCode).toBe(1)
+  })
+
+  it('reports unknown commands and sets non-zero exit code', async () => {
+    const runCli = await loadRunCli()
+    await runCli({
+      argv: ['node', 'profile', 'what-is-this'],
+      name: 'profile',
+      version: '3.0.4',
+    })
+
+    expect(mainMock).not.toHaveBeenCalled()
+    expect(directCommandMock).not.toHaveBeenCalled()
+    expect(errorMock).toHaveBeenCalledWith('Unknown command: what-is-this')
     expect(process.exitCode).toBe(1)
   })
 })

@@ -1,5 +1,6 @@
 import type { ProfileOptions } from './constants'
 import type { SupportedLanguage } from './i18n'
+import { profileLinks } from './constants'
 import { showPhotoGallery } from './features/photo-gallery'
 import { showRepositoryPrompt } from './features/repositories'
 import { changeLanguage, Dic, getCurrentLanguage, getSupportedLanguages, t } from './i18n'
@@ -27,15 +28,6 @@ interface ProfileSection {
   title: string
   lines: string[]
 }
-
-const profileLinks = {
-  github: 'https://github.com/sonofmagic',
-  website: 'https://icebreaker.top',
-  repositories: 'https://github.com/sonofmagic?tab=repositories',
-  juejin: 'https://juejin.cn/user/1943592290496919',
-  blog: 'http://blog.icebreaker.top/',
-  x: 'https://x.com/sonofmagic95',
-} as const
 
 function headingLine(title: string) {
   return `\n\n${profileTheme.colors.heading('|')} ${title}`

@@ -51,7 +51,6 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
   },
-  "publishConfig": {},
   "dependencies": {
     "@icebreakers/profile": "workspace:*"
   }

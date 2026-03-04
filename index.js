@@ -66,11 +66,11 @@ function buildContactTable(entries) {
       entries.map(
         (entry) => {
           const iconLink
-            = `<a href="${entry.href}" target="_blank"><img src="${entry.iconSrc}" alt="${entry.iconAlt}" /></a>`
+            = `<a href="${entry.href}" target="_blank"><img src="${entry.iconSrc}" alt="${entry.iconAlt}" width="18" height="18" align="absmiddle" /></a>`
           if (!entry.iconNote) {
             return iconLink
           }
-          return `<span style="display:inline-flex;align-items:center;gap:8px;">${iconLink}<span>${entry.iconNote}</span></span>`
+          return `${iconLink}&nbsp;${entry.iconNote}`
         },
       ),
       entries.map(

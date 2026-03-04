@@ -8,6 +8,8 @@ const fixedPackages = [
   'yangqiming',
 ]
 const requiredNodeVersionRange = '^20.19.0 || >=22.12.0'
+const requiredEsmMain = './dist/index.mjs'
+const requiredEsmTypes = './dist/index.d.mts'
 
 const rootDir = process.cwd()
 
@@ -40,6 +42,19 @@ function getProfileWorkspaceDependency(pkgJson) {
   }
 
   return null
+}
+
+function getRootExport(pkgJson) {
+  if (!pkgJson.exports || typeof pkgJson.exports !== 'object') {
+    return null
+  }
+
+  const rootExport = pkgJson.exports['.']
+  if (!rootExport || typeof rootExport !== 'object') {
+    return null
+  }
+
+  return rootExport
 }
 
 function hasFixedGroup(config) {
@@ -93,6 +108,12 @@ async function main() {
     ['sonofmagic', sonofmagicPkg],
     ['yangqiming', yangqimingPkg],
   ]
+  const esmPackages = [
+    ['@icebreakers/profile', profilePkg],
+    ['@icebreakers/profile-next', profileNextPkg],
+    ['sonofmagic', sonofmagicPkg],
+    ['yangqiming', yangqimingPkg],
+  ]
 
   let hasErrors = false
   for (const [pkgName, dependencySpec] of profileDependencySpecs) {
@@ -106,6 +127,55 @@ async function main() {
     const actualNodeVersionRange = pkgJson.engines?.node
     if (actualNodeVersionRange !== requiredNodeVersionRange) {
       fail(`${pkgName} engines.node must be ${requiredNodeVersionRange} (received ${String(actualNodeVersionRange)})`)
+      hasErrors = true
+    }
+  }
+
+  for (const [pkgName, pkgJson] of esmPackages) {
+    if (pkgJson.type !== 'module') {
+      fail(`${pkgName} must set type to module (received ${String(pkgJson.type)})`)
+      hasErrors = true
+    }
+
+    if (pkgJson.main !== requiredEsmMain) {
+      fail(`${pkgName} main must be ${requiredEsmMain} (received ${String(pkgJson.main)})`)
+      hasErrors = true
+    }
+
+    if (pkgJson.module !== requiredEsmMain) {
+      fail(`${pkgName} module must be ${requiredEsmMain} (received ${String(pkgJson.module)})`)
+      hasErrors = true
+    }
+
+    if (pkgJson.types !== requiredEsmTypes) {
+      fail(`${pkgName} types must be ${requiredEsmTypes} (received ${String(pkgJson.types)})`)
+      hasErrors = true
+    }
+
+    const rootExport = getRootExport(pkgJson)
+    if (!rootExport) {
+      fail(`${pkgName} must define exports["."] with ESM entrypoints`)
+      hasErrors = true
+      continue
+    }
+
+    if (rootExport.import !== requiredEsmMain) {
+      fail(`${pkgName} exports["."].import must be ${requiredEsmMain} (received ${String(rootExport.import)})`)
+      hasErrors = true
+    }
+
+    if (rootExport.default !== requiredEsmMain) {
+      fail(`${pkgName} exports["."].default must be ${requiredEsmMain} (received ${String(rootExport.default)})`)
+      hasErrors = true
+    }
+
+    if (rootExport.types !== requiredEsmTypes) {
+      fail(`${pkgName} exports["."].types must be ${requiredEsmTypes} (received ${String(rootExport.types)})`)
+      hasErrors = true
+    }
+
+    if ('require' in rootExport) {
+      fail(`${pkgName} exports["."] must not include require (CJS is disabled)`)
       hasErrors = true
     }
   }

@@ -8,6 +8,10 @@ export default defineProject({
         find: '@',
         replacement: path.resolve(__dirname, './src'),
       },
+      {
+        find: '@icebreakers/profile',
+        replacement: path.resolve(__dirname, '../profile/src/index.ts'),
+      },
     ],
     globals: true,
     testTimeout: 60_000,

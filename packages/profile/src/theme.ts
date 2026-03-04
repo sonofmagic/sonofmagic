@@ -104,8 +104,7 @@ function classifyColorCode(code: number): TerminalThemeMode | null {
 }
 
 function detectThemeFromColorFgbg(): TerminalThemeMode | null {
-  // eslint-disable-next-line dot-notation
-  const value = process.env['COLORFGBG']
+  const value = process.env.COLORFGBG
   if (!value) {
     return null
   }

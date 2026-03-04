@@ -10,6 +10,7 @@ async function main() {
 }
 
 void main().catch((error) => {
-  console.error(error)
+  const message = error instanceof Error ? (error.stack ?? error.message) : String(error)
+  process.stderr.write(`${message}\n`)
   process.exitCode = 1
 })

@@ -1,5 +1,30 @@
 # yangqiming
 
+## 4.0.0
+
+### Major Changes
+
+- 🚀 **Consolidate the recent CLI and packaging upgrades across the fixed release group.** [`3568fda`](https://github.com/sonofmagic/sonofmagic/commit/3568fdaff070c2b7f08411cab6ba7d93b057fae4) by @sonofmagic
+  Breaking changes:
+
+  - Ship ESM-only builds and remove CJS outputs.
+  - Drop support for Node.js versions lower than `20.19.0` and align engines to `^20.19.0 || >=22.12.0`.
+
+  Improvements:
+
+  - Migrate package builds from `tsup` to `tsdown`.
+  - Add direct output commands to the shared profile CLI:
+    - `summary [--lang zh|en]`
+    - `links`
+    - `contact`
+    - `url <target>`
+  - Add release safeguards and tests around fixed-version consistency and cross-package CLI delegation.
+
+### Patch Changes
+
+- 📦 **Dependencies** [`3568fda`](https://github.com/sonofmagic/sonofmagic/commit/3568fdaff070c2b7f08411cab6ba7d93b057fae4)
+  → `@icebreakers/profile@4.0.0`
+
 ## 3.0.4
 
 ### Patch Changes

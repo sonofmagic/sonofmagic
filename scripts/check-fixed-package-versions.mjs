@@ -7,6 +7,7 @@ const fixedPackages = [
   'sonofmagic',
   'yangqiming',
 ]
+const requiredNodeVersionRange = '^20.19.0 || >=22.12.0'
 
 const rootDir = process.cwd()
 
@@ -55,9 +56,10 @@ function hasFixedGroup(config) {
 }
 
 async function main() {
-  const [changesetConfig, profilePkg, sonofmagicPkg, yangqimingPkg] = await Promise.all([
+  const [changesetConfig, profilePkg, profileNextPkg, sonofmagicPkg, yangqimingPkg] = await Promise.all([
     readJson('.changeset/config.json'),
     readJson('packages/profile/package.json'),
+    readJson('packages/profile-next/package.json'),
     readJson('packages/sonofmagic/package.json'),
     readJson('packages/yangqiming/package.json'),
   ])
@@ -85,11 +87,25 @@ async function main() {
     ['sonofmagic', getProfileWorkspaceDependency(sonofmagicPkg)],
     ['yangqiming', getProfileWorkspaceDependency(yangqimingPkg)],
   ]
+  const nodeEnginePackages = [
+    ['@icebreakers/profile', profilePkg],
+    ['@icebreakers/profile-next', profileNextPkg],
+    ['sonofmagic', sonofmagicPkg],
+    ['yangqiming', yangqimingPkg],
+  ]
 
   let hasErrors = false
   for (const [pkgName, dependencySpec] of profileDependencySpecs) {
     if (dependencySpec !== 'workspace:*') {
       fail(`${pkgName} must depend on @icebreakers/profile as workspace:* (received ${String(dependencySpec)})`)
+      hasErrors = true
+    }
+  }
+
+  for (const [pkgName, pkgJson] of nodeEnginePackages) {
+    const actualNodeVersionRange = pkgJson.engines?.node
+    if (actualNodeVersionRange !== requiredNodeVersionRange) {
+      fail(`${pkgName} engines.node must be ${requiredNodeVersionRange} (received ${String(actualNodeVersionRange)})`)
       hasErrors = true
     }
   }

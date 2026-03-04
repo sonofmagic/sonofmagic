@@ -1,12 +1,7 @@
-import { defineConfig } from 'tsdown'
+import { createEsmNodeConfig } from '../../tsdown.shared.ts'
 
-export default defineConfig({
+export default createEsmNodeConfig({
   entry: ['src/index.ts'],
-  shims: true,
-  inlineOnly: false,
-  format: ['esm'],
-  clean: true,
-  dts: true,
   inputOptions: {
     onLog(level, log, defaultHandler) {
       if (
@@ -19,10 +14,5 @@ export default defineConfig({
 
       defaultHandler(level, log)
     },
-  },
-  outExtensions() {
-    return {
-      js: '.mjs',
-    }
   },
 })

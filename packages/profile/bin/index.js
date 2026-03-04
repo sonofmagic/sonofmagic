@@ -1,15 +1,15 @@
 #!/usr/bin/env node
 
-const process = require('node:process')
-const { version } = require('../package.json')
+import process from 'node:process'
+import { runCli } from '../dist/index.mjs'
 
-void (async () => {
-  const { runCli } = await import('../dist/index.mjs')
+async function main() {
   await runCli({
     name: 'profile',
-    version,
   })
-})().catch((error) => {
+}
+
+void main().catch((error) => {
   console.error(error)
   process.exitCode = 1
 })

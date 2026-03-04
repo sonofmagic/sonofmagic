@@ -1,13 +1,12 @@
-import { defineConfig } from 'tsup'
+import { defineConfig } from 'tsdown'
 
 export default defineConfig({
-  entry: ['src/index.ts'], // , 'src/cli.ts'],
+  entry: ['src/index.tsx'],
   shims: true,
   format: ['esm'],
   clean: true,
   dts: true,
-  splitting: true,
-  outExtension() {
+  outExtensions() {
     return {
       js: '.mjs',
     }

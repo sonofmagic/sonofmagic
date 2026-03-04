@@ -1,18 +1,19 @@
 {
   "name": "@icebreakers/profile-next",
+  "type": "module",
   "version": "0.0.0",
   "private": true,
   "license": "MIT",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/index.d.mts",
       "import": "./dist/index.mjs",
       "default": "./dist/index.mjs"
     }
   },
   "main": "./dist/index.mjs",
   "module": "./dist/index.mjs",
-  "types": "./dist/index.d.ts",
+  "types": "./dist/index.d.mts",
   "files": [
     "dist"
   ],
@@ -21,8 +22,8 @@
   },
   "scripts": {
     "start": "tsx src/index.tsx",
-    "build": "tsup",
-    "dev": "tsup --watch --sourcemap",
+    "build": "tsdown",
+    "dev": "tsdown --watch --sourcemap",
     "test": "vitest run",
     "test:dev": "vitest"
   },

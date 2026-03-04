@@ -1,15 +1,15 @@
 #!/usr/bin/env node
 
-const process = require('node:process')
-const { name, version } = require('../package.json')
+import process from 'node:process'
+import { runCli } from '@icebreakers/profile'
 
-void (async () => {
-  const { runCli } = await import('@icebreakers/profile')
+async function main() {
   await runCli({
-    name,
-    version,
+    name: 'yangqiming',
   })
-})().catch((error) => {
+}
+
+void main().catch((error) => {
   console.error(error)
   process.exitCode = 1
 })

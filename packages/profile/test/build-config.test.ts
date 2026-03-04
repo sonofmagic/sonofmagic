@@ -1,15 +1,8 @@
-import { bar } from '@/index'
 import packageJson from '../package.json'
 import config from '../tsdown.config'
 
-describe('index', () => {
-  it('foo bar', () => {
-    expect(bar()).toBe('foo')
-  })
-})
-
 describe('build configuration', () => {
-  it('uses tsdown scripts and esm metadata', () => {
+  it('uses tsdown scripts and esm package metadata', () => {
     expect(packageJson.type).toBe('module')
     expect(packageJson.scripts.build).toContain('tsdown')
     expect(packageJson.scripts.dev).toContain('tsdown')
@@ -19,8 +12,10 @@ describe('build configuration', () => {
     expect(packageJson.exports['.'].types).toBe('./dist/index.d.mts')
   })
 
-  it('builds esm output with mjs extension', () => {
+  it('keeps esm-only output and mjs extension', () => {
     expect(config.format).toEqual(['esm'])
+    expect(config.dts).toBe(true)
+    expect(config.clean).toBe(true)
     expect(config.entry).toEqual(['src/index.ts'])
     expect(config.outExtensions?.({ format: 'esm' } as never).js).toBe('.mjs')
   })

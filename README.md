@@ -12,7 +12,7 @@
 
 <summary>More Details</summary>
 
-|                         <a href="https://www.icebreaker.top/" target="_blank"><img src="assets/svg/chorme.svg" alt="Website Icon" width="18" height="18" align="absmiddle" /></a>                         |   <a href="https://u.wechat.com/EAVzgOGBnATKcePfVWr_QyQ" target="_blank"><img src="assets/svg/wechat.svg" alt="Wechat Icon" width="18" height="18" align="absmiddle" /></a>&nbsp;备注: Github  |
+|                         <a href="https://www.icebreaker.top/" target="_blank"><img src="assets/svg/chorme.svg" alt="Website Icon" width="18" height="18" align="absmiddle" /></a>                         | <a href="https://u.wechat.com/EAVzgOGBnATKcePfVWr_QyQ" target="_blank"><img src="assets/svg/wechat.svg" alt="Wechat Icon" width="18" height="18" align="absmiddle" /></a>&nbsp;备注: Github  |
 | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
 | <img width="160" height="160" src="https://github-readme-svg.vercel.app/api/v1/svg/qrcode?value=https://www.icebreaker.top&type=func&qrcodeType=round&posType=planet&posColor=%23000" alt="My Website" /> | <img width="160" height="160" src="https://github-readme-svg.vercel.app/api/v1/svg/qrcode?value=https://u.wechat.com/EAVzgOGBnATKcePfVWr_QyQ&type=circle&posColor=%23000" alt="My Wechat" /> |
 
@@ -21,30 +21,30 @@
 WeChat mini program(Weapp) / 微信小程序
 </p>
 
-|                                                                    <div style="display: flex;align-items: center;"> 破冰客 </div>                                                                   |                                                                    <div style="display: flex;align-items: center;"> 程序员名片 </div>                                                                   |                                                                    <div style="display: flex;align-items: center;"> IceStack </div>                                                                    |                                                                     <div style="display: flex;align-items: center;"> tailwindcss </div>                                                                     |
-| :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+|                                                                     <div style="display: flex;align-items: center;"> 破冰客 </div>                                                                     |                                                                     <div style="display: flex;align-items: center;"> 程序员名片 </div>                                                                     |                                                                     <div style="display: flex;align-items: center;"> IceStack </div>                                                                      |                                                                       <div style="display: flex;align-items: center;"> tailwindcss </div>                                                                        |
+| :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
 | <img width="160" height="160" src="https://github-readme-svg.vercel.app/api/v1/svg/qrcode?value=https://mp.weixin.qq.com/a/~QCyvHLpi7gWkTTw_D45LNg~~&type=image&posColor=%23000" alt="破冰客小程序" /> | <img width="160" height="160" src="https://github-readme-svg.vercel.app/api/v1/svg/qrcode?value=https://mp.weixin.qq.com/a/~wCmPXG4P6LVtnyOobH53KQ~~&type=image&posColor=%23000" alt="程序员名片小程序" /> | <img width="160" height="160" src="https://github-readme-svg.vercel.app/api/v1/svg/qrcode?value=https://mp.weixin.qq.com/a/~Z3ufw44yiwSSRapyxRmuqQ~~&type=image&posColor=%23000" alt="IceStack 小程序" /> | <img width="160" height="160" src="https://github-readme-svg.vercel.app/api/v1/svg/qrcode?value=https://mp.weixin.qq.com/a/~Z3ufw44yiwSSRapyxRmuqQ~~&type=image&posColor=%23000" alt="tailwindcss 主题小程序" /> |
 
 ```text
- _   _  _____  _____     
-| | | ||_   _|/  __ \  _ 
+ _   _  _____  _____
+| | | ||_   _|/  __ \  _
 | | | |  | |  | /  \/ (_)
-| | | |  | |  | |        
-| |_| |  | |  | \__/\  _ 
+| | | |  | |  | |
+| |_| |  | |  | \__/\  _
  \___/   \_/   \____/ (_)
-                         
-                         
+
+
  _____  _____  _____   ____          _____  _____          _____  ______
 / __  \|  _  |/ __  \ / ___|        |  _  ||____ |        |  _  ||___  /
-`' / /'| |/' |`' / /'/ /___  ______ | |/' |    / / ______ | |/' |   / / 
-  / /  |  /| |  / /  | ___ \|______||  /| |    \ \|______||  /| |  / /  
-./ /___\ |_/ /./ /___| \_/ |        \ |_/ /.___/ /        \ |_/ /./ /   
+`' / /'| |/' |`' / /'/ /___  ______ | |/' |    / / ______ | |/' |   / /
+  / /  |  /| |  / /  | ___ \|______||  /| |    \ \|______||  /| |  / /
+./ /___\ |_/ /./ /___| \_/ |        \ |_/ /.___/ /        \ |_/ /./ /
 \_____/ \___/ \_____/\_____/         \___/ \____/          \___/ \_/
 ```
 
 auto generated by Github Actions at 2026-03-07
 
-Powered by [`sonofmagic/github-readme-svg`](https://github.com/sonofmagic/github-readme-svg), [`sonofmagic/ascii-art-avatar`](https://github.com/sonofmagic/ascii-art-avatar) and [`sonofmagic/yangqiming`](https://github.com/sonofmagic/yangqiming)
+Powered by [`sonofmagic/github-readme-svg`](https://github.com/sonofmagic/github-readme-svg), [`sonofmagic/ascii-art-avatar`](https://github.com/sonofmagic/ascii-art-avatar) and [`sonofmagic/sonofmagic`](https://github.com/sonofmagic/sonofmagic)
 
 <!-- ![Shit happens](https://github-readme-svg.vercel.app/api/v1/svg/captcha?value=Shit%20happens&n=30&w=400) -->
 

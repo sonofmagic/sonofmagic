@@ -14,7 +14,7 @@ export interface HeroSvgOptions {
 const DEFAULTS = {
   width: 1280,
   height: 360,
-  title: 'ICEBREAKER',
+  title: 'ice breaker',
   subtitle: 'Build systems, mini-program workflows, and profile-grade interfaces.',
   badge: {
     text: 'Github Profile Hero',
@@ -25,12 +25,15 @@ const DEFAULTS = {
 export function createHeroSvg(options: HeroSvgOptions = {}) {
   const width = options.width ?? DEFAULTS.width
   const height = options.height ?? DEFAULTS.height
-  const title = escapeXml(options.title ?? DEFAULTS.title)
+  const title = options.title ?? DEFAULTS.title
   const subtitle = escapeXml(options.subtitle ?? DEFAULTS.subtitle)
   const badge = {
     text: escapeXml(options.badge?.text ?? DEFAULTS.badge.text),
     color: options.badge?.color ?? DEFAULTS.badge.color,
   }
+  const escapedTitle = escapeXml(title)
+  const dotX = 72 + Math.max(376, title.length * 32 + 36)
+  const dotY = height * 0.5 - 14
 
   const id = `hero-${Math.abs(hashCode(`${width}-${height}-${title}-${subtitle}-${badge.text}`))}`
   const gridPath = buildGridPath(width, height, 48)
@@ -39,7 +42,7 @@ export function createHeroSvg(options: HeroSvgOptions = {}) {
 
   return [
     `<svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="${id}-title ${id}-desc">`,
-    `<title id="${id}-title">${title}</title>`,
+    `<title id="${id}-title">${escapeXml(title)}</title>`,
     `<desc id="${id}-desc">${subtitle}</desc>`,
     '<defs>',
     `<linearGradient id="${id}-bg" x1="0" y1="0" x2="${width}" y2="${height}" gradientUnits="userSpaceOnUse">`,
@@ -68,6 +71,14 @@ export function createHeroSvg(options: HeroSvgOptions = {}) {
     `<filter id="${id}-blur" x="-20%" y="-20%" width="140%" height="140%">`,
     '<feGaussianBlur stdDeviation="18" />',
     '</filter>',
+    `<filter id="${id}-title-glow" x="-20%" y="-40%" width="160%" height="180%">`,
+    '<feGaussianBlur stdDeviation="6" result="titleBlur" />',
+    '<feColorMatrix in="titleBlur" type="matrix" values="1 0 0 0 0  0 1 0 0 0.35  0 0 1 0 0.55  0 0 0 1 0" result="titleGlow" />',
+    '<feMerge>',
+    '<feMergeNode in="titleGlow" />',
+    '<feMergeNode in="SourceGraphic" />',
+    '</feMerge>',
+    '</filter>',
     '</defs>',
     `<rect width="${width}" height="${height}" rx="28" fill="url(#${id}-bg)" />`,
     `<rect width="${width}" height="${height}" rx="28" fill="url(#${id}-glow-a)" />`,
@@ -81,9 +92,24 @@ export function createHeroSvg(options: HeroSvgOptions = {}) {
     ...accents,
     `<rect x="72" y="72" width="${badgeWidth}" height="32" rx="16" fill="rgba(10,16,36,0.72)" stroke="${badge.color}" />`,
     `<text x="88" y="93" fill="${badge.color}" font-family="'Fira Code', 'JetBrains Mono', monospace" font-size="14">${badge.text}</text>`,
-    `<text x="72" y="${height * 0.56}" fill="#F8FAFC" font-family="'Space Grotesk', 'Avenir Next', sans-serif" font-size="56" font-weight="700" letter-spacing="4">${title}</text>`,
-    `<text x="74" y="${height * 0.56 + 2}" fill="rgba(43,255,207,0.2)" font-family="'Space Grotesk', 'Avenir Next', sans-serif" font-size="56" font-weight="700" letter-spacing="4">${title}<animate attributeName="opacity" values="0.18;0.4;0.18" dur="3.2s" repeatCount="indefinite" /></text>`,
-    `<text x="72" y="${height * 0.69}" fill="rgba(226,232,240,0.92)" font-family="'IBM Plex Sans', 'Segoe UI', sans-serif" font-size="24">${subtitle}</text>`,
+    [
+      `<text x="72" y="${height * 0.5}" fill="#F8FAFC" filter="url(#${id}-title-glow)" font-family="'Space Grotesk', 'Avenir Next', sans-serif" font-size="52" font-weight="700" letter-spacing="4">${escapedTitle}`,
+      '<animate attributeName="fill" values="#EAFDFF;#B6FFF0;#EAFDFF" dur="2.8s" repeatCount="indefinite" />',
+      '<animate attributeName="opacity" values="0.88;1;0.88" dur="2.8s" repeatCount="indefinite" />',
+      '</text>',
+    ].join(''),
+    [
+      `<text x="74" y="${height * 0.5 + 2}" fill="rgba(43,255,207,0.2)" font-family="'Space Grotesk', 'Avenir Next', sans-serif" font-size="52" font-weight="700" letter-spacing="4">${escapedTitle}`,
+      '<animate attributeName="opacity" values="0.14;0.46;0.14" dur="1.9s" repeatCount="indefinite" />',
+      '</text>',
+    ].join(''),
+    [
+      `<circle cx="${dotX}" cy="${dotY}" r="8" fill="#FFD166">`,
+      '<animate attributeName="r" values="7;10;7" dur="2.4s" repeatCount="indefinite" />',
+      '<animate attributeName="opacity" values="0.7;1;0.7" dur="1.8s" repeatCount="indefinite" />',
+      '</circle>',
+    ].join(''),
+    `<text x="72" y="${height * 0.7}" fill="rgba(226,232,240,0.92)" font-family="'IBM Plex Sans', 'Segoe UI', sans-serif" font-size="24">${subtitle}</text>`,
     `<text x="72" y="${height - 54}" fill="rgba(148,163,184,0.92)" font-family="'Fira Code', 'JetBrains Mono', monospace" font-size="16">const profile = createSomethingMemorable()</text>`,
     [
       `<rect x="0" y="0" width="${width}" height="${height}" rx="28" fill="none" stroke="rgba(122,124,255,0.28)">`,

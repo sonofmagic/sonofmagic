@@ -63,7 +63,7 @@ function getUtcDateString() {
 
 async function writeHeroSvg() {
   const heroSvg = createHeroSvg({
-    title: 'ICEBREAKER',
+    title: 'ice breaker',
     subtitle: 'Build systems, mini-program workflows, and profile-grade interfaces.',
     badge: {
       text: 'Github Profile Hero',
@@ -72,7 +72,7 @@ async function writeHeroSvg() {
   })
   await fs.ensureDir(path.dirname(heroOutputPath))
   await fs.writeFile(heroOutputPath, heroSvg)
-  return '<img src="assets/generated/profile-hero.svg" alt="Icebreaker Github Profile Hero" />'
+  return '<a href="https://icebreaker.top/" target="_blank"><img src="assets/generated/profile-hero.svg" alt="Icebreaker Github Profile Hero" /></a>'
 }
 
 async function generateReadme() {

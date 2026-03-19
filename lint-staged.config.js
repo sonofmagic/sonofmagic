@@ -1,4 +1,5 @@
 export default {
+  '*': () => 'pnpm typecheck',
   '*.{js,jsx,mjs,ts,tsx,mts}': [
     'eslint --fix',
   ],

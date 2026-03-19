@@ -22,7 +22,13 @@ const BANNER_FONT: Record<string, string[]> = {
 const FALLBACK_GLYPH = BANNER_FONT['E'] as string[]
 
 export function renderBannerText(text: string) {
-  const rows: string[][] = Array.from({ length: 5 }).fill([])
+  const rows: string[][] = [
+    [],
+    [],
+    [],
+    [],
+    [],
+  ]
   for (const rawChar of text.toUpperCase()) {
     if (rawChar === ' ') {
       for (const row of rows) {

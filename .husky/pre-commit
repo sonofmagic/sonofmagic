@@ -2,3 +2,4 @@
 set -e
 
 pnpm exec lint-staged
+pnpm typecheck

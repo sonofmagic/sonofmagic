@@ -32,7 +32,7 @@ export function createHeroSvg(options: HeroSvgOptions = {}) {
     color: options.badge?.color ?? DEFAULTS.badge.color,
   }
   const escapedTitle = escapeXml(title)
-  const dotX = 72 + Math.max(376, title.length * 32 + 36)
+  const dotX = 72 + Math.max(340, title.length * 32)
   const dotY = height * 0.5 - 14
 
   const id = `hero-${Math.abs(hashCode(`${width}-${height}-${title}-${subtitle}-${badge.text}`))}`

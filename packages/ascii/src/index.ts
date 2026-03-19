@@ -3,7 +3,8 @@ export interface BannerOptions {
   text?: string
 }
 
-const DEFAULT_TEXT = 'ICEBREAKER'
+const DEFAULT_TEXT = 'ICE BREAKER'
+const WORD_SEPARATOR_RE = /\s+/
 
 const BANNER_FONT: Record<string, string[]> = {
   A: [' ### ', '#   #', '#####', '#   #', '#   #'],
@@ -22,6 +23,12 @@ const BANNER_FONT: Record<string, string[]> = {
 export function renderBannerText(text: string) {
   const rows = Array.from({ length: 5 }).fill([] as string[])
   for (const rawChar of text.toUpperCase()) {
+    if (rawChar === ' ') {
+      for (const row of rows) {
+        row.push('   ')
+      }
+      continue
+    }
     const glyph = BANNER_FONT[rawChar] ?? BANNER_FONT.E
     for (const [index, row] of glyph.entries()) {
       rows[index].push(row)
@@ -37,17 +44,34 @@ export function centerText(value: string, width: number) {
   return `${' '.repeat(leftPadding)}${value}${' '.repeat(rightPadding)}`
 }
 
+function buildStackedTitle(text: string) {
+  const words = text.trim().split(WORD_SEPARATOR_RE).filter(Boolean)
+  if (words.length > 1) {
+    const rows: string[] = []
+    for (const [index, word] of words.entries()) {
+      rows.push(...renderBannerText(word))
+      if (index < words.length - 1) {
+        rows.push('')
+      }
+    }
+    return rows
+  }
+
+  return renderBannerText(text)
+}
+
 export function buildProfileBanner(date: string, options: BannerOptions = {}) {
-  const title = renderBannerText(options.text ?? DEFAULT_TEXT)
+  const text = options.text ?? DEFAULT_TEXT
   const footer = options.dateLabel ?? `updated ${date}`
-  const innerWidth = Math.max(...title.map(line => line.length), footer.length)
-  const emptyLine = `| ${''.padEnd(innerWidth)} |`
+  const title = buildStackedTitle(text)
+  const innerWidth = Math.max(...title.map(line => line.length), footer.length + 8)
+  const divider = `| ${'-'.repeat(innerWidth)} |`
 
   return [
-    `+${'-'.repeat(innerWidth + 2)}+`,
-    ...title.map(line => `| ${line.padEnd(innerWidth)} |`),
-    emptyLine,
-    `| ${centerText(footer, innerWidth)} |`,
-    `+${'-'.repeat(innerWidth + 2)}+`,
+    `.${'-'.repeat(innerWidth + 2)}.`,
+    ...title.map(line => `| ${centerText(line, innerWidth)} |`),
+    divider,
+    `| ${centerText(`:: ${footer} ::`, innerWidth)} |`,
+    `'${'-'.repeat(innerWidth + 2)}'`,
   ].join('\n')
 }

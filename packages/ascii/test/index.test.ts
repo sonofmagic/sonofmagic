@@ -16,7 +16,8 @@ describe('ascii', () => {
     const banner = buildProfileBanner('2026-03-19')
 
     expect(banner).toContain('updated 2026-03-19')
-    expect(banner).toContain('+')
-    expect(banner.split('\n')).toHaveLength(9)
+    expect(banner).toContain('.-')
+    expect(banner).toContain('\'-')
+    expect(banner.split('\n')).toHaveLength(15)
   })
 })

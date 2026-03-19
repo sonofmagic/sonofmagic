@@ -1,17 +1,17 @@
 name: Change Date Everyday
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - TEMPLATE.md
-      - index.js
-      - assets/generated/**
-      - packages/ascii/**
-      - packages/svg/**
-      - package.json
-      - pnpm-lock.yaml
+  # push:
+  #   branches:
+  #     - main
+  #   paths:
+  #     - TEMPLATE.md
+  #     - index.js
+  #     - assets/generated/**
+  #     - packages/ascii/**
+  #     - packages/svg/**
+  #     - package.json
+  #     - pnpm-lock.yaml
   schedule:
     # 时区是UTC世界，我们中国在东八区，所以要加8
     # 下面指我们这的凌晨5点

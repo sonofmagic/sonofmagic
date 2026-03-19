@@ -1,6 +1,5 @@
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
-import { buildProfileBanner } from '@icebreakers/ascii'
 import { createHeroSvg } from '@icebreakers/svg'
 import fs from 'fs-extra'
 import { markdownTable } from 'markdown-table'
@@ -78,7 +77,6 @@ async function writeHeroSvg() {
 async function generateReadme() {
   const utcDate = getUtcDateString()
   const template = await fs.readFile(templatePath, { encoding: 'utf-8' })
-  const profileBanner = buildProfileBanner(utcDate)
   const heroImage = await writeHeroSvg()
 
   const contactTable = buildContactTable(contactEntries)
@@ -86,7 +84,6 @@ async function generateReadme() {
 
   const readme = template
     .replaceAll('{{heroImage}}', heroImage)
-    .replaceAll('{{replace}}', profileBanner)
     .replaceAll('{{date}}', generatedAt)
     .replaceAll('{{table}}', contactTable)
 

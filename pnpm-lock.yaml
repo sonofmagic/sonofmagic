@@ -17,6 +17,9 @@ importers:
       '@commitlint/cli':
         specifier: ^20.5.0
         version: 20.5.0(@types/node@25.5.0)(conventional-commits-parser@6.3.0)(typescript@5.9.3)
+      '@icebreakers/ascii':
+        specifier: workspace:*
+        version: link:packages/ascii
       '@icebreakers/changelog-github':
         specifier: ^0.2.2
         version: 0.2.2(encoding@0.1.13)
@@ -32,6 +35,9 @@ importers:
       '@icebreakers/stylelint-config':
         specifier: ^2.0.7
         version: 2.0.7(postcss@8.5.8)(stylelint-order@6.0.4(stylelint@17.4.0(typescript@5.9.3)))(stylelint@17.4.0(typescript@5.9.3))(tailwindcss@3.4.14)
+      '@icebreakers/svg':
+        specifier: workspace:*
+        version: link:packages/svg
       '@types/fs-extra':
         specifier: ^11.0.4
         version: 11.0.4
@@ -44,9 +50,6 @@ importers:
       '@vitest/coverage-v8':
         specifier: ~4.1.0
         version: 4.1.0(vitest@4.1.0(@types/node@25.5.0)(vite@7.3.1(@types/node@25.5.0)(jiti@2.6.1)(tsx@4.21.0)(yaml@2.8.2)))
-      ascii-art-font:
-        specifier: ^1.0.2
-        version: 1.0.2
       ci-info:
         specifier: ^4.4.0
         version: 4.4.0
@@ -132,6 +135,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/yangqiming
 
+  packages/ascii: {}
+
   packages/profile:
     devDependencies:
       '@types/prompts':
@@ -213,6 +218,8 @@ importers:
       '@icebreakers/profile':
         specifier: workspace:*
         version: link:../profile
+
+  packages/svg: {}
 
   packages/yangqiming:
     dependencies:
@@ -3263,9 +3270,6 @@ packages:
 
   as-table@1.0.55:
     resolution: {integrity: sha512-xvsWESUJn0JN421Xb9MQw6AsMHRCUknCe0Wjlxvjud80mU4E6hQf1A6NzQKcYNmYw62MfzEtXc+badstZP3JpQ==}
-
-  ascii-art-font@1.0.2:
-    resolution: {integrity: sha512-0hMSwoO1qk8u8IkFMxycqZxwi3SgzRzGQzqzv8RGaMmst4fVgerUTobEiJHZIRcLLrUvKa2DHMWqWKMTJG3QsQ==}
 
   assertion-error@2.0.1:
     resolution: {integrity: sha512-Izi8RQcffqCeNVgFigKli1ssklIbpHnCYc6AknXGYoB6grJqyeby7jv12JUQgmTAnIDnbck1uxksT4dzN3PWBA==}
@@ -10950,8 +10954,8 @@ snapshots:
 
   '@typescript-eslint/project-service@8.56.1(typescript@5.9.3)':
     dependencies:
-      '@typescript-eslint/tsconfig-utils': 8.56.1(typescript@5.9.3)
-      '@typescript-eslint/types': 8.56.1
+      '@typescript-eslint/tsconfig-utils': 8.57.1(typescript@5.9.3)
+      '@typescript-eslint/types': 8.57.1
       debug: 4.4.3
       typescript: 5.9.3
     transitivePeerDependencies:
@@ -11435,8 +11439,6 @@ snapshots:
   as-table@1.0.55:
     dependencies:
       printable-characters: 1.0.42
-
-  ascii-art-font@1.0.2: {}
 
   assertion-error@2.0.1: {}
 

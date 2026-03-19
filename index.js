@@ -1,6 +1,7 @@
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
-import Font from 'ascii-art-font'
+import { buildProfileBanner } from '@icebreakers/ascii'
+import { createHeroSvg } from '@icebreakers/svg'
 import fs from 'fs-extra'
 import { markdownTable } from 'markdown-table'
 import path from 'pathe'
@@ -8,6 +9,7 @@ import path from 'pathe'
 const currentDir = fileURLToPath(new URL('.', import.meta.url))
 const templatePath = path.resolve(currentDir, 'TEMPLATE.md')
 const outputPath = path.resolve(currentDir, 'README.md')
+const heroOutputPath = path.resolve(currentDir, 'assets/generated/profile-hero.svg')
 
 const contactEntries = [
   {
@@ -55,29 +57,36 @@ function buildContactTable(entries) {
   )
 }
 
-async function buildAsciiClock(now) {
-  const [utcLabel, utcDate] = await Promise.all([
-    Font.create('UTC :', 'Doom'),
-    Font.create(now, 'Doom'),
-  ])
-
-  return `${utcLabel}${utcDate}`.trimEnd()
-}
-
 function getUtcDateString() {
   return new Date().toISOString().slice(0, 10)
+}
+
+async function writeHeroSvg() {
+  const heroSvg = createHeroSvg({
+    title: 'ICEBREAKER',
+    subtitle: 'Build systems, mini-program workflows, and profile-grade interfaces.',
+    badge: {
+      text: 'Github Profile Hero',
+      color: '#FFD166',
+    },
+  })
+  await fs.ensureDir(path.dirname(heroOutputPath))
+  await fs.writeFile(heroOutputPath, heroSvg)
+  return '<img src="assets/generated/profile-hero.svg" alt="Icebreaker Github Profile Hero" />'
 }
 
 async function generateReadme() {
   const utcDate = getUtcDateString()
   const template = await fs.readFile(templatePath, { encoding: 'utf-8' })
-  const asciiClock = await buildAsciiClock(utcDate)
+  const profileBanner = buildProfileBanner(utcDate)
+  const heroImage = await writeHeroSvg()
 
   const contactTable = buildContactTable(contactEntries)
   const generatedAt = utcDate
 
   const readme = template
-    .replaceAll('{{replace}}', asciiClock)
+    .replaceAll('{{heroImage}}', heroImage)
+    .replaceAll('{{replace}}', profileBanner)
     .replaceAll('{{date}}', generatedAt)
     .replaceAll('{{table}}', contactTable)
 

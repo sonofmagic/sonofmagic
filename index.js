@@ -56,10 +56,6 @@ function buildContactTable(entries) {
   )
 }
 
-function getUtcDateString() {
-  return new Date().toISOString().slice(0, 10)
-}
-
 async function writeHeroSvg() {
   const heroSvg = createHeroSvg({
     title: 'ice breaker',
@@ -94,16 +90,13 @@ async function writeContactQrSvgs(entries) {
 }
 
 async function generateReadme() {
-  const utcDate = getUtcDateString()
   const template = await fs.readFile(templatePath, { encoding: 'utf-8' })
   const heroImage = await writeHeroSvg()
   const contactEntriesWithQr = await writeContactQrSvgs(contactEntries)
   const contactTable = buildContactTable(contactEntriesWithQr)
-  const generatedAt = utcDate
 
   const readme = template
     .replaceAll('{{heroImage}}', heroImage)
-    .replaceAll('{{date}}', generatedAt)
     .replaceAll('{{table}}', contactTable)
 
   const existed = await fs.pathExists(outputPath)

@@ -12,20 +12,20 @@
 
 <summary>More Details</summary>
 
-|                         <a href="https://www.icebreaker.top/" target="_blank"><img src="assets/svg/chorme.svg" alt="Website Icon" width="18" height="18" align="absmiddle" /></a>                         | <a href="https://u.wechat.com/EAVzgOGBnATKcePfVWr_QyQ" target="_blank"><img src="assets/svg/wechat.svg" alt="Wechat Icon" width="18" height="18" align="absmiddle" /></a>&nbsp;备注: Github  |
+|                         <a href="https://www.icebreaker.top/" target="_blank"><img src="assets/svg/chorme.svg" alt="Website Icon" width="18" height="18" align="absmiddle" /></a>                         |   <a href="https://u.wechat.com/EAVzgOGBnATKcePfVWr_QyQ" target="_blank"><img src="assets/svg/wechat.svg" alt="Wechat Icon" width="18" height="18" align="absmiddle" /></a>&nbsp;备注: Github  |
 | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
 | <img width="160" height="160" src="https://github-readme-svg.vercel.app/api/v1/svg/qrcode?value=https://www.icebreaker.top&type=func&qrcodeType=round&posType=planet&posColor=%23000" alt="My Website" /> | <img width="160" height="160" src="https://github-readme-svg.vercel.app/api/v1/svg/qrcode?value=https://u.wechat.com/EAVzgOGBnATKcePfVWr_QyQ&type=circle&posColor=%23000" alt="My Wechat" /> |
 
 ```text
- _   _  _____  _____
-| | | ||_   _|/  __ \  _
+ _   _  _____  _____     
+| | | ||_   _|/  __ \  _ 
 | | | |  | |  | /  \/ (_)
-| | | |  | |  | |
-| |_| |  | |  | \__/\  _
+| | | |  | |  | |        
+| |_| |  | |  | \__/\  _ 
  \___/   \_/   \____/ (_)
-
-
- _____  _____  _____   ____          _____  _____          __   _____
+                         
+                         
+ _____  _____  _____   ____          _____  _____          __   _____ 
 / __  \|  _  |/ __  \ / ___|        |  _  ||____ |        /  | |  _  |
 `' / /'| |/' |`' / /'/ /___  ______ | |/' |    / / ______ `| | | |_| |
   / /  |  /| |  / /  | ___ \|______||  /| |    \ \|______| | | \____ |

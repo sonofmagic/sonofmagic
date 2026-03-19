@@ -29,36 +29,9 @@ const contactEntries = [
   },
 ]
 
-const miniPrograms = [
-  {
-    name: '破冰客',
-    qrSrc:
-      'https://github-readme-svg.vercel.app/api/v1/svg/qrcode?value=https://mp.weixin.qq.com/a/~QCyvHLpi7gWkTTw_D45LNg~~&type=image&posColor=%23000',
-    qrAlt: '破冰客小程序',
-  },
-  {
-    name: '程序员名片',
-    qrSrc:
-      'https://github-readme-svg.vercel.app/api/v1/svg/qrcode?value=https://mp.weixin.qq.com/a/~wCmPXG4P6LVtnyOobH53KQ~~&type=image&posColor=%23000',
-    qrAlt: '程序员名片小程序',
-  },
-  {
-    name: 'IceStack',
-    qrSrc:
-      'https://github-readme-svg.vercel.app/api/v1/svg/qrcode?value=https://mp.weixin.qq.com/a/~Z3ufw44yiwSSRapyxRmuqQ~~&type=image&posColor=%23000',
-    qrAlt: 'IceStack 小程序',
-  },
-  {
-    name: 'tailwindcss',
-    qrSrc:
-      'https://github-readme-svg.vercel.app/api/v1/svg/qrcode?value=https://mp.weixin.qq.com/a/~Z3ufw44yiwSSRapyxRmuqQ~~&type=image&posColor=%23000',
-    qrAlt: 'tailwindcss 主题小程序',
-  },
-]
-
 const QR_IMAGE_SIZE = 160
 
-const centerAlign = columns => Array.from({ length: columns }, () => 'c')
+const centerAlign = columns => Array.from({ length: columns }).fill('c')
 
 function buildContactTable(entries) {
   return markdownTable(
@@ -73,19 +46,6 @@ function buildContactTable(entries) {
           return `${iconLink}&nbsp;${entry.iconNote}`
         },
       ),
-      entries.map(
-        entry =>
-          `<img width="${QR_IMAGE_SIZE}" height="${QR_IMAGE_SIZE}" src="${entry.qrSrc}" alt="${entry.qrAlt}" />`,
-      ),
-    ],
-    { align: centerAlign(entries.length) },
-  )
-}
-
-function buildMiniProgramTable(entries) {
-  return markdownTable(
-    [
-      entries.map(entry => `<div style="display: flex;align-items: center;"> ${entry.name} </div>`),
       entries.map(
         entry =>
           `<img width="${QR_IMAGE_SIZE}" height="${QR_IMAGE_SIZE}" src="${entry.qrSrc}" alt="${entry.qrAlt}" />`,
@@ -114,14 +74,12 @@ async function generateReadme() {
   const asciiClock = await buildAsciiClock(utcDate)
 
   const contactTable = buildContactTable(contactEntries)
-  const miniProgramTable = buildMiniProgramTable(miniPrograms)
   const generatedAt = utcDate
 
   const readme = template
     .replaceAll('{{replace}}', asciiClock)
     .replaceAll('{{date}}', generatedAt)
     .replaceAll('{{table}}', contactTable)
-    .replaceAll('{{mpTable}}', miniProgramTable)
 
   const existed = await fs.pathExists(outputPath)
   const prevReadme = existed ? await fs.readFile(outputPath, { encoding: 'utf-8' }) : ''

@@ -22,6 +22,7 @@ export interface QrCodeSvgOptions {
   highlightColor?: string
   dotColor?: string
   cornerRadius?: number
+  variant?: 'decorated' | 'plain'
 }
 
 export interface ContactCardSvgOptions {
@@ -73,6 +74,7 @@ const QR_DEFAULTS = {
   highlightColor: '#2BFFCF',
   dotColor: '#111827',
   cornerRadius: 26,
+  variant: 'decorated',
 } satisfies Required<QrCodeSvgOptions>
 
 const CONTACT_CARD_DEFAULTS = {
@@ -84,8 +86,8 @@ const CONTACT_CARD_DEFAULTS = {
 } satisfies Omit<Required<ContactCardSvgOptions>, 'title' | 'label' | 'value' | 'qrValue' | 'note' | 'iconHref'>
 
 const CONTACT_PANEL_DEFAULTS = {
-  width: 700,
-  height: 264,
+  width: 340,
+  height: 204,
 } satisfies Required<Omit<ContactPanelSvgOptions, 'entries'>>
 
 export function createHeroSvg(options: HeroSvgOptions = {}) {
@@ -200,6 +202,7 @@ export function createQrCodeSvg(content: string, options: QrCodeSvgOptions = {})
   const highlightColor = options.highlightColor ?? QR_DEFAULTS.highlightColor
   const dotColor = options.dotColor ?? QR_DEFAULTS.dotColor
   const cornerRadius = options.cornerRadius ?? QR_DEFAULTS.cornerRadius
+  const variant = options.variant ?? QR_DEFAULTS.variant
   const qr = createQrMatrix(content, 'H')
   const moduleCount = qr.size
   const moduleSize = (size - padding * 2) / moduleCount
@@ -233,6 +236,18 @@ export function createQrCodeSvg(content: string, options: QrCodeSvgOptions = {})
     buildFinderPattern(size - padding - moduleSize * 7, padding, moduleSize, dotColor, id),
     buildFinderPattern(padding, size - padding - moduleSize * 7, moduleSize, dotColor, id),
   ].join('')
+
+  if (variant === 'plain') {
+    return [
+      `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="${id}-title ${id}-desc">`,
+      `<title id="${id}-title">QR code for ${escapeXml(content)}</title>`,
+      `<desc id="${id}-desc">Plain SVG QR code generated locally.</desc>`,
+      `<rect width="${size}" height="${size}" rx="${cornerRadius}" fill="${backgroundColor}" />`,
+      ...moduleRects,
+      finderPatterns,
+      '</svg>',
+    ].join('')
+  }
 
   return [
     `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="${id}-title ${id}-desc">`,
@@ -373,11 +388,11 @@ export function createContactPanelSvg(options: ContactPanelSvgOptions) {
   const width = options.width ?? CONTACT_PANEL_DEFAULTS.width
   const height = options.height ?? CONTACT_PANEL_DEFAULTS.height
   const id = `contact-panel-${Math.abs(hashCode(`${width}-${height}-${options.entries.map(entry => entry.qrValue).join('|')}`))}`
-  const cardWidth = 300
-  const cardHeight = 196
-  const cardY = 44
-  const leftX = 28
-  const rightX = width - cardWidth - 28
+  const cardWidth = 136
+  const cardHeight = 172
+  const cardY = 16
+  const leftX = 18
+  const rightX = width - cardWidth - 18
   const leftEntry = options.entries[0]
   const rightEntry = options.entries[1]
 
@@ -387,28 +402,93 @@ export function createContactPanelSvg(options: ContactPanelSvgOptions) {
     `<desc id="${id}-desc">Combined website and Wechat contact panel with two scannable QR codes.</desc>`,
     '<defs>',
     `<linearGradient id="${id}-bg" x1="0" y1="0" x2="${width}" y2="${height}" gradientUnits="userSpaceOnUse">`,
-    '<stop offset="0%" stop-color="#030711" />',
-    '<stop offset="38%" stop-color="#0A1B3D" />',
-    '<stop offset="72%" stop-color="#15104A" />',
-    '<stop offset="100%" stop-color="#02050D" />',
+    '<stop offset="0%" stop-color="#041427" />',
+    '<stop offset="24%" stop-color="#0B2A4E" />',
+    '<stop offset="62%" stop-color="#1A3E77" />',
+    '<stop offset="100%" stop-color="#08111E" />',
+    `<animate attributeName="x1" values="0;${width * 0.1};0" dur="10s" repeatCount="indefinite" />`,
+    `<animate attributeName="y2" values="${height};${height * 0.78};${height}" dur="12s" repeatCount="indefinite" />`,
     '</linearGradient>',
-    `<radialGradient id="${id}-glow-a" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(126 46) rotate(35) scale(260 170)">`,
+    `<linearGradient id="${id}-scan" x1="-40" y1="0" x2="64" y2="0" gradientUnits="userSpaceOnUse">`,
+    '<stop offset="0%" stop-color="rgba(43,255,207,0)" />',
+    '<stop offset="50%" stop-color="rgba(43,255,207,0.34)" />',
+    '<stop offset="100%" stop-color="rgba(96,165,250,0)" />',
+    '</linearGradient>',
+    `<radialGradient id="${id}-wash-left" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(72 88) rotate(12) scale(136 112)">`,
     '<stop offset="0%" stop-color="#2BFFCF" stop-opacity="0.34" />',
-    '<stop offset="100%" stop-color="#31D0AA" stop-opacity="0" />',
+    '<stop offset="100%" stop-color="#2BFFCF" stop-opacity="0" />',
     '</radialGradient>',
-    `<radialGradient id="${id}-glow-b" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(574 48) rotate(125) scale(230 160)">`,
-    '<stop offset="0%" stop-color="#7A7CFF" stop-opacity="0.3" />',
-    '<stop offset="100%" stop-color="#5DA9FF" stop-opacity="0" />',
+    `<radialGradient id="${id}-wash-right" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(280 88) rotate(-10) scale(140 116)">`,
+    '<stop offset="0%" stop-color="#60A5FA" stop-opacity="0.36" />',
+    '<stop offset="100%" stop-color="#60A5FA" stop-opacity="0" />',
+    '</radialGradient>',
+    `<radialGradient id="${id}-core-left" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(84 112) rotate(0) scale(116 94)">`,
+    '<stop offset="0%" stop-color="#2BFFCF" stop-opacity="0.22" />',
+    '<stop offset="100%" stop-color="#2BFFCF" stop-opacity="0" />',
+    '</radialGradient>',
+    `<radialGradient id="${id}-core-right" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(256 112) rotate(0) scale(116 94)">`,
+    '<stop offset="0%" stop-color="#60A5FA" stop-opacity="0.22" />',
+    '<stop offset="100%" stop-color="#60A5FA" stop-opacity="0" />',
+    '</radialGradient>',
+    `<radialGradient id="${id}-halo-left" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(92 78) rotate(20) scale(118 76)">`,
+    '<stop offset="0%" stop-color="#2BFFCF" stop-opacity="0.10" />',
+    '<stop offset="100%" stop-color="#2BFFCF" stop-opacity="0" />',
+    '</radialGradient>',
+    `<radialGradient id="${id}-halo-right" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(368 78) rotate(-18) scale(118 76)">`,
+    '<stop offset="0%" stop-color="#FFD166" stop-opacity="0.10" />',
+    '<stop offset="100%" stop-color="#FFD166" stop-opacity="0" />',
     '</radialGradient>',
     `<filter id="${id}-blur" x="-20%" y="-20%" width="140%" height="140%">`,
-    '<feGaussianBlur stdDeviation="18" />',
+    '<feGaussianBlur stdDeviation="16" />',
     '</filter>',
     '</defs>',
-    `<rect width="${width}" height="${height}" rx="28" fill="url(#${id}-bg)" />`,
-    `<rect width="${width}" height="${height}" rx="28" fill="url(#${id}-glow-a)" />`,
-    `<rect width="${width}" height="${height}" rx="28" fill="url(#${id}-glow-b)" />`,
-    `<path d="${buildGridPath(width, height, 28)}" stroke="rgba(133,164,255,0.06)" stroke-width="1" />`,
-    `<path d="M ${width / 2} 42 V ${height - 30}" stroke="rgba(148,163,184,0.18)" stroke-width="1" />`,
+    `<rect width="${width}" height="${height}" rx="26" fill="url(#${id}-bg)" />`,
+    `<rect width="${width}" height="${height}" rx="26" fill="url(#${id}-wash-left)" />`,
+    `<rect width="${width}" height="${height}" rx="26" fill="url(#${id}-wash-right)" />`,
+    `<rect width="${width}" height="${height}" rx="26" fill="url(#${id}-core-left)" />`,
+    `<rect width="${width}" height="${height}" rx="26" fill="url(#${id}-core-right)" />`,
+    `<path d="${buildGridPath(width, height, 24)}" stroke="rgba(96,165,250,0.08)" stroke-width="1" />`,
+    [
+      `<rect x="-56" y="0" width="72" height="${height}" fill="url(#${id}-scan)" opacity="0.85">`,
+      `<animate attributeName="x" values="-56;${width + 18};-56" dur="6.4s" repeatCount="indefinite" />`,
+      '</rect>',
+    ].join(''),
+    [
+      `<rect x="-80" y="26" width="124" height="${height - 52}" rx="62" fill="rgba(43,255,207,0.16)" filter="url(#${id}-blur)">`,
+      '<animate attributeName="x" values="-80;-48;-80" dur="8.4s" repeatCount="indefinite" />',
+      '<animate attributeName="opacity" values="0.55;0.95;0.55" dur="5.2s" repeatCount="indefinite" />',
+      '</rect>',
+    ].join(''),
+    [
+      `<rect x="${width - 44}" y="18" width="108" height="${height - 36}" rx="54" fill="rgba(96,165,250,0.18)" filter="url(#${id}-blur)">`,
+      `<animate attributeName="x" values="${width - 44};${width - 70};${width - 44}" dur="9.2s" repeatCount="indefinite" />`,
+      '<animate attributeName="opacity" values="0.5;0.9;0.5" dur="5.8s" repeatCount="indefinite" />',
+      '</rect>',
+    ].join(''),
+    `<path d="M 28 28 H 84" stroke="rgba(43,255,207,0.68)" stroke-width="2.5" stroke-linecap="round" />`,
+    `<path d="M 28 28 V 60" stroke="rgba(43,255,207,0.46)" stroke-width="2.5" stroke-linecap="round" />`,
+    `<path d="M ${width - 28} 28 H ${width - 84}" stroke="rgba(96,165,250,0.68)" stroke-width="2.5" stroke-linecap="round" />`,
+    `<path d="M ${width - 28} 28 V 60" stroke="rgba(96,165,250,0.46)" stroke-width="2.5" stroke-linecap="round" />`,
+    `<path d="M 28 ${height - 28} H 84" stroke="rgba(96,165,250,0.36)" stroke-width="2.5" stroke-linecap="round" />`,
+    `<path d="M ${width - 28} ${height - 28} H ${width - 84}" stroke="rgba(43,255,207,0.36)" stroke-width="2.5" stroke-linecap="round" />`,
+    [
+      `<circle cx="${width * 0.5}" cy="26" r="3.5" fill="#FFD166">`,
+      '<animate attributeName="opacity" values="0.45;1;0.45" dur="2.2s" repeatCount="indefinite" />',
+      '</circle>',
+    ].join(''),
+    `<rect x="0.75" y="0.75" width="${width - 1.5}" height="${height - 1.5}" rx="25.25" stroke="rgba(148,163,184,0.22)" />`,
+    [
+      `<ellipse cx="${leftX + cardWidth / 2}" cy="${cardY + cardHeight / 2}" rx="84" ry="52" fill="url(#${id}-halo-left)">`,
+      '<animate attributeName="opacity" values="0.28;0.64;0.28" dur="3.8s" repeatCount="indefinite" />',
+      '<animate attributeName="rx" values="80;88;80" dur="4.6s" repeatCount="indefinite" />',
+      '</ellipse>',
+    ].join(''),
+    [
+      `<ellipse cx="${rightX + cardWidth / 2}" cy="${cardY + cardHeight / 2}" rx="84" ry="52" fill="url(#${id}-halo-right)">`,
+      '<animate attributeName="opacity" values="0.28;0.64;0.28" dur="4.1s" repeatCount="indefinite" />',
+      '<animate attributeName="rx" values="80;88;80" dur="4.9s" repeatCount="indefinite" />',
+      '</ellipse>',
+    ].join(''),
     renderContactPanelCell(leftEntry, {
       x: leftX,
       y: cardY,
@@ -423,7 +503,6 @@ export function createContactPanelSvg(options: ContactPanelSvgOptions) {
       height: cardHeight,
       id: `${id}-right`,
     }),
-    `<rect x="0.75" y="0.75" width="${width - 1.5}" height="${height - 1.5}" rx="27.25" stroke="rgba(122,124,255,0.32)" />`,
     '</svg>',
   ].join('')
 }
@@ -467,28 +546,51 @@ function renderContactPanelCell(
 ) {
   const iconName = resolveIconName(entry.iconHref)
   const note = entry.note ? escapeXml(entry.note) : ''
-  const qrSize = 136
-  const qrX = frame.x + frame.width - qrSize - 18
-  const qrY = frame.y + (frame.height - qrSize) / 2
-  const iconX = frame.x + 28
-  const iconY = frame.y + 34
+  const qrSize = 114
+  const qrX = frame.x + Math.floor((frame.width - qrSize) / 2)
+  const qrY = frame.y + 42
+  const iconX = frame.x + Math.floor((frame.width - 22) / 2)
+  const iconY = frame.y + 14
+  const noteX = frame.x + frame.width / 2
+  const noteWidth = note ? Math.max(92, note.length * 11 + 20) : 0
+  const noteRectX = noteX - noteWidth / 2
+  const noteRectY = frame.y + frame.height - 30
+  const noteY = noteRectY + 15
   const qrSvg = createQrCodeSvg(entry.qrValue, {
     size: qrSize,
-    padding: 18,
-    accentColor: entry.accentColor ?? CONTACT_CARD_DEFAULTS.accentColor,
-    highlightColor: entry.highlightColor ?? CONTACT_CARD_DEFAULTS.highlightColor,
-    backgroundColor: '#F8FAFC',
-    gridColor: 'rgba(15, 23, 42, 0.12)',
+    padding: 12,
+    backgroundColor: '#FFFFFF',
     dotColor: '#020617',
-    cornerRadius: 22,
+    cornerRadius: 16,
+    variant: 'plain',
   })
 
   return [
     `<g>`,
-    `<rect x="${frame.x}" y="${frame.y}" width="${frame.width}" height="${frame.height}" rx="24" fill="rgba(2,6,23,0.16)" stroke="rgba(148,163,184,0.12)" />`,
-    renderInlineIcon(iconName, iconX, iconY, 32),
+    `<rect x="${frame.x}" y="${frame.y}" width="${frame.width}" height="${frame.height}" rx="22" fill="rgba(255,255,255,0.045)" stroke="rgba(148,163,184,0.12)" />`,
+    `<rect x="${frame.x + 1.5}" y="${frame.y + 1.5}" width="${frame.width - 3}" height="${frame.height - 3}" rx="20.5" fill="none" stroke="rgba(96,165,250,0.08)" />`,
+    `<path d="M ${frame.x + 14} ${frame.y + 16} H ${frame.x + 44}" stroke="rgba(43,255,207,0.55)" stroke-width="2" stroke-linecap="round" />`,
+    `<path d="M ${frame.x + frame.width - 14} ${frame.y + 16} H ${frame.x + frame.width - 44}" stroke="rgba(96,165,250,0.55)" stroke-width="2" stroke-linecap="round" />`,
+    renderInlineIcon(iconName, iconX, iconY, 22),
+    [
+      `<rect x="${qrX - 5}" y="${qrY - 5}" width="${qrSize + 10}" height="${qrSize + 10}" rx="22" fill="none" stroke="rgba(15,23,42,0.08)" stroke-width="1.25" stroke-dasharray="10 8">`,
+      '<animate attributeName="stroke-opacity" values="0.25;0.7;0.25" dur="3.2s" repeatCount="indefinite" />',
+      '<animate attributeName="stroke-dashoffset" values="0;-36" dur="2.8s" repeatCount="indefinite" />',
+      '</rect>',
+    ].join(''),
+    [
+      `<rect x="${qrX - 10}" y="${qrY - 10}" width="${qrSize + 20}" height="${qrSize + 20}" rx="28" fill="none" stroke="rgba(96,165,250,0.08)" stroke-width="1">`,
+      '<animate attributeName="stroke-opacity" values="0.08;0.28;0.08" dur="4.4s" repeatCount="indefinite" />',
+      '</rect>',
+    ].join(''),
     note
-      ? `<text x="${iconX}" y="${frame.y + frame.height - 18}" fill="rgba(148,163,184,0.92)" font-family="'IBM Plex Sans', 'Segoe UI', sans-serif" font-size="13">${note}</text>`
+      ? `<rect x="${noteRectX}" y="${noteRectY}" width="${noteWidth}" height="24" rx="12" fill="rgba(7,19,36,0.92)" stroke="rgba(43,255,207,0.56)" />`
+      : '',
+    note
+      ? `<path d="M ${noteRectX + 10} ${noteRectY + 12} H ${noteRectX + 24}" stroke="rgba(43,255,207,0.88)" stroke-width="2" stroke-linecap="round" />`
+      : '',
+    note
+      ? `<text x="${noteX + 6}" y="${noteY}" text-anchor="middle" fill="#F8FAFC" font-family="'IBM Plex Sans', 'Segoe UI', sans-serif" font-size="12" font-weight="700">${note}</text>`
       : '',
     `<svg x="${qrX}" y="${qrY}" width="${qrSize}" height="${qrSize}" viewBox="0 0 ${qrSize} ${qrSize}">`,
     qrSvg,

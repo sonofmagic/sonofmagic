@@ -1,0 +1,4 @@
+interface:
+  display_name: SVG Preview Review
+  short_description: Preview generated SVGs via PNG before iterating layout.
+  default_prompt: 'Use this skill to render a generated SVG into a preview image, inspect spacing and composition, then adjust the SVG source accordingly.'

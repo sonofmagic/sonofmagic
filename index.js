@@ -10,8 +10,8 @@ const outputPath = path.resolve(currentDir, 'README.md')
 const generatedAssetDir = path.resolve(currentDir, 'assets/generated')
 const heroOutputPath = path.resolve(currentDir, 'assets/generated/profile-hero.svg')
 
-const CONTACT_PANEL_WIDTH = 700
-const CONTACT_PANEL_HEIGHT = 264
+const CONTACT_PANEL_WIDTH = 340
+const CONTACT_PANEL_HEIGHT = 204
 const contactEntries = [
   {
     title: 'Website',

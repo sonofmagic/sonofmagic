@@ -12,8 +12,9 @@
 
 <summary>More Details</summary>
 
-| <a href="https://www.icebreaker.top/" target="_blank"><img src="assets/svg/chorme.svg" alt="Website Icon" width="18" height="18" align="absmiddle" /></a> | <a href="https://u.wechat.com/EAVzgOGBnATKcePfVWr_QyQ" target="_blank"><img src="assets/svg/wechat.svg" alt="Wechat Icon" width="18" height="18" align="absmiddle" /></a>&nbsp;备注: Github |
-| :-------------------------------------------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-|                              <img width="160" height="160" src="assets/generated/contact-website-qr.svg" alt="My Website" />                              |                                                <img width="160" height="160" src="assets/generated/contact-wechat-qr.svg" alt="My Wechat" />                                                |
+<p align="center">
+  <a href="https://www.icebreaker.top/" target="_blank"><img width="320" height="236" src="assets/generated/contact-website-card.svg" alt="Website contact card" /></a>
+  <a href="https://u.wechat.com/EAVzgOGBnATKcePfVWr_QyQ" target="_blank"><img width="320" height="236" src="assets/generated/contact-wechat-card.svg" alt="Wechat contact card" /></a>
+</p>
 
 </details>

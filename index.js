@@ -1,8 +1,7 @@
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
-import { createHeroSvg, createQrCodeSvg } from '@icebreakers/svg'
+import { createContactCardSvg, createHeroSvg } from '@icebreakers/svg'
 import fs from 'fs-extra'
-import { markdownTable } from 'markdown-table'
 import path from 'pathe'
 
 const currentDir = fileURLToPath(new URL('.', import.meta.url))
@@ -11,49 +10,42 @@ const outputPath = path.resolve(currentDir, 'README.md')
 const generatedAssetDir = path.resolve(currentDir, 'assets/generated')
 const heroOutputPath = path.resolve(currentDir, 'assets/generated/profile-hero.svg')
 
-const QR_IMAGE_SIZE = 160
+const CONTACT_CARD_WIDTH = 320
+const CONTACT_CARD_HEIGHT = 236
 const contactEntries = [
   {
     href: 'https://www.icebreaker.top/',
-    iconSrc: 'assets/svg/chorme.svg',
-    iconAlt: 'Website Icon',
+    title: 'Website',
     qrValue: 'https://www.icebreaker.top',
-    qrFileName: 'contact-website-qr.svg',
-    qrAlt: 'My Website',
+    iconHref: '../svg/chorme.svg',
+    cardFileName: 'contact-website-card.svg',
+    imageAlt: 'Website contact card',
+    accentColor: '#7A7CFF',
+    highlightColor: '#2BFFCF',
   },
   {
     href: 'https://u.wechat.com/EAVzgOGBnATKcePfVWr_QyQ',
-    iconSrc: 'assets/svg/wechat.svg',
-    iconAlt: 'Wechat Icon',
-    iconNote: '备注: Github',
+    title: 'Wechat',
     qrValue: 'https://u.wechat.com/EAVzgOGBnATKcePfVWr_QyQ',
-    qrFileName: 'contact-wechat-qr.svg',
-    qrAlt: 'My Wechat',
+    iconHref: '../svg/wechat.svg',
+    note: '备注: Github',
+    cardFileName: 'contact-wechat-card.svg',
+    imageAlt: 'Wechat contact card',
+    accentColor: '#FFD166',
+    highlightColor: '#FF8A5B',
   },
 ]
 
-const centerAlign = columns => Array.from({ length: columns }).fill('c')
-
-function buildContactTable(entries) {
-  return markdownTable(
-    [
-      entries.map(
-        (entry) => {
-          const iconLink
-            = `<a href="${entry.href}" target="_blank"><img src="${entry.iconSrc}" alt="${entry.iconAlt}" width="18" height="18" align="absmiddle" /></a>`
-          if (!entry.iconNote) {
-            return iconLink
-          }
-          return `${iconLink}&nbsp;${entry.iconNote}`
-        },
-      ),
-      entries.map(
-        entry =>
-          `<img width="${QR_IMAGE_SIZE}" height="${QR_IMAGE_SIZE}" src="${entry.qrSrc}" alt="${entry.qrAlt}" />`,
-      ),
-    ],
-    { align: centerAlign(entries.length) },
+function buildContactCards(entries) {
+  const cardImages = entries.map(entry =>
+    `<a href="${entry.href}" target="_blank"><img width="${CONTACT_CARD_WIDTH}" height="${CONTACT_CARD_HEIGHT}" src="${entry.cardSrc}" alt="${entry.imageAlt}" /></a>`,
   )
+
+  return [
+    '<p align="center">',
+    `  ${cardImages.join('\n  ')}`,
+    '</p>',
+  ].join('\n')
 }
 
 async function writeHeroSvg() {
@@ -70,21 +62,26 @@ async function writeHeroSvg() {
   return '<a href="https://icebreaker.top/" target="_blank"><img src="assets/generated/profile-hero.svg" alt="Icebreaker Github Profile Hero" /></a>'
 }
 
-async function writeContactQrSvgs(entries) {
+async function writeContactCardSvgs(entries) {
   await fs.ensureDir(generatedAssetDir)
 
   return Promise.all(entries.map(async (entry, index) => {
-    const qrSvg = createQrCodeSvg(entry.qrValue, {
-      size: QR_IMAGE_SIZE,
-      accentColor: index === 0 ? '#7A7CFF' : '#FFD166',
-      highlightColor: index === 0 ? '#2BFFCF' : '#FF8A5B',
+    const cardSvg = createContactCardSvg({
+      title: entry.title,
+      label: entry.label,
+      qrValue: entry.qrValue,
+      iconHref: entry.iconHref,
+      note: entry.note,
+      badge: '',
+      accentColor: entry.accentColor,
+      highlightColor: entry.highlightColor,
     })
-    const qrOutputPath = path.resolve(generatedAssetDir, entry.qrFileName)
-    await fs.writeFile(qrOutputPath, qrSvg)
+    const cardOutputPath = path.resolve(generatedAssetDir, entry.cardFileName)
+    await fs.writeFile(cardOutputPath, cardSvg)
 
     return {
       ...entry,
-      qrSrc: `assets/generated/${entry.qrFileName}`,
+      cardSrc: `assets/generated/${entry.cardFileName}`,
     }
   }))
 }
@@ -92,12 +89,12 @@ async function writeContactQrSvgs(entries) {
 async function generateReadme() {
   const template = await fs.readFile(templatePath, { encoding: 'utf-8' })
   const heroImage = await writeHeroSvg()
-  const contactEntriesWithQr = await writeContactQrSvgs(contactEntries)
-  const contactTable = buildContactTable(contactEntriesWithQr)
+  const contactEntriesWithCards = await writeContactCardSvgs(contactEntries)
+  const contactCards = buildContactCards(contactEntriesWithCards)
 
   const readme = template
     .replaceAll('{{heroImage}}', heroImage)
-    .replaceAll('{{table}}', contactTable)
+    .replaceAll('{{table}}', contactCards)
 
   const existed = await fs.pathExists(outputPath)
   const prevReadme = existed ? await fs.readFile(outputPath, { encoding: 'utf-8' }) : ''

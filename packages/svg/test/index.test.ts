@@ -1,4 +1,10 @@
-import { createHeroSvg, createHeroSvgDataUri, createQrCodeSvg, createQrCodeSvgDataUri } from '@/index'
+import {
+  createContactCardSvg,
+  createHeroSvg,
+  createHeroSvgDataUri,
+  createQrCodeSvg,
+  createQrCodeSvgDataUri,
+} from '@/index'
 
 describe('svg', () => {
   it('creates a hero svg string', () => {
@@ -41,5 +47,19 @@ describe('svg', () => {
     expect(uri.startsWith('data:image/svg+xml;utf8,')).toBe(true)
     expect(decodeURIComponent(uri)).toContain('<svg')
     expect(decodeURIComponent(uri)).toContain('Stylized SVG QR code generated locally.')
+  })
+
+  it('creates a contact card svg string', () => {
+    const svg = createContactCardSvg({
+      label: 'Website',
+      iconHref: '../svg/chorme.svg',
+      qrValue: 'https://www.icebreaker.top',
+    })
+
+    expect(svg).toContain('<svg')
+    expect(svg).toContain('Website contact card with a scannable QR code.')
+    expect(svg).toContain('Scan to connect')
+    expect(svg).toContain('QR code for https://www.icebreaker.top')
+    expect(svg).toContain('../svg/chorme.svg')
   })
 })

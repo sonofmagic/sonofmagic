@@ -67,7 +67,7 @@
     "cac": "^7.0.0",
     "enquirer": "^2.4.1",
     "graphemer": "^1.4.0",
-    "i18next": "^25.8.18",
+    "i18next": "^25.8.19",
     "inquirer": "^13.3.2",
     "is-interactive": "^2.0.0",
     "is-unicode-supported": "^2.1.0",

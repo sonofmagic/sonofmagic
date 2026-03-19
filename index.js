@@ -1,6 +1,6 @@
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
-import { createHeroSvg } from '@icebreakers/svg'
+import { createHeroSvg, createQrCodeSvg } from '@icebreakers/svg'
 import fs from 'fs-extra'
 import { markdownTable } from 'markdown-table'
 import path from 'pathe'
@@ -8,15 +8,17 @@ import path from 'pathe'
 const currentDir = fileURLToPath(new URL('.', import.meta.url))
 const templatePath = path.resolve(currentDir, 'TEMPLATE.md')
 const outputPath = path.resolve(currentDir, 'README.md')
+const generatedAssetDir = path.resolve(currentDir, 'assets/generated')
 const heroOutputPath = path.resolve(currentDir, 'assets/generated/profile-hero.svg')
 
+const QR_IMAGE_SIZE = 160
 const contactEntries = [
   {
     href: 'https://www.icebreaker.top/',
     iconSrc: 'assets/svg/chorme.svg',
     iconAlt: 'Website Icon',
-    qrSrc:
-      'https://github-readme-svg.vercel.app/api/v1/svg/qrcode?value=https://www.icebreaker.top&type=func&qrcodeType=round&posType=planet&posColor=%23000',
+    qrValue: 'https://www.icebreaker.top',
+    qrFileName: 'contact-website-qr.svg',
     qrAlt: 'My Website',
   },
   {
@@ -24,13 +26,11 @@ const contactEntries = [
     iconSrc: 'assets/svg/wechat.svg',
     iconAlt: 'Wechat Icon',
     iconNote: '备注: Github',
-    qrSrc:
-      'https://github-readme-svg.vercel.app/api/v1/svg/qrcode?value=https://u.wechat.com/EAVzgOGBnATKcePfVWr_QyQ&type=circle&posColor=%23000',
+    qrValue: 'https://u.wechat.com/EAVzgOGBnATKcePfVWr_QyQ',
+    qrFileName: 'contact-wechat-qr.svg',
     qrAlt: 'My Wechat',
   },
 ]
-
-const QR_IMAGE_SIZE = 160
 
 const centerAlign = columns => Array.from({ length: columns }).fill('c')
 
@@ -74,12 +74,31 @@ async function writeHeroSvg() {
   return '<a href="https://icebreaker.top/" target="_blank"><img src="assets/generated/profile-hero.svg" alt="Icebreaker Github Profile Hero" /></a>'
 }
 
+async function writeContactQrSvgs(entries) {
+  await fs.ensureDir(generatedAssetDir)
+
+  return Promise.all(entries.map(async (entry, index) => {
+    const qrSvg = createQrCodeSvg(entry.qrValue, {
+      size: QR_IMAGE_SIZE,
+      accentColor: index === 0 ? '#7A7CFF' : '#FFD166',
+      highlightColor: index === 0 ? '#2BFFCF' : '#FF8A5B',
+    })
+    const qrOutputPath = path.resolve(generatedAssetDir, entry.qrFileName)
+    await fs.writeFile(qrOutputPath, qrSvg)
+
+    return {
+      ...entry,
+      qrSrc: `assets/generated/${entry.qrFileName}`,
+    }
+  }))
+}
+
 async function generateReadme() {
   const utcDate = getUtcDateString()
   const template = await fs.readFile(templatePath, { encoding: 'utf-8' })
   const heroImage = await writeHeroSvg()
-
-  const contactTable = buildContactTable(contactEntries)
+  const contactEntriesWithQr = await writeContactQrSvgs(contactEntries)
+  const contactTable = buildContactTable(contactEntriesWithQr)
   const generatedAt = utcDate
 
   const readme = template

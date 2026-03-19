@@ -1,4 +1,4 @@
-import { createHeroSvg, createHeroSvgDataUri } from '@/index'
+import { createHeroSvg, createHeroSvgDataUri, createQrCodeSvg, createQrCodeSvgDataUri } from '@/index'
 
 describe('svg', () => {
   it('creates a hero svg string', () => {
@@ -23,5 +23,23 @@ describe('svg', () => {
 
     expect(uri.startsWith('data:image/svg+xml;utf8,')).toBe(true)
     expect(decodeURIComponent(uri)).toContain('ice breaker')
+  })
+
+  it('creates a stylized qr code svg string', () => {
+    const svg = createQrCodeSvg('https://icebreaker.top')
+
+    expect(svg).toContain('<svg')
+    expect(svg).toContain('QR code for https://icebreaker.top')
+    expect(svg).toContain('Stylized SVG QR code generated locally.')
+    expect(svg).toContain('url(#qr-')
+    expect(svg).toContain('repeatCount="indefinite"')
+  })
+
+  it('creates a qr code data uri wrapper', () => {
+    const uri = createQrCodeSvgDataUri('https://u.wechat.com/EAVzgOGBnATKcePfVWr_QyQ')
+
+    expect(uri.startsWith('data:image/svg+xml;utf8,')).toBe(true)
+    expect(decodeURIComponent(uri)).toContain('<svg')
+    expect(decodeURIComponent(uri)).toContain('Stylized SVG QR code generated locally.')
   })
 })

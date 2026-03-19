@@ -1,5 +1,5 @@
 import {
-  createContactCardSvg,
+  createContactPanelSvg,
   createHeroSvg,
   createHeroSvgDataUri,
   createQrCodeSvg,
@@ -49,17 +49,32 @@ describe('svg', () => {
     expect(decodeURIComponent(uri)).toContain('Stylized SVG QR code generated locally.')
   })
 
-  it('creates a contact card svg string', () => {
-    const svg = createContactCardSvg({
-      label: 'Website',
-      iconHref: '../svg/chorme.svg',
-      qrValue: 'https://www.icebreaker.top',
+  it('creates a contact panel svg string', () => {
+    const svg = createContactPanelSvg({
+      entries: [
+        {
+          title: 'Website',
+          iconHref: '../svg/chorme.svg',
+          qrValue: 'https://www.icebreaker.top',
+          accentColor: '#7A7CFF',
+          highlightColor: '#2BFFCF',
+        },
+        {
+          title: 'Wechat',
+          iconHref: '../svg/wechat.svg',
+          qrValue: 'https://u.wechat.com/EAVzgOGBnATKcePfVWr_QyQ',
+          note: '备注: Github',
+          accentColor: '#FFD166',
+          highlightColor: '#FF8A5B',
+        },
+      ],
     })
 
     expect(svg).toContain('<svg')
-    expect(svg).toContain('Website contact card with a scannable QR code.')
-    expect(svg).toContain('Scan to connect')
+    expect(svg).toContain('Combined website and Wechat contact panel with two scannable QR codes.')
     expect(svg).toContain('QR code for https://www.icebreaker.top')
     expect(svg).toContain('../svg/chorme.svg')
+    expect(svg).toContain('../svg/wechat.svg')
+    expect(svg).toContain('备注: Github')
   })
 })

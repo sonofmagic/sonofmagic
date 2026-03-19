@@ -1,6 +1,6 @@
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
-import { createContactCardSvg, createHeroSvg } from '@icebreakers/svg'
+import { createContactPanelSvg, createHeroSvg } from '@icebreakers/svg'
 import fs from 'fs-extra'
 import path from 'pathe'
 
@@ -10,40 +10,30 @@ const outputPath = path.resolve(currentDir, 'README.md')
 const generatedAssetDir = path.resolve(currentDir, 'assets/generated')
 const heroOutputPath = path.resolve(currentDir, 'assets/generated/profile-hero.svg')
 
-const CONTACT_CARD_WIDTH = 320
-const CONTACT_CARD_HEIGHT = 236
+const CONTACT_PANEL_WIDTH = 700
+const CONTACT_PANEL_HEIGHT = 264
 const contactEntries = [
   {
-    href: 'https://www.icebreaker.top/',
     title: 'Website',
     qrValue: 'https://www.icebreaker.top',
     iconHref: '../svg/chorme.svg',
-    cardFileName: 'contact-website-card.svg',
-    imageAlt: 'Website contact card',
     accentColor: '#7A7CFF',
     highlightColor: '#2BFFCF',
   },
   {
-    href: 'https://u.wechat.com/EAVzgOGBnATKcePfVWr_QyQ',
     title: 'Wechat',
     qrValue: 'https://u.wechat.com/EAVzgOGBnATKcePfVWr_QyQ',
     iconHref: '../svg/wechat.svg',
     note: '备注: Github',
-    cardFileName: 'contact-wechat-card.svg',
-    imageAlt: 'Wechat contact card',
     accentColor: '#FFD166',
     highlightColor: '#FF8A5B',
   },
 ]
 
-function buildContactCards(entries) {
-  const cardImages = entries.map(entry =>
-    `<a href="${entry.href}" target="_blank"><img width="${CONTACT_CARD_WIDTH}" height="${CONTACT_CARD_HEIGHT}" src="${entry.cardSrc}" alt="${entry.imageAlt}" /></a>`,
-  )
-
+function buildContactPanel() {
   return [
     '<p align="center">',
-    `  ${cardImages.join('\n  ')}`,
+    `  <img width="${CONTACT_PANEL_WIDTH}" height="${CONTACT_PANEL_HEIGHT}" src="assets/generated/contact-panel.svg" alt="Contact panel" />`,
     '</p>',
   ].join('\n')
 }
@@ -62,39 +52,26 @@ async function writeHeroSvg() {
   return '<a href="https://icebreaker.top/" target="_blank"><img src="assets/generated/profile-hero.svg" alt="Icebreaker Github Profile Hero" /></a>'
 }
 
-async function writeContactCardSvgs(entries) {
+async function writeContactPanelSvg(entries) {
   await fs.ensureDir(generatedAssetDir)
-
-  return Promise.all(entries.map(async (entry, index) => {
-    const cardSvg = createContactCardSvg({
-      title: entry.title,
-      label: entry.label,
-      qrValue: entry.qrValue,
-      iconHref: entry.iconHref,
-      note: entry.note,
-      badge: '',
-      accentColor: entry.accentColor,
-      highlightColor: entry.highlightColor,
-    })
-    const cardOutputPath = path.resolve(generatedAssetDir, entry.cardFileName)
-    await fs.writeFile(cardOutputPath, cardSvg)
-
-    return {
-      ...entry,
-      cardSrc: `assets/generated/${entry.cardFileName}`,
-    }
-  }))
+  const panelSvg = createContactPanelSvg({
+    width: CONTACT_PANEL_WIDTH,
+    height: CONTACT_PANEL_HEIGHT,
+    entries,
+  })
+  const panelOutputPath = path.resolve(generatedAssetDir, 'contact-panel.svg')
+  await fs.writeFile(panelOutputPath, panelSvg)
 }
 
 async function generateReadme() {
   const template = await fs.readFile(templatePath, { encoding: 'utf-8' })
   const heroImage = await writeHeroSvg()
-  const contactEntriesWithCards = await writeContactCardSvgs(contactEntries)
-  const contactCards = buildContactCards(contactEntriesWithCards)
+  await writeContactPanelSvg(contactEntries)
+  const contactPanel = buildContactPanel()
 
   const readme = template
     .replaceAll('{{heroImage}}', heroImage)
-    .replaceAll('{{table}}', contactCards)
+    .replaceAll('{{table}}', contactPanel)
 
   const existed = await fs.pathExists(outputPath)
   const prevReadme = existed ? await fs.readFile(outputPath, { encoding: 'utf-8' }) : ''

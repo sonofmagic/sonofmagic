@@ -13,8 +13,7 @@
 <summary>More Details</summary>
 
 <p align="center">
-  <a href="https://www.icebreaker.top/" target="_blank"><img width="320" height="236" src="assets/generated/contact-website-card.svg" alt="Website contact card" /></a>
-  <a href="https://u.wechat.com/EAVzgOGBnATKcePfVWr_QyQ" target="_blank"><img width="320" height="236" src="assets/generated/contact-wechat-card.svg" alt="Wechat contact card" /></a>
+  <img width="700" height="264" src="assets/generated/contact-panel.svg" alt="Contact panel" />
 </p>
 
 </details>

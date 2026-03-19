@@ -38,6 +38,21 @@ export interface ContactCardSvgOptions {
   highlightColor?: string
 }
 
+export interface ContactPanelEntry {
+  title?: string
+  qrValue: string
+  iconHref?: string
+  note?: string
+  accentColor?: string
+  highlightColor?: string
+}
+
+export interface ContactPanelSvgOptions {
+  width?: number
+  height?: number
+  entries: [ContactPanelEntry, ContactPanelEntry]
+}
+
 const DEFAULTS = {
   width: 1280,
   height: 360,
@@ -67,6 +82,11 @@ const CONTACT_CARD_DEFAULTS = {
   accentColor: '#7A7CFF',
   highlightColor: '#2BFFCF',
 } satisfies Omit<Required<ContactCardSvgOptions>, 'title' | 'label' | 'value' | 'qrValue' | 'note' | 'iconHref'>
+
+const CONTACT_PANEL_DEFAULTS = {
+  width: 700,
+  height: 264,
+} satisfies Required<Omit<ContactPanelSvgOptions, 'entries'>>
 
 export function createHeroSvg(options: HeroSvgOptions = {}) {
   const width = options.width ?? DEFAULTS.width
@@ -349,6 +369,65 @@ export function createContactCardSvg(options: ContactCardSvgOptions) {
   ].join('')
 }
 
+export function createContactPanelSvg(options: ContactPanelSvgOptions) {
+  const width = options.width ?? CONTACT_PANEL_DEFAULTS.width
+  const height = options.height ?? CONTACT_PANEL_DEFAULTS.height
+  const id = `contact-panel-${Math.abs(hashCode(`${width}-${height}-${options.entries.map(entry => entry.qrValue).join('|')}`))}`
+  const cardWidth = 300
+  const cardHeight = 196
+  const cardY = 44
+  const leftX = 28
+  const rightX = width - cardWidth - 28
+  const leftEntry = options.entries[0]
+  const rightEntry = options.entries[1]
+
+  return [
+    `<svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="${id}-title ${id}-desc">`,
+    `<title id="${id}-title">Contact panel</title>`,
+    `<desc id="${id}-desc">Combined website and Wechat contact panel with two scannable QR codes.</desc>`,
+    '<defs>',
+    `<linearGradient id="${id}-bg" x1="0" y1="0" x2="${width}" y2="${height}" gradientUnits="userSpaceOnUse">`,
+    '<stop offset="0%" stop-color="#030711" />',
+    '<stop offset="38%" stop-color="#0A1B3D" />',
+    '<stop offset="72%" stop-color="#15104A" />',
+    '<stop offset="100%" stop-color="#02050D" />',
+    '</linearGradient>',
+    `<radialGradient id="${id}-glow-a" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(126 46) rotate(35) scale(260 170)">`,
+    '<stop offset="0%" stop-color="#2BFFCF" stop-opacity="0.34" />',
+    '<stop offset="100%" stop-color="#31D0AA" stop-opacity="0" />',
+    '</radialGradient>',
+    `<radialGradient id="${id}-glow-b" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(574 48) rotate(125) scale(230 160)">`,
+    '<stop offset="0%" stop-color="#7A7CFF" stop-opacity="0.3" />',
+    '<stop offset="100%" stop-color="#5DA9FF" stop-opacity="0" />',
+    '</radialGradient>',
+    `<filter id="${id}-blur" x="-20%" y="-20%" width="140%" height="140%">`,
+    '<feGaussianBlur stdDeviation="18" />',
+    '</filter>',
+    '</defs>',
+    `<rect width="${width}" height="${height}" rx="28" fill="url(#${id}-bg)" />`,
+    `<rect width="${width}" height="${height}" rx="28" fill="url(#${id}-glow-a)" />`,
+    `<rect width="${width}" height="${height}" rx="28" fill="url(#${id}-glow-b)" />`,
+    `<path d="${buildGridPath(width, height, 28)}" stroke="rgba(133,164,255,0.06)" stroke-width="1" />`,
+    `<path d="M ${width / 2} 42 V ${height - 30}" stroke="rgba(148,163,184,0.18)" stroke-width="1" />`,
+    renderContactPanelCell(leftEntry, {
+      x: leftX,
+      y: cardY,
+      width: cardWidth,
+      height: cardHeight,
+      id: `${id}-left`,
+    }),
+    renderContactPanelCell(rightEntry, {
+      x: rightX,
+      y: cardY,
+      width: cardWidth,
+      height: cardHeight,
+      id: `${id}-right`,
+    }),
+    `<rect x="0.75" y="0.75" width="${width - 1.5}" height="${height - 1.5}" rx="27.25" stroke="rgba(122,124,255,0.32)" />`,
+    '</svg>',
+  ].join('')
+}
+
 function createAccentShapes(width: number, height: number, id: string) {
   return [
     [
@@ -380,6 +459,72 @@ function createAccentShapes(width: number, height: number, id: string) {
       '</circle>',
     ].join(''),
   ]
+}
+
+function renderContactPanelCell(
+  entry: ContactPanelEntry,
+  frame: { x: number, y: number, width: number, height: number, id: string },
+) {
+  const iconName = resolveIconName(entry.iconHref)
+  const note = entry.note ? escapeXml(entry.note) : ''
+  const qrSize = 136
+  const qrX = frame.x + frame.width - qrSize - 18
+  const qrY = frame.y + (frame.height - qrSize) / 2
+  const iconX = frame.x + 28
+  const iconY = frame.y + 34
+  const qrSvg = createQrCodeSvg(entry.qrValue, {
+    size: qrSize,
+    padding: 18,
+    accentColor: entry.accentColor ?? CONTACT_CARD_DEFAULTS.accentColor,
+    highlightColor: entry.highlightColor ?? CONTACT_CARD_DEFAULTS.highlightColor,
+    backgroundColor: '#F8FAFC',
+    gridColor: 'rgba(15, 23, 42, 0.12)',
+    dotColor: '#020617',
+    cornerRadius: 22,
+  })
+
+  return [
+    `<g>`,
+    `<rect x="${frame.x}" y="${frame.y}" width="${frame.width}" height="${frame.height}" rx="24" fill="rgba(2,6,23,0.16)" stroke="rgba(148,163,184,0.12)" />`,
+    renderInlineIcon(iconName, iconX, iconY, 32),
+    note
+      ? `<text x="${iconX}" y="${frame.y + frame.height - 18}" fill="rgba(148,163,184,0.92)" font-family="'IBM Plex Sans', 'Segoe UI', sans-serif" font-size="13">${note}</text>`
+      : '',
+    `<svg x="${qrX}" y="${qrY}" width="${qrSize}" height="${qrSize}" viewBox="0 0 ${qrSize} ${qrSize}">`,
+    qrSvg,
+    '</svg>',
+    '</g>',
+  ].join('')
+}
+
+function resolveIconName(iconHref?: string) {
+  if (!iconHref) {
+    return ''
+  }
+  if (iconHref.includes('chorme')) {
+    return 'chrome'
+  }
+  if (iconHref.includes('wechat')) {
+    return 'wechat'
+  }
+  return ''
+}
+
+function renderInlineIcon(iconName: string, x: number, y: number, size: number) {
+  if (!iconName) {
+    return ''
+  }
+
+  const pathData = iconName === 'chrome'
+    ? 'M371.8 512c0 77.5 62.7 140.2 140.2 140.2S652.2 589.5 652.2 512 589.5 371.8 512 371.8 371.8 434.4 371.8 512zM900 362.4l-234.3 12.1c63.6 74.3 64.6 181.5 11.1 263.7l-188 289.2c78 4.2 158.4-12.9 231.2-55.2 180-104 253-322.1 180-509.8zM320.3 591.9L163.8 284.1A415.35 415.35 0 0096 512c0 208 152.3 380.3 351.4 410.8l106.9-209.4c-96.6 18.2-189.9-34.8-234-121.5zm218.5-285.5l344.4 18.1C848 254.7 792.6 194 719.8 151.7 653.9 113.6 581.5 95.5 510.5 96c-122.5.5-242.2 55.2-322.1 154.5l128.2 196.9c32-91.9 124.8-146.7 222.2-141z'
+    : 'M690.1 377.4c5.9 0 11.8.2 17.6.5-24.4-128.7-158.3-227.1-319.9-227.1C209 150.8 64 271.4 64 420.2c0 81.1 43.6 154.2 111.9 203.6a21.5 21.5 0 019.1 17.6c0 2.4-.5 4.6-1.1 6.9-5.5 20.3-14.2 52.8-14.6 54.3-.7 2.6-1.7 5.2-1.7 7.9 0 5.9 4.8 10.8 10.8 10.8 2.3 0 4.2-.9 6.2-2l70.9-40.9c5.3-3.1 11-5 17.2-5 3.2 0 6.4.5 9.5 1.4 33.1 9.5 68.8 14.8 105.7 14.8 6 0 11.9-.1 17.8-.4-7.1-21-10.9-43.1-10.9-66 0-135.8 132.2-245.8 295.3-245.8zm-194.3-86.5c23.8 0 43.2 19.3 43.2 43.1s-19.3 43.1-43.2 43.1c-23.8 0-43.2-19.3-43.2-43.1s19.4-43.1 43.2-43.1zm-215.9 86.2c-23.8 0-43.2-19.3-43.2-43.1s19.3-43.1 43.2-43.1 43.2 19.3 43.2 43.1-19.4 43.1-43.2 43.1zm586.8 415.6c56.9-41.2 93.2-102 93.2-169.7 0-124-120.8-224.5-269.9-224.5-149 0-269.9 100.5-269.9 224.5S540.9 847.5 690 847.5c30.8 0 60.6-4.4 88.1-12.3 2.6-.8 5.2-1.2 7.9-1.2 5.2 0 9.9 1.6 14.3 4.1l59.1 34c1.7 1 3.3 1.7 5.2 1.7a9 9 0 006.4-2.6 9 9 0 002.6-6.4c0-2.2-.9-4.4-1.4-6.6-.3-1.2-7.6-28.3-12.2-45.3-.5-1.9-.9-3.8-.9-5.7.1-5.9 3.1-11.2 7.6-14.5zM600.2 587.2c-19.9 0-36-16.1-36-35.9 0-19.8 16.1-35.9 36-35.9s36 16.1 36 35.9c0 19.8-16.2 35.9-36 35.9zm179.9 0c-19.9 0-36-16.1-36-35.9 0-19.8 16.1-35.9 36-35.9s36 16.1 36 35.9a36.08 36.08 0 01-36 35.9z'
+  const fill = iconName === 'chrome' ? '#5193FB' : '#0DCB19'
+
+  return [
+    `<svg x="${x}" y="${y}" width="${size}" height="${size}" viewBox="0 0 1024 1024" fill="none">`,
+    `<path d="${pathData}" fill="${fill}" />`,
+    '</svg>',
+  ].join('')
 }
 
 function buildGridPath(width: number, height: number, gap: number) {

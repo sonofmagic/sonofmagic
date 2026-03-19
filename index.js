@@ -1,27 +1,27 @@
 import process from 'node:process'
-import { fileURLToPath } from 'node:url'
-import { createContactPanelSvg, createHeroSvg } from '@icebreakers/svg'
+import { fileURLToPath, pathToFileURL } from 'node:url'
 import fs from 'fs-extra'
 import path from 'pathe'
 
 const currentDir = fileURLToPath(new URL('.', import.meta.url))
+const svgModulePath = pathToFileURL(path.resolve(currentDir, 'packages/svg/dist/index.mjs')).href
 const templatePath = path.resolve(currentDir, 'TEMPLATE.md')
 const outputPath = path.resolve(currentDir, 'README.md')
 const generatedAssetDir = path.resolve(currentDir, 'assets/generated')
 const heroOutputPath = path.resolve(currentDir, 'assets/generated/profile-hero.svg')
 
-const CONTACT_PANEL_WIDTH = 340
-const CONTACT_PANEL_HEIGHT = 204
+const CONTACT_PANEL_WIDTH = 1280
+const CONTACT_PANEL_HEIGHT = 360
 const contactEntries = [
   {
-    title: 'Website',
+    title: '',
     qrValue: 'https://www.icebreaker.top',
     iconHref: '../svg/chorme.svg',
     accentColor: '#7A7CFF',
     highlightColor: '#2BFFCF',
   },
   {
-    title: 'Wechat',
+    title: '',
     qrValue: 'https://u.wechat.com/EAVzgOGBnATKcePfVWr_QyQ',
     iconHref: '../svg/wechat.svg',
     note: '备注: Github',
@@ -29,6 +29,10 @@ const contactEntries = [
     highlightColor: '#FF8A5B',
   },
 ]
+
+async function loadSvgModule() {
+  return import(svgModulePath)
+}
 
 function buildContactPanel() {
   return [
@@ -39,6 +43,7 @@ function buildContactPanel() {
 }
 
 async function writeHeroSvg() {
+  const { createHeroSvg } = await loadSvgModule()
   const heroSvg = createHeroSvg({
     title: 'ice breaker',
     subtitle: 'Build systems, mini-program workflows, and profile-grade interfaces.',
@@ -53,6 +58,7 @@ async function writeHeroSvg() {
 }
 
 async function writeContactPanelSvg(entries) {
+  const { createContactPanelSvg } = await loadSvgModule()
   await fs.ensureDir(generatedAssetDir)
   const panelSvg = createContactPanelSvg({
     width: CONTACT_PANEL_WIDTH,

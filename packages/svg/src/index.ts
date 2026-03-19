@@ -44,6 +44,7 @@ export interface ContactPanelEntry {
   qrValue: string
   iconHref?: string
   note?: string
+  badge?: string
   accentColor?: string
   highlightColor?: string
 }
@@ -86,8 +87,8 @@ const CONTACT_CARD_DEFAULTS = {
 } satisfies Omit<Required<ContactCardSvgOptions>, 'title' | 'label' | 'value' | 'qrValue' | 'note' | 'iconHref'>
 
 const CONTACT_PANEL_DEFAULTS = {
-  width: 340,
-  height: 204,
+  width: 1280,
+  height: 360,
 } satisfies Required<Omit<ContactPanelSvgOptions, 'entries'>>
 
 export function createHeroSvg(options: HeroSvgOptions = {}) {
@@ -388,11 +389,14 @@ export function createContactPanelSvg(options: ContactPanelSvgOptions) {
   const width = options.width ?? CONTACT_PANEL_DEFAULTS.width
   const height = options.height ?? CONTACT_PANEL_DEFAULTS.height
   const id = `contact-panel-${Math.abs(hashCode(`${width}-${height}-${options.entries.map(entry => entry.qrValue).join('|')}`))}`
-  const cardWidth = 136
-  const cardHeight = 172
-  const cardY = 16
-  const leftX = 18
-  const rightX = width - cardWidth - 18
+  const isBanner = width >= 960
+  const cardWidth = isBanner ? Math.round(width * 0.31) : 136
+  const cardHeight = isBanner ? Math.round(height * 0.84) : 172
+  const cardY = isBanner ? Math.round((height - cardHeight) / 2) : 16
+  const sidePadding = isBanner ? Math.round(width * 0.11) : 18
+  const leftX = sidePadding
+  const rightX = width - cardWidth - sidePadding
+  const dividerX = Math.round(width / 2)
   const leftEntry = options.entries[0]
   const rightEntry = options.entries[1]
 
@@ -402,99 +406,93 @@ export function createContactPanelSvg(options: ContactPanelSvgOptions) {
     `<desc id="${id}-desc">Combined website and Wechat contact panel with two scannable QR codes.</desc>`,
     '<defs>',
     `<linearGradient id="${id}-bg" x1="0" y1="0" x2="${width}" y2="${height}" gradientUnits="userSpaceOnUse">`,
-    '<stop offset="0%" stop-color="#041427" />',
-    '<stop offset="24%" stop-color="#0B2A4E" />',
-    '<stop offset="62%" stop-color="#1A3E77" />',
-    '<stop offset="100%" stop-color="#08111E" />',
+    '<stop offset="0%" stop-color="#03101E" />',
+    '<stop offset="22%" stop-color="#0B2442" />',
+    '<stop offset="58%" stop-color="#16467F" />',
+    '<stop offset="100%" stop-color="#07111D" />',
     `<animate attributeName="x1" values="0;${width * 0.1};0" dur="10s" repeatCount="indefinite" />`,
     `<animate attributeName="y2" values="${height};${height * 0.78};${height}" dur="12s" repeatCount="indefinite" />`,
     '</linearGradient>',
-    `<linearGradient id="${id}-scan" x1="-40" y1="0" x2="64" y2="0" gradientUnits="userSpaceOnUse">`,
-    '<stop offset="0%" stop-color="rgba(43,255,207,0)" />',
-    '<stop offset="50%" stop-color="rgba(43,255,207,0.34)" />',
-    '<stop offset="100%" stop-color="rgba(96,165,250,0)" />',
+    `<linearGradient id="${id}-divider" x1="${dividerX}" y1="76" x2="${dividerX}" y2="${height - 76}" gradientUnits="userSpaceOnUse">`,
+    '<stop offset="0%" stop-color="rgba(96,165,250,0)" />',
+    '<stop offset="50%" stop-color="rgba(96,165,250,0.34)" />',
+    '<stop offset="100%" stop-color="rgba(43,255,207,0)" />',
     '</linearGradient>',
-    `<radialGradient id="${id}-wash-left" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(72 88) rotate(12) scale(136 112)">`,
-    '<stop offset="0%" stop-color="#2BFFCF" stop-opacity="0.34" />',
+    `<radialGradient id="${id}-wash-left" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(${formatNumber(leftX + cardWidth / 2)} ${formatNumber(cardY + cardHeight / 2)}) rotate(-8) scale(${formatNumber(cardWidth * 0.86)} ${formatNumber(cardHeight * 0.88)})">`,
+    '<stop offset="0%" stop-color="#2BFFCF" stop-opacity="0.18" />',
     '<stop offset="100%" stop-color="#2BFFCF" stop-opacity="0" />',
     '</radialGradient>',
-    `<radialGradient id="${id}-wash-right" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(280 88) rotate(-10) scale(140 116)">`,
-    '<stop offset="0%" stop-color="#60A5FA" stop-opacity="0.36" />',
+    `<radialGradient id="${id}-wash-right" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(${formatNumber(rightX + cardWidth / 2)} ${formatNumber(cardY + cardHeight / 2)}) rotate(8) scale(${formatNumber(cardWidth * 0.86)} ${formatNumber(cardHeight * 0.88)})">`,
+    '<stop offset="0%" stop-color="#60A5FA" stop-opacity="0.18" />',
     '<stop offset="100%" stop-color="#60A5FA" stop-opacity="0" />',
     '</radialGradient>',
-    `<radialGradient id="${id}-core-left" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(84 112) rotate(0) scale(116 94)">`,
-    '<stop offset="0%" stop-color="#2BFFCF" stop-opacity="0.22" />',
-    '<stop offset="100%" stop-color="#2BFFCF" stop-opacity="0" />',
-    '</radialGradient>',
-    `<radialGradient id="${id}-core-right" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(256 112) rotate(0) scale(116 94)">`,
-    '<stop offset="0%" stop-color="#60A5FA" stop-opacity="0.22" />',
-    '<stop offset="100%" stop-color="#60A5FA" stop-opacity="0" />',
-    '</radialGradient>',
-    `<radialGradient id="${id}-halo-left" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(92 78) rotate(20) scale(118 76)">`,
-    '<stop offset="0%" stop-color="#2BFFCF" stop-opacity="0.10" />',
-    '<stop offset="100%" stop-color="#2BFFCF" stop-opacity="0" />',
-    '</radialGradient>',
-    `<radialGradient id="${id}-halo-right" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(368 78) rotate(-18) scale(118 76)">`,
-    '<stop offset="0%" stop-color="#FFD166" stop-opacity="0.10" />',
-    '<stop offset="100%" stop-color="#FFD166" stop-opacity="0" />',
+    `<radialGradient id="${id}-top-bloom" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(${formatNumber(width * 0.5)} ${formatNumber(height * 0.08)}) rotate(90) scale(${formatNumber(width * 0.36)} ${formatNumber(height * 0.22)})">`,
+    '<stop offset="0%" stop-color="#C1F8FF" stop-opacity="0.24" />',
+    '<stop offset="100%" stop-color="#C1F8FF" stop-opacity="0" />',
     '</radialGradient>',
     `<filter id="${id}-blur" x="-20%" y="-20%" width="140%" height="140%">`,
     '<feGaussianBlur stdDeviation="16" />',
     '</filter>',
+    `<filter id="${id}-soft-glow" x="-30%" y="-30%" width="160%" height="160%">`,
+    '<feGaussianBlur stdDeviation="7" />',
+    '</filter>',
+    `<filter id="${id}-edge-glow" x="-40%" y="-40%" width="180%" height="180%">`,
+    '<feGaussianBlur stdDeviation="3.5" />',
+    '</filter>',
     '</defs>',
     `<rect width="${width}" height="${height}" rx="26" fill="url(#${id}-bg)" />`,
-    `<rect width="${width}" height="${height}" rx="26" fill="url(#${id}-wash-left)" />`,
-    `<rect width="${width}" height="${height}" rx="26" fill="url(#${id}-wash-right)" />`,
-    `<rect width="${width}" height="${height}" rx="26" fill="url(#${id}-core-left)" />`,
-    `<rect width="${width}" height="${height}" rx="26" fill="url(#${id}-core-right)" />`,
-    `<path d="${buildGridPath(width, height, 24)}" stroke="rgba(96,165,250,0.08)" stroke-width="1" />`,
-    [
-      `<rect x="-56" y="0" width="72" height="${height}" fill="url(#${id}-scan)" opacity="0.85">`,
-      `<animate attributeName="x" values="-56;${width + 18};-56" dur="6.4s" repeatCount="indefinite" />`,
-      '</rect>',
-    ].join(''),
-    [
-      `<rect x="-80" y="26" width="124" height="${height - 52}" rx="62" fill="rgba(43,255,207,0.16)" filter="url(#${id}-blur)">`,
-      '<animate attributeName="x" values="-80;-48;-80" dur="8.4s" repeatCount="indefinite" />',
-      '<animate attributeName="opacity" values="0.55;0.95;0.55" dur="5.2s" repeatCount="indefinite" />',
-      '</rect>',
-    ].join(''),
-    [
-      `<rect x="${width - 44}" y="18" width="108" height="${height - 36}" rx="54" fill="rgba(96,165,250,0.18)" filter="url(#${id}-blur)">`,
-      `<animate attributeName="x" values="${width - 44};${width - 70};${width - 44}" dur="9.2s" repeatCount="indefinite" />`,
-      '<animate attributeName="opacity" values="0.5;0.9;0.5" dur="5.8s" repeatCount="indefinite" />',
-      '</rect>',
-    ].join(''),
-    `<path d="M 28 28 H 84" stroke="rgba(43,255,207,0.68)" stroke-width="2.5" stroke-linecap="round" />`,
-    `<path d="M 28 28 V 60" stroke="rgba(43,255,207,0.46)" stroke-width="2.5" stroke-linecap="round" />`,
-    `<path d="M ${width - 28} 28 H ${width - 84}" stroke="rgba(96,165,250,0.68)" stroke-width="2.5" stroke-linecap="round" />`,
-    `<path d="M ${width - 28} 28 V 60" stroke="rgba(96,165,250,0.46)" stroke-width="2.5" stroke-linecap="round" />`,
-    `<path d="M 28 ${height - 28} H 84" stroke="rgba(96,165,250,0.36)" stroke-width="2.5" stroke-linecap="round" />`,
-    `<path d="M ${width - 28} ${height - 28} H ${width - 84}" stroke="rgba(43,255,207,0.36)" stroke-width="2.5" stroke-linecap="round" />`,
+    `<rect width="${width}" height="${height}" rx="26" fill="url(#${id}-top-bloom)" />`,
+    `<rect width="${width}" height="${height}" rx="26" fill="url(#${id}-wash-left)" opacity="0.74" />`,
+    `<rect width="${width}" height="${height}" rx="26" fill="url(#${id}-wash-right)" opacity="0.74" />`,
+    `<path d="${buildGridPath(width, height, 28)}" stroke="rgba(160,210,255,0.08)" stroke-width="1" />`,
+    `<path d="M 0 ${height - 1} H ${width}" stroke="rgba(255,255,255,0.08)" />`,
+    `<path d="M 28 28 H ${isBanner ? 120 : 84}" stroke="rgba(43,255,207,0.68)" stroke-width="2.5" stroke-linecap="round" />`,
+    `<path d="M 28 28 V ${isBanner ? 76 : 60}" stroke="rgba(43,255,207,0.46)" stroke-width="2.5" stroke-linecap="round" />`,
+    `<path d="M ${width - 28} 28 H ${width - (isBanner ? 120 : 84)}" stroke="rgba(96,165,250,0.68)" stroke-width="2.5" stroke-linecap="round" />`,
+    `<path d="M ${width - 28} 28 V ${isBanner ? 76 : 60}" stroke="rgba(96,165,250,0.46)" stroke-width="2.5" stroke-linecap="round" />`,
+    `<path d="M 28 ${height - 28} H ${isBanner ? 120 : 84}" stroke="rgba(96,165,250,0.36)" stroke-width="2.5" stroke-linecap="round" />`,
+    `<path d="M ${width - 28} ${height - 28} H ${width - (isBanner ? 120 : 84)}" stroke="rgba(43,255,207,0.36)" stroke-width="2.5" stroke-linecap="round" />`,
+    isBanner
+      ? `<rect x="${dividerX - 1}" y="76" width="2" height="${height - 152}" rx="1" fill="url(#${id}-divider)" />`
+      : '',
+    isBanner
+      ? `<path d="M ${dividerX - 26} 102 H ${dividerX + 26}" stroke="rgba(43,255,207,0.5)" stroke-width="2.5" stroke-linecap="round" />`
+      : '',
+    isBanner
+      ? `<path d="M ${dividerX - 26} ${height - 102} H ${dividerX + 26}" stroke="rgba(96,165,250,0.42)" stroke-width="2.5" stroke-linecap="round" />`
+      : '',
+    isBanner
+      ? `<circle cx="${dividerX}" cy="${Math.round(height / 2)}" r="5" fill="#C7FBFF" filter="url(#${id}-edge-glow)">`
+      : '',
+    isBanner
+      ? '<animate attributeName="opacity" values="0.56;1;0.56" dur="2.6s" repeatCount="indefinite" />'
+      : '',
+    isBanner
+      ? '</circle>'
+      : '',
     [
       `<circle cx="${width * 0.5}" cy="26" r="3.5" fill="#FFD166">`,
       '<animate attributeName="opacity" values="0.45;1;0.45" dur="2.2s" repeatCount="indefinite" />',
       '</circle>',
     ].join(''),
+    [
+      `<circle cx="${leftX + cardWidth / 2}" cy="${cardY + cardHeight / 2}" r="${Math.round(cardWidth * 0.34)}" fill="rgba(43,255,207,0.16)" filter="url(#${id}-blur)">`,
+      '<animate attributeName="opacity" values="0.24;0.5;0.24" dur="4.6s" repeatCount="indefinite" />',
+      '</circle>',
+    ].join(''),
+    [
+      `<circle cx="${rightX + cardWidth / 2}" cy="${cardY + cardHeight / 2}" r="${Math.round(cardWidth * 0.34)}" fill="rgba(96,165,250,0.16)" filter="url(#${id}-blur)">`,
+      '<animate attributeName="opacity" values="0.24;0.5;0.24" dur="4.9s" repeatCount="indefinite" />',
+      '</circle>',
+    ].join(''),
     `<rect x="0.75" y="0.75" width="${width - 1.5}" height="${height - 1.5}" rx="25.25" stroke="rgba(148,163,184,0.22)" />`,
-    [
-      `<ellipse cx="${leftX + cardWidth / 2}" cy="${cardY + cardHeight / 2}" rx="84" ry="52" fill="url(#${id}-halo-left)">`,
-      '<animate attributeName="opacity" values="0.28;0.64;0.28" dur="3.8s" repeatCount="indefinite" />',
-      '<animate attributeName="rx" values="80;88;80" dur="4.6s" repeatCount="indefinite" />',
-      '</ellipse>',
-    ].join(''),
-    [
-      `<ellipse cx="${rightX + cardWidth / 2}" cy="${cardY + cardHeight / 2}" rx="84" ry="52" fill="url(#${id}-halo-right)">`,
-      '<animate attributeName="opacity" values="0.28;0.64;0.28" dur="4.1s" repeatCount="indefinite" />',
-      '<animate attributeName="rx" values="80;88;80" dur="4.9s" repeatCount="indefinite" />',
-      '</ellipse>',
-    ].join(''),
     renderContactPanelCell(leftEntry, {
       x: leftX,
       y: cardY,
       width: cardWidth,
       height: cardHeight,
       id: `${id}-left`,
+      compact: !isBanner,
     }),
     renderContactPanelCell(rightEntry, {
       x: rightX,
@@ -502,6 +500,7 @@ export function createContactPanelSvg(options: ContactPanelSvgOptions) {
       width: cardWidth,
       height: cardHeight,
       id: `${id}-right`,
+      compact: !isBanner,
     }),
     '</svg>',
   ].join('')
@@ -542,55 +541,69 @@ function createAccentShapes(width: number, height: number, id: string) {
 
 function renderContactPanelCell(
   entry: ContactPanelEntry,
-  frame: { x: number, y: number, width: number, height: number, id: string },
+  frame: { x: number, y: number, width: number, height: number, id: string, compact?: boolean },
 ) {
   const iconName = resolveIconName(entry.iconHref)
+  const title = escapeXml(entry.title ?? '')
   const note = entry.note ? escapeXml(entry.note) : ''
-  const qrSize = 114
+  const badge = entry.badge ? escapeXml(entry.badge) : ''
+  const compact = frame.compact ?? false
+  const qrSize = compact ? 114 : Math.min(Math.round(frame.width * 0.5), frame.height - 118)
   const qrX = frame.x + Math.floor((frame.width - qrSize) / 2)
-  const qrY = frame.y + 42
-  const iconX = frame.x + Math.floor((frame.width - 22) / 2)
-  const iconY = frame.y + 14
+  const qrY = frame.y + (compact ? 42 : 66)
+  const iconSize = compact ? 22 : 34
+  const iconX = frame.x + Math.floor((frame.width - iconSize) / 2)
+  const iconY = frame.y + (compact ? 14 : 24)
   const noteX = frame.x + frame.width / 2
-  const noteWidth = note ? Math.max(92, note.length * 11 + 20) : 0
-  const noteRectX = noteX - noteWidth / 2
-  const noteRectY = frame.y + frame.height - 30
-  const noteY = noteRectY + 15
+  const chipText = note || badge
+  const chipWidth = chipText ? Math.max(compact ? 92 : 148, chipText.length * (compact ? 11 : 15) + (compact ? 20 : 30)) : 0
+  const chipRectX = noteX - chipWidth / 2
+  const chipRectHeight = compact ? 24 : 34
+  const chipRectY = compact ? frame.y + frame.height - 30 : frame.y + frame.height - 46
+  const chipTextY = chipRectY + (compact ? 15 : 22)
+  const titleY = frame.y + (compact ? 34 : 42)
   const qrSvg = createQrCodeSvg(entry.qrValue, {
     size: qrSize,
-    padding: 12,
+    padding: compact ? 12 : 18,
     backgroundColor: '#FFFFFF',
     dotColor: '#020617',
-    cornerRadius: 16,
+    cornerRadius: compact ? 16 : 28,
     variant: 'plain',
   })
 
   return [
     `<g>`,
-    `<rect x="${frame.x}" y="${frame.y}" width="${frame.width}" height="${frame.height}" rx="22" fill="rgba(255,255,255,0.045)" stroke="rgba(148,163,184,0.12)" />`,
-    `<rect x="${frame.x + 1.5}" y="${frame.y + 1.5}" width="${frame.width - 3}" height="${frame.height - 3}" rx="20.5" fill="none" stroke="rgba(96,165,250,0.08)" />`,
-    `<path d="M ${frame.x + 14} ${frame.y + 16} H ${frame.x + 44}" stroke="rgba(43,255,207,0.55)" stroke-width="2" stroke-linecap="round" />`,
-    `<path d="M ${frame.x + frame.width - 14} ${frame.y + 16} H ${frame.x + frame.width - 44}" stroke="rgba(96,165,250,0.55)" stroke-width="2" stroke-linecap="round" />`,
-    renderInlineIcon(iconName, iconX, iconY, 22),
+    `<rect x="${frame.x}" y="${frame.y}" width="${frame.width}" height="${frame.height}" rx="${compact ? 22 : 36}" fill="rgba(4,12,28,0.22)" stroke="rgba(191,235,255,0.14)" />`,
+    `<rect x="${frame.x + 2}" y="${frame.y + 2}" width="${frame.width - 4}" height="${frame.height - 4}" rx="${compact ? 20 : 34}" fill="none" stroke="rgba(96,165,250,0.12)" />`,
+    `<rect x="${frame.x + (compact ? 10 : 14)}" y="${frame.y + (compact ? 10 : 14)}" width="${frame.width - (compact ? 20 : 28)}" height="${frame.height - (compact ? 20 : 28)}" rx="${compact ? 18 : 28}" fill="rgba(255,255,255,0.03)" />`,
+    `<path d="M ${frame.x + (compact ? 14 : 24)} ${frame.y + (compact ? 16 : 24)} H ${frame.x + (compact ? 44 : 82)}" stroke="rgba(43,255,207,0.6)" stroke-width="${compact ? 2 : 3}" stroke-linecap="round" />`,
+    `<path d="M ${frame.x + frame.width - (compact ? 14 : 24)} ${frame.y + (compact ? 16 : 24)} H ${frame.x + frame.width - (compact ? 44 : 82)}" stroke="rgba(96,165,250,0.6)" stroke-width="${compact ? 2 : 3}" stroke-linecap="round" />`,
+    renderInlineIcon(iconName, iconX, iconY, iconSize),
+    title
+      ? `<text x="${frame.x + frame.width / 2}" y="${titleY}" text-anchor="middle" fill="rgba(226,232,240,0.84)" font-family="'Space Grotesk', 'Avenir Next', sans-serif" font-size="${compact ? 11 : 15}" font-weight="700" letter-spacing="${compact ? 0.6 : 1.8}">${title}</text>`
+      : '',
     [
-      `<rect x="${qrX - 5}" y="${qrY - 5}" width="${qrSize + 10}" height="${qrSize + 10}" rx="22" fill="none" stroke="rgba(15,23,42,0.08)" stroke-width="1.25" stroke-dasharray="10 8">`,
-      '<animate attributeName="stroke-opacity" values="0.25;0.7;0.25" dur="3.2s" repeatCount="indefinite" />',
+      `<rect x="${qrX - (compact ? 5 : 10)}" y="${qrY - (compact ? 5 : 10)}" width="${qrSize + (compact ? 10 : 20)}" height="${qrSize + (compact ? 10 : 20)}" rx="${compact ? 22 : 38}" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="${compact ? 1.25 : 1.6}" stroke-dasharray="${compact ? '10 8' : '14 10'}">`,
+      '<animate attributeName="stroke-opacity" values="0.22;0.64;0.22" dur="3.2s" repeatCount="indefinite" />',
       '<animate attributeName="stroke-dashoffset" values="0;-36" dur="2.8s" repeatCount="indefinite" />',
       '</rect>',
     ].join(''),
     [
-      `<rect x="${qrX - 10}" y="${qrY - 10}" width="${qrSize + 20}" height="${qrSize + 20}" rx="28" fill="none" stroke="rgba(96,165,250,0.08)" stroke-width="1">`,
-      '<animate attributeName="stroke-opacity" values="0.08;0.28;0.08" dur="4.4s" repeatCount="indefinite" />',
+      `<rect x="${qrX - (compact ? 10 : 18)}" y="${qrY - (compact ? 10 : 18)}" width="${qrSize + (compact ? 20 : 36)}" height="${qrSize + (compact ? 20 : 36)}" rx="${compact ? 28 : 46}" fill="none" stroke="rgba(96,165,250,0.12)" stroke-width="${compact ? 1 : 1.4}">`,
+      '<animate attributeName="stroke-opacity" values="0.1;0.26;0.1" dur="4.4s" repeatCount="indefinite" />',
       '</rect>',
     ].join(''),
-    note
-      ? `<rect x="${noteRectX}" y="${noteRectY}" width="${noteWidth}" height="24" rx="12" fill="rgba(7,19,36,0.92)" stroke="rgba(43,255,207,0.56)" />`
+    !compact
+      ? `<rect x="${qrX - 24}" y="${qrY - 24}" width="${qrSize + 48}" height="${qrSize + 48}" rx="50" fill="rgba(255,255,255,0.025)" />`
       : '',
-    note
-      ? `<path d="M ${noteRectX + 10} ${noteRectY + 12} H ${noteRectX + 24}" stroke="rgba(43,255,207,0.88)" stroke-width="2" stroke-linecap="round" />`
+    chipText
+      ? `<rect x="${chipRectX}" y="${chipRectY}" width="${chipWidth}" height="${chipRectHeight}" rx="${Math.round(chipRectHeight / 2)}" fill="rgba(7,19,36,0.96)" stroke="${note ? 'rgba(43,255,207,0.66)' : 'rgba(96,165,250,0.5)'}" />`
       : '',
-    note
-      ? `<text x="${noteX + 6}" y="${noteY}" text-anchor="middle" fill="#F8FAFC" font-family="'IBM Plex Sans', 'Segoe UI', sans-serif" font-size="12" font-weight="700">${note}</text>`
+    chipText
+      ? `<path d="M ${chipRectX + (compact ? 10 : 16)} ${chipRectY + Math.round(chipRectHeight / 2)} H ${chipRectX + (compact ? 24 : 42)}" stroke="${note ? 'rgba(43,255,207,0.88)' : 'rgba(96,165,250,0.82)'}" stroke-width="${compact ? 2 : 3}" stroke-linecap="round" />`
+      : '',
+    chipText
+      ? `<text x="${noteX + (compact ? 6 : 10)}" y="${chipTextY}" text-anchor="middle" fill="#F8FAFC" font-family="'IBM Plex Sans', 'Segoe UI', sans-serif" font-size="${compact ? 12 : 16}" font-weight="700">${chipText}</text>`
       : '',
     `<svg x="${qrX}" y="${qrY}" width="${qrSize}" height="${qrSize}" viewBox="0 0 ${qrSize} ${qrSize}">`,
     qrSvg,

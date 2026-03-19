@@ -13,7 +13,7 @@
 <summary>More Details</summary>
 
 <p align="center">
-  <img width="340" height="204" src="assets/generated/contact-panel.svg" alt="Contact panel" />
+  <img width="1280" height="360" src="assets/generated/contact-panel.svg" alt="Contact panel" />
 </p>
 
 </details>

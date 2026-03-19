@@ -19,9 +19,10 @@ const BANNER_FONT: Record<string, string[]> = {
   T: ['#####', '  #  ', '  #  ', '  #  ', '  #  '],
   U: ['#   #', '#   #', '#   #', '#   #', ' ### '],
 }
+const FALLBACK_GLYPH = BANNER_FONT['E'] as string[]
 
 export function renderBannerText(text: string) {
-  const rows = Array.from({ length: 5 }).fill([] as string[])
+  const rows: string[][] = Array.from({ length: 5 }).fill([])
   for (const rawChar of text.toUpperCase()) {
     if (rawChar === ' ') {
       for (const row of rows) {
@@ -29,9 +30,12 @@ export function renderBannerText(text: string) {
       }
       continue
     }
-    const glyph = BANNER_FONT[rawChar] ?? BANNER_FONT.E
+    const glyph = BANNER_FONT[rawChar] ?? FALLBACK_GLYPH
     for (const [index, row] of glyph.entries()) {
-      rows[index].push(row)
+      const targetRow = rows[index]
+      if (targetRow) {
+        targetRow.push(row)
+      }
     }
   }
   return rows.map(row => row.join('  '))

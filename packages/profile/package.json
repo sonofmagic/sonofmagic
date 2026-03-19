@@ -54,6 +54,10 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
   },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  },
   "devDependencies": {
     "@types/prompts": "^2.4.9",
     "@types/qrcode": "^1.5.6",

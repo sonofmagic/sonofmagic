@@ -31,6 +31,7 @@ yarn-error.log*
 
 # turbo
 .turbo
+.playwright-cli/
 
 dist
 vite.config.ts.timestamp-*.mjs

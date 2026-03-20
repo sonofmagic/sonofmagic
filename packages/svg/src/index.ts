@@ -430,6 +430,16 @@ export function createContactPanelSvg(options: ContactPanelSvgOptions) {
     '<stop offset="0%" stop-color="#C1F8FF" stop-opacity="0.24" />',
     '<stop offset="100%" stop-color="#C1F8FF" stop-opacity="0" />',
     '</radialGradient>',
+    `<linearGradient id="${id}-edge-left" x1="0" y1="${height * 0.18}" x2="${width * 0.12}" y2="${height * 0.82}" gradientUnits="userSpaceOnUse">`,
+    '<stop offset="0%" stop-color="rgba(43,255,207,0)" />',
+    '<stop offset="52%" stop-color="rgba(43,255,207,0.26)" />',
+    '<stop offset="100%" stop-color="rgba(43,255,207,0)" />',
+    '</linearGradient>',
+    `<linearGradient id="${id}-edge-right" x1="${width}" y1="${height * 0.12}" x2="${width * 0.88}" y2="${height * 0.88}" gradientUnits="userSpaceOnUse">`,
+    '<stop offset="0%" stop-color="rgba(96,165,250,0)" />',
+    '<stop offset="48%" stop-color="rgba(96,165,250,0.24)" />',
+    '<stop offset="100%" stop-color="rgba(96,165,250,0)" />',
+    '</linearGradient>',
     `<filter id="${id}-blur" x="-20%" y="-20%" width="140%" height="140%">`,
     '<feGaussianBlur stdDeviation="16" />',
     '</filter>',
@@ -444,6 +454,16 @@ export function createContactPanelSvg(options: ContactPanelSvgOptions) {
     `<rect width="${width}" height="${height}" rx="26" fill="url(#${id}-top-bloom)" />`,
     `<rect width="${width}" height="${height}" rx="26" fill="url(#${id}-wash-left)" opacity="0.74" />`,
     `<rect width="${width}" height="${height}" rx="26" fill="url(#${id}-wash-right)" opacity="0.74" />`,
+    [
+      `<path d="M ${formatNumber(width * 0.04)} ${formatNumber(height * 0.18)} C ${formatNumber(width * 0.08)} ${formatNumber(height * 0.3)}, ${formatNumber(width * 0.06)} ${formatNumber(height * 0.62)}, ${formatNumber(width * 0.11)} ${formatNumber(height * 0.82)}" stroke="url(#${id}-edge-left)" stroke-width="14" stroke-linecap="round" opacity="0.42" filter="url(#${id}-soft-glow)">`,
+      '<animate attributeName="opacity" values="0.12;0.42;0.12" dur="4.6s" repeatCount="indefinite" />',
+      '</path>',
+    ].join(''),
+    [
+      `<path d="M ${formatNumber(width * 0.96)} ${formatNumber(height * 0.14)} C ${formatNumber(width * 0.92)} ${formatNumber(height * 0.28)}, ${formatNumber(width * 0.94)} ${formatNumber(height * 0.58)}, ${formatNumber(width * 0.89)} ${formatNumber(height * 0.84)}" stroke="url(#${id}-edge-right)" stroke-width="14" stroke-linecap="round" opacity="0.4" filter="url(#${id}-soft-glow)">`,
+      '<animate attributeName="opacity" values="0.1;0.4;0.1" dur="5.2s" repeatCount="indefinite" />',
+      '</path>',
+    ].join(''),
     `<path d="${buildGridPath(width, height, 28)}" stroke="rgba(160,210,255,0.08)" stroke-width="1" />`,
     `<path d="M 0 ${height - 1} H ${width}" stroke="rgba(255,255,255,0.08)" />`,
     `<path d="M 28 28 H ${isBanner ? 120 : 84}" stroke="rgba(43,255,207,0.68)" stroke-width="2.5" stroke-linecap="round" />`,
@@ -485,6 +505,36 @@ export function createContactPanelSvg(options: ContactPanelSvgOptions) {
       '<animate attributeName="opacity" values="0.24;0.5;0.24" dur="4.9s" repeatCount="indefinite" />',
       '</circle>',
     ].join(''),
+    ...createPanelOrbitAccents({
+      cardX: leftX,
+      cardY,
+      cardWidth,
+      cardHeight,
+      qrSide: 'left',
+      color: '#2BFFCF',
+      secondaryColor: '#C7FBFF',
+      id: `${id}-orbit-left`,
+      compact: !isBanner,
+    }),
+    ...createPanelOrbitAccents({
+      cardX: rightX,
+      cardY,
+      cardWidth,
+      cardHeight,
+      qrSide: 'right',
+      color: '#60A5FA',
+      secondaryColor: '#FFD166',
+      id: `${id}-orbit-right`,
+      compact: !isBanner,
+    }),
+    ...createCenterSignalAccents({
+      centerX: dividerX,
+      centerY: Math.round(height / 2),
+      width,
+      height,
+      id,
+      compact: !isBanner,
+    }),
     `<rect x="0.75" y="0.75" width="${width - 1.5}" height="${height - 1.5}" rx="25.25" stroke="rgba(148,163,184,0.22)" />`,
     renderContactPanelCell(leftEntry, {
       x: leftX,
@@ -562,6 +612,10 @@ function renderContactPanelCell(
   const chipRectY = compact ? frame.y + frame.height - 30 : frame.y + frame.height - 46
   const chipTextY = chipRectY + (compact ? 15 : 22)
   const titleY = frame.y + (compact ? 34 : 42)
+  const safeInset = compact ? 16 : 28
+  const safeZoneX = qrX - safeInset
+  const safeZoneY = qrY - safeInset
+  const safeZoneSize = qrSize + safeInset * 2
   const qrSvg = createQrCodeSvg(entry.qrValue, {
     size: qrSize,
     padding: compact ? 12 : 18,
@@ -583,6 +637,18 @@ function renderContactPanelCell(
       ? `<text x="${frame.x + frame.width / 2}" y="${titleY}" text-anchor="middle" fill="rgba(226,232,240,0.84)" font-family="'Space Grotesk', 'Avenir Next', sans-serif" font-size="${compact ? 11 : 15}" font-weight="700" letter-spacing="${compact ? 0.6 : 1.8}">${title}</text>`
       : '',
     [
+      `<path d="M ${safeZoneX} ${qrY + qrSize / 2} H ${safeZoneX + safeZoneSize}" stroke="${iconName === 'wechat' ? 'rgba(255,138,91,0.66)' : 'rgba(43,255,207,0.62)'}" stroke-width="${compact ? 2.2 : 3.4}" stroke-linecap="round" opacity="0.8" stroke-dasharray="${compact ? '14 22' : '24 30'}">`,
+      '<animate attributeName="stroke-dashoffset" values="0;-60" dur="2.4s" repeatCount="indefinite" />',
+      '<animate attributeName="opacity" values="0.26;0.94;0.26" dur="2.6s" repeatCount="indefinite" />',
+      '</path>',
+    ].join(''),
+    [
+      `<path d="M ${qrX + qrSize / 2} ${safeZoneY} V ${safeZoneY + safeZoneSize}" stroke="${iconName === 'wechat' ? 'rgba(255,209,102,0.58)' : 'rgba(96,165,250,0.54)'}" stroke-width="${compact ? 2.2 : 3.4}" stroke-linecap="round" opacity="0.78" stroke-dasharray="${compact ? '12 18' : '18 24'}">`,
+      '<animate attributeName="stroke-dashoffset" values="0;50" dur="2.8s" repeatCount="indefinite" />',
+      '<animate attributeName="opacity" values="0.24;0.86;0.24" dur="3s" repeatCount="indefinite" />',
+      '</path>',
+    ].join(''),
+    [
       `<rect x="${qrX - (compact ? 5 : 10)}" y="${qrY - (compact ? 5 : 10)}" width="${qrSize + (compact ? 10 : 20)}" height="${qrSize + (compact ? 10 : 20)}" rx="${compact ? 22 : 38}" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="${compact ? 1.25 : 1.6}" stroke-dasharray="${compact ? '10 8' : '14 10'}">`,
       '<animate attributeName="stroke-opacity" values="0.22;0.64;0.22" dur="3.2s" repeatCount="indefinite" />',
       '<animate attributeName="stroke-dashoffset" values="0;-36" dur="2.8s" repeatCount="indefinite" />',
@@ -596,6 +662,21 @@ function renderContactPanelCell(
     !compact
       ? `<rect x="${qrX - 24}" y="${qrY - 24}" width="${qrSize + 48}" height="${qrSize + 48}" rx="50" fill="rgba(255,255,255,0.025)" />`
       : '',
+    [
+      `<rect x="${safeZoneX}" y="${safeZoneY}" width="${safeZoneSize}" height="${safeZoneSize}" rx="${compact ? 26 : 48}" fill="none" stroke="${iconName === 'wechat' ? 'rgba(255,138,91,0.34)' : 'rgba(96,165,250,0.32)'}" stroke-width="${compact ? 1.2 : 1.6}" stroke-dasharray="${compact ? '10 14' : '16 18'}">`,
+      '<animate attributeName="stroke-dashoffset" values="0;56" dur="4s" repeatCount="indefinite" />',
+      '<animate attributeName="stroke-opacity" values="0.22;0.68;0.22" dur="3.6s" repeatCount="indefinite" />',
+      '</rect>',
+    ].join(''),
+    ...createQrCornerPulses({
+      x: safeZoneX,
+      y: safeZoneY,
+      size: safeZoneSize,
+      color: iconName === 'wechat' ? '#FF8A5B' : '#2BFFCF',
+      secondaryColor: iconName === 'wechat' ? '#FFD166' : '#60A5FA',
+      panelId: frame.id,
+      compact,
+    }),
     chipText
       ? `<rect x="${chipRectX}" y="${chipRectY}" width="${chipWidth}" height="${chipRectHeight}" rx="${Math.round(chipRectHeight / 2)}" fill="rgba(7,19,36,0.96)" stroke="${note ? 'rgba(43,255,207,0.66)' : 'rgba(96,165,250,0.5)'}" />`
       : '',
@@ -610,6 +691,167 @@ function renderContactPanelCell(
     '</svg>',
     '</g>',
   ].join('')
+}
+
+function createPanelOrbitAccents(options: {
+  cardX: number
+  cardY: number
+  cardWidth: number
+  cardHeight: number
+  qrSide: 'left' | 'right'
+  color: string
+  secondaryColor: string
+  id: string
+  compact: boolean
+}) {
+  const {
+    cardX,
+    cardY,
+    cardWidth,
+    cardHeight,
+    qrSide,
+    color,
+    secondaryColor,
+    id,
+    compact,
+  } = options
+  const orbitWidth = compact ? 54 : 76
+  const orbitHeight = compact ? 102 : 154
+  const orbitX = qrSide === 'left'
+    ? cardX - (compact ? 10 : 22)
+    : cardX + cardWidth - orbitWidth + (compact ? 10 : 22)
+  const orbitY = cardY + cardHeight * (compact ? 0.28 : 0.24)
+  const satelliteX = qrSide === 'left' ? orbitX + orbitWidth - 8 : orbitX + 8
+  const pathA = buildOrbitPath(orbitX, orbitY, orbitWidth, orbitHeight, qrSide === 'left')
+  const pathB = buildOrbitPath(orbitX + (compact ? 6 : 10), orbitY + (compact ? 10 : 14), orbitWidth - (compact ? 12 : 20), orbitHeight - (compact ? 20 : 28), qrSide !== 'left')
+
+  return [
+    [
+      `<path d="${pathA}" fill="none" stroke="${color}" stroke-width="${compact ? 1.8 : 2.4}" stroke-linecap="round" stroke-dasharray="${compact ? '10 16' : '16 24'}" opacity="0.72">`,
+      '<animate attributeName="stroke-dashoffset" values="0;-64" dur="3.4s" repeatCount="indefinite" />',
+      '<animate attributeName="opacity" values="0.24;0.82;0.24" dur="3.6s" repeatCount="indefinite" />',
+      '</path>',
+    ].join(''),
+    [
+      `<path d="${pathB}" fill="none" stroke="${secondaryColor}" stroke-width="${compact ? 1.2 : 1.6}" stroke-linecap="round" stroke-dasharray="${compact ? '6 14' : '10 18'}" opacity="0.64">`,
+      '<animate attributeName="stroke-dashoffset" values="0;52" dur="4.2s" repeatCount="indefinite" />',
+      '<animate attributeName="opacity" values="0.18;0.62;0.18" dur="4.6s" repeatCount="indefinite" />',
+      '</path>',
+    ].join(''),
+    [
+      `<circle cx="${formatNumber(satelliteX)}" cy="${formatNumber(orbitY + orbitHeight * 0.26)}" r="${compact ? 3.2 : 4.8}" fill="${secondaryColor}" filter="url(#${id.split('-orbit-')[0]}-edge-glow)">`,
+      `<animateMotion dur="${compact ? '4.4s' : '5.2s'}" repeatCount="indefinite" path="${pathA}" />`,
+      '<animate attributeName="opacity" values="0.46;1;0.46" dur="1.6s" repeatCount="indefinite" />',
+      '</circle>',
+    ].join(''),
+    [
+      `<circle cx="${formatNumber(satelliteX)}" cy="${formatNumber(orbitY + orbitHeight * 0.68)}" r="${compact ? 2.6 : 4}" fill="${color}" filter="url(#${id.split('-orbit-')[0]}-soft-glow)">`,
+      `<animateMotion dur="${compact ? '5.2s' : '6.4s'}" repeatCount="indefinite" rotate="auto-reverse" path="${pathB}" />`,
+      '<animate attributeName="opacity" values="0.32;0.94;0.32" dur="2s" repeatCount="indefinite" />',
+      '</circle>',
+    ].join(''),
+  ]
+}
+
+function createCenterSignalAccents(options: {
+  centerX: number
+  centerY: number
+  width: number
+  height: number
+  id: string
+  compact: boolean
+}) {
+  const { centerX, centerY, width, height, id, compact } = options
+  const ringRx = compact ? 34 : 56
+  const ringRy = compact ? 72 : 108
+  const innerRx = compact ? 20 : 32
+  const innerRy = compact ? 44 : 68
+  const dataHalf = compact ? 44 : 72
+  const pillarHeight = compact ? 72 : 112
+
+  return [
+    [
+      `<ellipse cx="${centerX}" cy="${centerY}" rx="${ringRx}" ry="${ringRy}" fill="none" stroke="rgba(193,248,255,0.28)" stroke-width="${compact ? 1.2 : 1.6}" stroke-dasharray="${compact ? '10 14' : '14 20'}" opacity="0.72">`,
+      '<animate attributeName="stroke-dashoffset" values="0;-52" dur="4.8s" repeatCount="indefinite" />',
+      '<animate attributeName="opacity" values="0.16;0.72;0.16" dur="4.2s" repeatCount="indefinite" />',
+      '</ellipse>',
+    ].join(''),
+    [
+      `<ellipse cx="${centerX}" cy="${centerY}" rx="${innerRx}" ry="${innerRy}" fill="none" stroke="rgba(43,255,207,0.42)" stroke-width="${compact ? 1.6 : 2.2}" stroke-dasharray="${compact ? '8 12' : '10 16'}" opacity="0.84">`,
+      '<animate attributeName="stroke-dashoffset" values="0;40" dur="3.4s" repeatCount="indefinite" />',
+      '<animate attributeName="opacity" values="0.24;0.84;0.24" dur="3.2s" repeatCount="indefinite" />',
+      '</ellipse>',
+    ].join(''),
+    [
+      `<path d="M ${centerX} ${centerY - pillarHeight / 2} V ${centerY + pillarHeight / 2}" stroke="rgba(193,248,255,0.18)" stroke-width="${compact ? 8 : 12}" stroke-linecap="round" filter="url(#${id}-soft-glow)">`,
+      '<animate attributeName="opacity" values="0.08;0.34;0.08" dur="2.8s" repeatCount="indefinite" />',
+      '</path>',
+    ].join(''),
+    [
+      `<path d="M ${centerX - dataHalf} ${centerY - 62} H ${centerX + dataHalf}" stroke="rgba(43,255,207,0.48)" stroke-width="${compact ? 1.8 : 2.4}" stroke-linecap="round" stroke-dasharray="${compact ? '8 10' : '12 14'}">`,
+      '<animate attributeName="stroke-dashoffset" values="0;-36" dur="2.4s" repeatCount="indefinite" />',
+      '</path>',
+    ].join(''),
+    [
+      `<path d="M ${centerX - dataHalf + 8} ${centerY + 62} H ${centerX + dataHalf - 8}" stroke="rgba(96,165,250,0.44)" stroke-width="${compact ? 1.8 : 2.4}" stroke-linecap="round" stroke-dasharray="${compact ? '8 10' : '12 14'}">`,
+      '<animate attributeName="stroke-dashoffset" values="0;36" dur="2.7s" repeatCount="indefinite" />',
+      '</path>',
+    ].join(''),
+    [
+      `<circle cx="${centerX}" cy="${centerY}" r="${compact ? 7 : 10}" fill="#C7FBFF" filter="url(#${id}-edge-glow)">`,
+      '<animate attributeName="r" values="6;11;6" dur="2.2s" repeatCount="indefinite" />',
+      '<animate attributeName="opacity" values="0.48;1;0.48" dur="1.8s" repeatCount="indefinite" />',
+      '</circle>',
+    ].join(''),
+    [
+      `<circle cx="${centerX}" cy="${centerY - ringRy + (compact ? 14 : 20)}" r="${compact ? 2.8 : 4}" fill="#FFD166">`,
+      `<animateMotion dur="${compact ? '4.8s' : '5.6s'}" repeatCount="indefinite" path="M ${centerX} ${centerY - ringRy + (compact ? 14 : 20)} A ${ringRx - (compact ? 8 : 12)} ${ringRy - (compact ? 16 : 24)} 0 1 1 ${centerX - 0.1} ${centerY - ringRy + (compact ? 14 : 20)}" />`,
+      '<animate attributeName="opacity" values="0.34;0.92;0.34" dur="1.8s" repeatCount="indefinite" />',
+      '</circle>',
+    ].join(''),
+    [
+      `<circle cx="${centerX}" cy="${centerY + ringRy - (compact ? 14 : 20)}" r="${compact ? 2.4 : 3.6}" fill="#60A5FA">`,
+      `<animateMotion dur="${compact ? '5.4s' : '6.2s'}" repeatCount="indefinite" path="M ${centerX} ${centerY + ringRy - (compact ? 14 : 20)} A ${innerRx + (compact ? 2 : 4)} ${innerRy + (compact ? 10 : 16)} 0 1 0 ${centerX - 0.1} ${centerY + ringRy - (compact ? 14 : 20)}" />`,
+      '<animate attributeName="opacity" values="0.28;0.84;0.28" dur="2s" repeatCount="indefinite" />',
+      '</circle>',
+    ].join(''),
+  ]
+}
+
+function buildOrbitPath(x: number, y: number, width: number, height: number, bendLeft: boolean) {
+  const startX = bendLeft ? x + width : x
+  const controlAX = bendLeft ? x - width * 0.36 : x + width * 1.36
+  const controlBX = bendLeft ? x + width * 1.18 : x - width * 0.18
+  const endX = bendLeft ? x + width * 0.4 : x + width * 0.6
+
+  return `M ${formatNumber(startX)} ${formatNumber(y)} C ${formatNumber(controlAX)} ${formatNumber(y + height * 0.12)}, ${formatNumber(controlBX)} ${formatNumber(y + height * 0.54)}, ${formatNumber(endX)} ${formatNumber(y + height)}`
+}
+
+function createQrCornerPulses(options: {
+  x: number
+  y: number
+  size: number
+  color: string
+  secondaryColor: string
+  panelId: string
+  compact: boolean
+}) {
+  const { x, y, size, color, secondaryColor, panelId, compact } = options
+  const inset = compact ? 6 : 10
+  const pulseRadius = compact ? 2.8 : 4.2
+  const points = [
+    { x: x + inset, y: y + inset, delay: '0s', fill: color },
+    { x: x + size - inset, y: y + inset, delay: '0.4s', fill: secondaryColor },
+    { x: x + inset, y: y + size - inset, delay: '0.8s', fill: secondaryColor },
+    { x: x + size - inset, y: y + size - inset, delay: '1.2s', fill: color },
+  ]
+
+  return points.map(point => [
+    `<circle cx="${formatNumber(point.x)}" cy="${formatNumber(point.y)}" r="${pulseRadius}" fill="${point.fill}" filter="url(#${panelId.replace(/-(left|right)$/, '')}-edge-glow)">`,
+    `<animate attributeName="r" values="${pulseRadius * 0.8};${pulseRadius * 1.8};${pulseRadius * 0.8}" dur="2.4s" begin="${point.delay}" repeatCount="indefinite" />`,
+    `<animate attributeName="opacity" values="0.36;1;0.36" dur="2.4s" begin="${point.delay}" repeatCount="indefinite" />`,
+    '</circle>',
+  ].join(''))
 }
 
 function resolveIconName(iconHref?: string) {

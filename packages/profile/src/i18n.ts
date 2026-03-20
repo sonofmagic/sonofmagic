@@ -8,6 +8,7 @@ const supportedLanguages = ['zh', 'en'] as const
 export type SupportedLanguage = typeof supportedLanguages[number]
 
 const defaultLanguage: SupportedLanguage = 'zh'
+const localeSeparatorPattern = /_/g
 
 let cachedInstance: I18nInstance | null = null
 let initializationPromise: Promise<void> | null = null
@@ -37,7 +38,7 @@ function sanitizeLocaleTag(tag?: string | null): string | undefined {
   }
   const withoutEncoding = trimmed.split('.')[0] ?? trimmed
   const withoutModifiers = withoutEncoding.split('@')[0] ?? withoutEncoding
-  const normalized = withoutModifiers.replace(/_/g, '-').toLowerCase()
+  const normalized = withoutModifiers.replace(localeSeparatorPattern, '-').toLowerCase()
   return normalized || undefined
 }
 

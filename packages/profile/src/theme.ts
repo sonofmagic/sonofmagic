@@ -51,6 +51,8 @@ export interface ProfileTheme {
   }
 }
 
+const colorFgbgSeparatorPattern = /[:;]/
+
 function detectThemeFromEnv(): TerminalThemeMode | null {
   const envKeys = [
     'ICEBREAKER_PROFILE_THEME',
@@ -110,7 +112,7 @@ function detectThemeFromColorFgbg(): TerminalThemeMode | null {
   }
 
   const parts = value
-    .split(/[:;]/)
+    .split(colorFgbgSeparatorPattern)
     .map(part => Number.parseInt(part, 10))
     .filter(part => Number.isInteger(part))
 
@@ -118,7 +120,7 @@ function detectThemeFromColorFgbg(): TerminalThemeMode | null {
     return null
   }
 
-  const backgroundCandidate = parts[parts.length - 1]
+  const backgroundCandidate = parts.at(-1)
   if (backgroundCandidate === undefined) {
     return null
   }

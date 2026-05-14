@@ -82,6 +82,28 @@ export const translation: ITranslation = {
     title: '视觉档案',
     description: '由 sonofmagic/ascii-art-avatar 生成',
   },
+  timeline: {
+    title: '工程时间线',
+    description: '按年份查看关键项目与工具链演进',
+    items: {
+      openSource: {
+        title: '开源工具起点',
+        detail: '持续发布面向小程序工作流与构建流程的工程工具。',
+      },
+      weappTailwindcss: {
+        title: 'weapp-tailwindcss',
+        detail: '推动 Tailwind 在微信生态的工程化落地与团队实践。',
+      },
+      weappVite: {
+        title: 'weapp-vite',
+        detail: '让小程序项目更贴近现代前端开发体验。',
+      },
+      mokup: {
+        title: 'mokup',
+        detail: '覆盖 Vite、CLI 构建与运行时适配的文件路由 Mock 工具链。',
+      },
+    },
+  },
   blogWeb: {
     title: '技术主页',
     description: '公开技术站点与长期内容沉淀',

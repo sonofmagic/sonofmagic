@@ -3,6 +3,7 @@ import type { SupportedLanguage } from './i18n'
 import { profileData, profileLinks } from './constants'
 import { Dic, init, t } from './i18n'
 import { consoleLog as log } from './logger'
+import { renderProfileMarkdown } from './profile-content'
 import { dayjs } from './util'
 
 const linkAliasMap: Record<string, ProfileLinkKey> = {
@@ -82,6 +83,13 @@ export async function runDirectCommand({ command, args, language }: RunDirectCom
     for (const line of lines) {
       log(line)
     }
+    return
+  }
+
+  if (normalizedCommand === 'export') {
+    assertNoExtraArgs(normalizedCommand, args)
+    await init(language)
+    log(renderProfileMarkdown())
     return
   }
 

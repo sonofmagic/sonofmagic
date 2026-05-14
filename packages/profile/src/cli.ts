@@ -59,6 +59,7 @@ export async function runCli(runOptions: RunCliOptions = {}) {
   cli.command('summary', 'Print profile summary and exit')
   cli.command('links', 'Print all public links and exit')
   cli.command('contact', 'Print contact links and exit')
+  cli.command('export', 'Print profile as Markdown and exit')
   cli.command('url <target>', 'Print a single public url and exit')
   cli.option('-l, --lang <language>', `Specify language (${getSupportedLanguages().join('|')})`)
   cli.help()
@@ -66,6 +67,7 @@ export async function runCli(runOptions: RunCliOptions = {}) {
     cli.version(cliVersion)
   }
   cli.example(bin => `$ ${bin} summary --lang en`)
+  cli.example(bin => `$ ${bin} export --lang en`)
   cli.example(bin => `$ ${bin} links`)
   cli.example(bin => `$ ${bin} url github`)
   cli.example(bin => `$ ${bin} --lang en`)

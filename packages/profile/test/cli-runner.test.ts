@@ -81,7 +81,7 @@ describe('runCli', () => {
   it('dispatches matched direct commands with resolved options', async () => {
     const runCli = await loadRunCli()
     await runCli({
-      argv: ['node', 'profile', 'summary', '--lang', 'EN-US'],
+      argv: ['node', 'profile', 'export', '--lang', 'EN-US'],
       name: 'profile',
       version: '3.0.4',
     })
@@ -89,7 +89,7 @@ describe('runCli', () => {
     expect(mainMock).not.toHaveBeenCalled()
     expect(directCommandMock).toHaveBeenCalledTimes(1)
     expect(directCommandMock).toHaveBeenCalledWith({
-      command: 'summary',
+      command: 'export',
       args: [],
       language: 'en',
     })

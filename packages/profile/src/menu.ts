@@ -1,11 +1,12 @@
 import type { ProfileOptions } from './constants'
 import type { SupportedLanguage } from './i18n'
+import type { ProfileSection, TimelineEntry } from './profile-content'
 import { profileLinks } from './constants'
 import { showPhotoGallery } from './features/photo-gallery'
 import { showRepositoryPrompt } from './features/repositories'
 import { changeLanguage, Dic, getCurrentLanguage, getSupportedLanguages, t } from './i18n'
 import { consoleLog as log } from './logger'
-import { createProjectsTree } from './project'
+import { buildProfileSections, buildTimelineEntries } from './profile-content'
 import { animateQrcodeBox, boxen, generateQrcode, profileTheme, prompts, sleep, typeWriterLines } from './util'
 
 export interface MenuContext {
@@ -24,48 +25,8 @@ export interface MenuItem {
   handler: MenuHandler
 }
 
-interface ProfileSection {
-  title: string
-  lines: string[]
-}
-
 function headingLine(title: string) {
   return `\n\n${profileTheme.colors.heading('|')} ${title}`
-}
-
-function buildProfileSections(): ProfileSection[] {
-  const sectionConfigs: Array<{ titleKey: string, bodyKey: string, params?: Record<string, unknown> }> = [
-    { titleKey: Dic.profile.summaryTitle, bodyKey: Dic.profile.summary },
-    { titleKey: Dic.profile.strengthsTitle, bodyKey: Dic.profile.strengths },
-    { titleKey: Dic.profile.skillsTitle, bodyKey: Dic.profile.skills },
-    { titleKey: Dic.profile.expectationTitle, bodyKey: Dic.profile.expectation },
-    { titleKey: Dic.profile.experienceTitle, bodyKey: Dic.profile.experience },
-    {
-      titleKey: Dic.profile.projectsTitle,
-      bodyKey: Dic.profile.projects,
-      params: {
-        projectsTree: createProjectsTree().toString(),
-      },
-    },
-    { titleKey: Dic.profile.closingTitle, bodyKey: Dic.profile.closing },
-  ]
-
-  return sectionConfigs.map(({ titleKey, bodyKey, params }) => {
-    const title = t(titleKey) as string
-    const content = t(bodyKey, {
-      ...(params ?? {}),
-      interpolation: { escapeValue: false },
-    }) as string
-    const lines = content
-      .split('\n')
-      .map(line => line.trimEnd())
-      .filter(line => line.length > 0)
-
-    return {
-      title,
-      lines,
-    }
-  })
 }
 
 async function renderProfileSections(sections: ProfileSection[]) {
@@ -101,6 +62,22 @@ async function renderProfileSections(sections: ProfileSection[]) {
       await sleep(80)
     }
   }
+}
+
+async function renderTimeline(entries: TimelineEntry[]) {
+  const lines = entries.flatMap((entry, index) => {
+    const connector = index === entries.length - 1 ? '└─' : '├─'
+    return [
+      `${profileTheme.colors.heading(connector)} ${profileTheme.colors.primaryStrong(entry.year)} ${entry.title}`,
+      `   ${profileTheme.colors.secondary(entry.detail)}`,
+    ]
+  })
+
+  await typeWriterLines([
+    headingLine(t(Dic.timeline.title)),
+    '',
+    ...lines,
+  ], 8, 70, 2)
 }
 
 function createProfileItem(context: MenuContext): MenuItem {
@@ -147,6 +124,17 @@ function createPhotoItem(context: MenuContext): MenuItem {
     description: t(Dic.photo.description),
     async handler() {
       await showPhotoGallery()
+    },
+  }
+}
+
+function createTimelineItem(context: MenuContext): MenuItem {
+  return {
+    value: context.options.timeline,
+    title: t(Dic.timeline.title),
+    description: t(Dic.timeline.description),
+    async handler() {
+      await renderTimeline(buildTimelineEntries())
     },
   }
 }
@@ -258,6 +246,7 @@ export function buildMenuItems(context: MenuContext): MenuItem[] {
     createProfileItem(context),
     createContactItem(context),
     createPhotoItem(context),
+    createTimelineItem(context),
     createRepositoriesItem(context),
     createBlogWebItem(context),
     createBlogMpItem(context),

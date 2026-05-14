@@ -80,6 +80,29 @@ export const translation: ITranslation = (() => {
     description: 'Generated with sonofmagic/ascii-art-avatar',
   }
 
+  base.timeline = {
+    title: 'Engineering Timeline',
+    description: 'Browse key projects and toolchain milestones by year',
+    items: {
+      openSource: {
+        title: 'Open-source tooling begins',
+        detail: 'Started publishing engineering tools for mini-program workflows and build pipelines.',
+      },
+      weappTailwindcss: {
+        title: 'weapp-tailwindcss',
+        detail: 'Brought Tailwind utility workflows into production WeChat engineering practice.',
+      },
+      weappVite: {
+        title: 'weapp-vite',
+        detail: 'Aligned mini-program projects with a modern frontend development experience.',
+      },
+      mokup: {
+        title: 'mokup',
+        detail: 'Added file-based mock tooling across Vite, CLI builds, and runtime adapters.',
+      },
+    },
+  }
+
   base.blogWeb = {
     title: 'Tech Homepage',
     description: 'Public technical website and long-term writings',

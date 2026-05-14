@@ -26,6 +26,7 @@ export const optionsData = {
   music: 'music',
   quit: 'quit',
   photo: 'photo',
+  timeline: 'timeline',
   changeLanguage: 'changeLanguage',
   myRepositories: 'myRepositories',
 } as const

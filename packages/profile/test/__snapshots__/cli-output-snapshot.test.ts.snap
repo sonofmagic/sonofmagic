@@ -10,12 +10,14 @@ Commands:
   summary       Print profile summary and exit
   links         Print all public links and exit
   contact       Print contact links and exit
+  export        Print profile as Markdown and exit
   url <target>  Print a single public url and exit
 
 For more info, run any command with the \`--help\` flag:
   $ profile summary --help
   $ profile links --help
   $ profile contact --help
+  $ profile export --help
   $ profile url --help
 
 Options:
@@ -25,6 +27,7 @@ Options:
 
 Examples:
 $ profile summary --lang en
+$ profile export --lang en
 $ profile links
 $ profile url github
 $ profile --lang en
@@ -41,12 +44,14 @@ Commands:
   summary       Print profile summary and exit
   links         Print all public links and exit
   contact       Print contact links and exit
+  export        Print profile as Markdown and exit
   url <target>  Print a single public url and exit
 
 For more info, run any command with the \`--help\` flag:
   $ sonofmagic summary --help
   $ sonofmagic links --help
   $ sonofmagic contact --help
+  $ sonofmagic export --help
   $ sonofmagic url --help
 
 Options:
@@ -56,6 +61,7 @@ Options:
 
 Examples:
 $ sonofmagic summary --lang en
+$ sonofmagic export --lang en
 $ sonofmagic links
 $ sonofmagic url github
 $ sonofmagic --lang en
@@ -72,12 +78,14 @@ Commands:
   summary       Print profile summary and exit
   links         Print all public links and exit
   contact       Print contact links and exit
+  export        Print profile as Markdown and exit
   url <target>  Print a single public url and exit
 
 For more info, run any command with the \`--help\` flag:
   $ yangqiming summary --help
   $ yangqiming links --help
   $ yangqiming contact --help
+  $ yangqiming export --help
   $ yangqiming url --help
 
 Options:
@@ -87,6 +95,7 @@ Options:
 
 Examples:
 $ yangqiming summary --lang en
+$ yangqiming export --lang en
 $ yangqiming links
 $ yangqiming url github
 $ yangqiming --lang en

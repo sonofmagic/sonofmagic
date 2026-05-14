@@ -58,6 +58,20 @@ describe('direct commands', () => {
     expect(outputLines.some(line => line.startsWith('position: '))).toBe(true)
   })
 
+  it('prints markdown export with timeline content', async () => {
+    await runDirectCommand({
+      command: 'export',
+      args: [],
+      language: 'en',
+    })
+
+    expect(logMock).toHaveBeenCalledTimes(1)
+    const output = String(logMock.mock.calls[0]?.[0])
+    expect(output).toContain('# Engineering Profile')
+    expect(output).toContain('## Engineering Timeline')
+    expect(output).toContain('weapp-tailwindcss')
+  })
+
   it('throws for unknown url targets', async () => {
     await expect(runDirectCommand({
       command: 'url',

@@ -60,6 +60,29 @@ const Dic = {
     description: '',
   },
 
+  timeline: {
+    title: '',
+    description: '',
+    items: {
+      openSource: {
+        title: '',
+        detail: '',
+      },
+      weappTailwindcss: {
+        title: '',
+        detail: '',
+      },
+      weappVite: {
+        title: '',
+        detail: '',
+      },
+      mokup: {
+        title: '',
+        detail: '',
+      },
+    },
+  },
+
   blogWeb: {
     title: '',
     description: '',

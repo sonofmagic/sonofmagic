@@ -11,6 +11,7 @@ Commands:
   links         Print all public links and exit
   contact       Print contact links and exit
   export        Print profile as Markdown and exit
+  projects      Print highlighted projects and exit
   url <target>  Print a single public url and exit
 
 For more info, run any command with the \`--help\` flag:
@@ -18,6 +19,7 @@ For more info, run any command with the \`--help\` flag:
   $ profile links --help
   $ profile contact --help
   $ profile export --help
+  $ profile projects --help
   $ profile url --help
 
 Options:
@@ -28,6 +30,7 @@ Options:
 Examples:
 $ profile summary --lang en
 $ profile export --lang en
+$ profile projects
 $ profile links
 $ profile url github
 $ profile --lang en
@@ -45,6 +48,7 @@ Commands:
   links         Print all public links and exit
   contact       Print contact links and exit
   export        Print profile as Markdown and exit
+  projects      Print highlighted projects and exit
   url <target>  Print a single public url and exit
 
 For more info, run any command with the \`--help\` flag:
@@ -52,6 +56,7 @@ For more info, run any command with the \`--help\` flag:
   $ sonofmagic links --help
   $ sonofmagic contact --help
   $ sonofmagic export --help
+  $ sonofmagic projects --help
   $ sonofmagic url --help
 
 Options:
@@ -62,6 +67,7 @@ Options:
 Examples:
 $ sonofmagic summary --lang en
 $ sonofmagic export --lang en
+$ sonofmagic projects
 $ sonofmagic links
 $ sonofmagic url github
 $ sonofmagic --lang en
@@ -79,6 +85,7 @@ Commands:
   links         Print all public links and exit
   contact       Print contact links and exit
   export        Print profile as Markdown and exit
+  projects      Print highlighted projects and exit
   url <target>  Print a single public url and exit
 
 For more info, run any command with the \`--help\` flag:
@@ -86,6 +93,7 @@ For more info, run any command with the \`--help\` flag:
   $ yangqiming links --help
   $ yangqiming contact --help
   $ yangqiming export --help
+  $ yangqiming projects --help
   $ yangqiming url --help
 
 Options:
@@ -96,6 +104,7 @@ Options:
 Examples:
 $ yangqiming summary --lang en
 $ yangqiming export --lang en
+$ yangqiming projects
 $ yangqiming links
 $ yangqiming url github
 $ yangqiming --lang en

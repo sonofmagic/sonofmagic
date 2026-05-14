@@ -161,4 +161,11 @@ export function getRepositorySpotlight(repoName: string) {
   return spotlight ? { ...spotlight, bestFor: [...spotlight.bestFor] } : null
 }
 
+export function getRepositorySpotlights() {
+  return repositorySpotlights.map(spotlight => ({
+    ...spotlight,
+    bestFor: [...spotlight.bestFor],
+  }))
+}
+
 export type { RepositorySpotlight, RepositorySummary }

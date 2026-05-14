@@ -36,6 +36,18 @@ describe('direct commands', () => {
     expect(logMock).toHaveBeenCalledWith(`website: ${profileLinks.website}`)
   })
 
+  it('prints highlighted projects for projects command', async () => {
+    await runDirectCommand({
+      command: 'projects',
+      args: [],
+    })
+
+    const output = logMock.mock.calls.map(call => String(call[0])).join('\n')
+    expect(output).toContain('1. weapp-tailwindcss')
+    expect(output).toContain('bestFor:')
+    expect(output).toContain('mokup')
+  })
+
   it('prints a single url for url command', async () => {
     await runDirectCommand({
       command: 'url',

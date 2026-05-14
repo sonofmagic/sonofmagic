@@ -96,6 +96,23 @@ describe('runCli', () => {
     expect(process.exitCode).toBeUndefined()
   })
 
+  it('dispatches projects direct command', async () => {
+    const runCli = await loadRunCli()
+    await runCli({
+      argv: ['node', 'profile', 'projects'],
+      name: 'profile',
+      version: '3.0.4',
+    })
+
+    expect(mainMock).not.toHaveBeenCalled()
+    expect(directCommandMock).toHaveBeenCalledTimes(1)
+    expect(directCommandMock).toHaveBeenCalledWith({
+      command: 'projects',
+      args: [],
+    })
+    expect(process.exitCode).toBeUndefined()
+  })
+
   it('handles help and version flags without invoking main', async () => {
     const runCli = await loadRunCli()
     await runCli({

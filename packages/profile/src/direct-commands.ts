@@ -4,6 +4,7 @@ import { profileData, profileLinks } from './constants'
 import { Dic, init, t } from './i18n'
 import { consoleLog as log } from './logger'
 import { renderProfileMarkdown } from './profile-content'
+import { getFallbackRepoList, getRepositorySpotlight } from './repos'
 import { dayjs } from './util'
 
 const linkAliasMap: Record<string, ProfileLinkKey> = {
@@ -60,6 +61,24 @@ function assertNoExtraArgs(commandName: string, args: readonly string[]) {
   }
 }
 
+function buildProjectLines() {
+  return getFallbackRepoList().flatMap((repo, index) => {
+    const spotlight = getRepositorySpotlight(repo.name)
+    const lines = [
+      `${index + 1}. ${repo.name}`,
+      `   url: ${repo.html_url}`,
+      `   description: ${repo.description}`,
+    ]
+
+    if (spotlight) {
+      lines.push(`   spotlight: ${spotlight.tagline}`)
+      lines.push(`   bestFor: ${spotlight.bestFor.join(', ')}`)
+    }
+
+    return lines
+  })
+}
+
 export interface RunDirectCommandOptions {
   command: string
   args: readonly string[]
@@ -72,6 +91,14 @@ export async function runDirectCommand({ command, args, language }: RunDirectCom
   if (normalizedCommand === 'links' || normalizedCommand === 'contact') {
     assertNoExtraArgs(normalizedCommand, args)
     for (const line of buildLinkLines()) {
+      log(line)
+    }
+    return
+  }
+
+  if (normalizedCommand === 'projects') {
+    assertNoExtraArgs(normalizedCommand, args)
+    for (const line of buildProjectLines()) {
       log(line)
     }
     return
@@ -113,4 +140,5 @@ export async function runDirectCommand({ command, args, language }: RunDirectCom
 export const directCommandInternal = {
   resolveLinkTarget,
   buildLinkLines,
+  buildProjectLines,
 }

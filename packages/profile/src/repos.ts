@@ -30,6 +30,33 @@ interface RepositorySummary {
   name: string
 }
 
+const fallbackRepositories: RepositorySummary[] = [
+  {
+    name: 'weapp-tailwindcss',
+    html_url: 'https://github.com/sonofmagic/weapp-tailwindcss',
+    description: 'Tailwind CSS utility compiler and integration toolkit for WeChat mini-program projects.',
+    language: 'TypeScript',
+    stargazers_count: 0,
+    forks_count: 0,
+  },
+  {
+    name: 'weapp-vite',
+    html_url: 'https://github.com/weapp-vite/weapp-vite',
+    description: 'Vite-powered workflow for mini-program development.',
+    language: 'TypeScript',
+    stargazers_count: 0,
+    forks_count: 0,
+  },
+  {
+    name: 'mokup',
+    html_url: 'https://github.com/sonofmagic/mokup',
+    description: 'File-based mock toolkit for Vite, CLI builds, and runtime adapters.',
+    language: 'TypeScript',
+    stargazers_count: 0,
+    forks_count: 0,
+  },
+]
+
 function mapGitHubRepository(repo: GitHubRepository): RepositorySummary {
   return {
     stargazers_count: repo.stargazers_count,
@@ -100,3 +127,9 @@ export async function getRepoList() {
 
   return [...highlighted, ...rest]
 }
+
+export function getFallbackRepoList() {
+  return fallbackRepositories.map(repo => ({ ...repo }))
+}
+
+export type { RepositorySummary }

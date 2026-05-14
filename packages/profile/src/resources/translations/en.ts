@@ -145,6 +145,7 @@ export const translation: ITranslation = (() => {
     loading: {
       text: 'Fetching repositories from GitHub...',
       failText: 'Request failed - please check your network connection and retry.',
+      fallbackText: 'GitHub data is unavailable; showing the built-in highlighted project list.',
     },
     promptMsg: 'Repositories',
   }

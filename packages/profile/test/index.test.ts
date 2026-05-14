@@ -4,6 +4,7 @@ import { photoGalleryInternal } from '@/features/photo-gallery'
 import { repositoryInternal } from '@/features/repositories'
 import { changeLanguage, Dic, getCurrentLanguage, getSupportedLanguages, init, t } from '@/i18n'
 import { menuInternal } from '@/menu'
+import { getFallbackRepoList } from '@/repos'
 import { emoji, isComplexType, isPrimitivesType, splitParagraphByLines } from '@/util'
 
 function stripAnsi(input: string): string {
@@ -94,6 +95,13 @@ describe('repository helpers', () => {
     }
     expect(formatRepositoryLabel(repo, true)).toContain(emoji.get('star'))
     expect(formatRepositoryLabel(repo, true)).toContain(emoji.get('fork_and_knife'))
+  })
+
+  it('provides offline fallback repositories as copies', () => {
+    const first = getFallbackRepoList()
+    const second = getFallbackRepoList()
+    expect(first.map(repo => repo.name)).toEqual(['weapp-tailwindcss', 'weapp-vite', 'mokup'])
+    expect(first[0]).not.toBe(second[0])
   })
 })
 

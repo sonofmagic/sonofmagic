@@ -1,7 +1,7 @@
 import { createSpinner } from 'nanospinner'
 import { Dic, t } from '../i18n'
 import { consoleWarn as warn } from '../logger'
-import { getRepoList } from '../repos'
+import { getFallbackRepoList, getRepoList } from '../repos'
 import { emoji, prompts } from '../util'
 
 interface RepositoryPromptOptions {
@@ -107,15 +107,19 @@ export async function showRepositoryPrompt(options: RepositoryPromptOptions) {
   }
   catch {
     spinner.stop()
-    warn(t(Dic.myRepositories.loading.failText))
-    return
+    warn(t(Dic.myRepositories.loading.fallbackText))
+    repos = getFallbackRepoList()
   }
 
   spinner.stop()
 
   if (!repos.length) {
-    warn(t(Dic.myRepositories.loading.failText))
-    return
+    warn(t(Dic.myRepositories.loading.fallbackText))
+    repos = getFallbackRepoList()
+    if (!repos.length) {
+      warn(t(Dic.myRepositories.loading.failText))
+      return
+    }
   }
 
   await promptLoop(repos, options.isUnicodeSupported)

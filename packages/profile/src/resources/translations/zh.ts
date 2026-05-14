@@ -140,6 +140,7 @@ export const translation: ITranslation = {
     loading: {
       text: '正在从 GitHub 拉取数据...',
       failText: '拉取失败，请检查网络连接后重试',
+      fallbackText: 'GitHub 数据暂不可用，已切换到内置重点项目列表',
     },
     promptMsg: '项目列表',
   },

@@ -121,6 +121,7 @@ const Dic = {
     loading: {
       text: '',
       failText: '',
+      fallbackText: '',
     },
     promptMsg: '',
   },

@@ -143,6 +143,20 @@ export const translation: ITranslation = {
       fallbackText: 'GitHub 数据暂不可用，已切换到内置重点项目列表',
     },
     promptMsg: '项目列表',
+    actions: {
+      open: '打开仓库',
+      details: '查看项目详情',
+      back: '返回项目列表',
+    },
+    detail: {
+      language: '语言',
+      stars: 'Stars',
+      forks: 'Forks',
+      url: '链接',
+      spotlight: '亮点',
+      bestFor: '适合场景',
+      noDescription: '暂无项目描述',
+    },
   },
 
   leaveMeMessage: {

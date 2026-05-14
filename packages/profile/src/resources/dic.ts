@@ -124,6 +124,20 @@ const Dic = {
       fallbackText: '',
     },
     promptMsg: '',
+    actions: {
+      open: '',
+      details: '',
+      back: '',
+    },
+    detail: {
+      language: '',
+      stars: '',
+      forks: '',
+      url: '',
+      spotlight: '',
+      bestFor: '',
+      noDescription: '',
+    },
   },
 
   leaveMeMessage: {

@@ -148,6 +148,20 @@ export const translation: ITranslation = (() => {
       fallbackText: 'GitHub data is unavailable; showing the built-in highlighted project list.',
     },
     promptMsg: 'Repositories',
+    actions: {
+      open: 'Open repository',
+      details: 'View project details',
+      back: 'Back to repositories',
+    },
+    detail: {
+      language: 'Language',
+      stars: 'Stars',
+      forks: 'Forks',
+      url: 'URL',
+      spotlight: 'Spotlight',
+      bestFor: 'Best for',
+      noDescription: 'No repository description available',
+    },
   }
 
   base.leaveMeMessage = {

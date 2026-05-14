@@ -1,8 +1,8 @@
 import { createSpinner } from 'nanospinner'
 import { Dic, t } from '../i18n'
-import { consoleWarn as warn } from '../logger'
-import { getFallbackRepoList, getRepoList } from '../repos'
-import { emoji, prompts } from '../util'
+import { consoleLog as log, consoleWarn as warn } from '../logger'
+import { getFallbackRepoList, getRepoList, getRepositorySpotlight } from '../repos'
+import { boxen, emoji, profileTheme, prompts, typeWriterLines } from '../util'
 
 interface RepositoryPromptOptions {
   isUnicodeSupported: boolean
@@ -12,7 +12,7 @@ type RepoSummary = Awaited<ReturnType<typeof getRepoList>>[number]
 
 interface Selection {
   index: number
-  url: string
+  repo: RepoSummary
 }
 
 interface RepoChoice {
@@ -57,7 +57,7 @@ function buildRepoChoices(repos: RepoSummary[], isUnicodeSupported: boolean): Re
     title: formatRepositoryLabel(repo, isUnicodeSupported),
     description: repo.description ?? undefined,
     value: {
-      url: repo.html_url,
+      repo,
       index,
     },
   }))
@@ -69,6 +69,57 @@ async function openRepository(url: string) {
   }
   const mod = await openModulePromise
   await mod.default(url)
+}
+
+async function renderRepositoryDetails(repo: RepoSummary) {
+  const spotlight = getRepositorySpotlight(repo.name)
+  const lines = [
+    profileTheme.colors.primaryStrong(repo.name),
+    '',
+    repo.description || t(Dic.myRepositories.detail.noDescription),
+    '',
+    `${t(Dic.myRepositories.detail.language)}: ${repo.language ?? 'n/a'}`,
+    `${t(Dic.myRepositories.detail.stars)}: ${repo.stargazers_count}`,
+    `${t(Dic.myRepositories.detail.forks)}: ${repo.forks_count}`,
+    `${t(Dic.myRepositories.detail.url)}: ${profileTheme.colors.link(repo.html_url)}`,
+  ]
+
+  if (spotlight) {
+    lines.push('')
+    lines.push(`${t(Dic.myRepositories.detail.spotlight)}: ${spotlight.tagline}`)
+    lines.push(`${t(Dic.myRepositories.detail.bestFor)}:`)
+    lines.push(...spotlight.bestFor.map(item => `- ${item}`))
+  }
+
+  log('')
+  const card = boxen(lines.join('\n'), {
+    borderStyle: 'round',
+    borderColor: 'cyan',
+    padding: { top: 1, bottom: 1, left: 2, right: 2 },
+  })
+  await typeWriterLines(card.split('\n'), 4, 0, 1)
+}
+
+async function handleRepositorySelection(selection: Selection) {
+  const { action } = await prompts({
+    type: 'select',
+    name: 'action',
+    message: selection.repo.name,
+    choices: [
+      { title: t(Dic.myRepositories.actions.open), value: 'open' },
+      { title: t(Dic.myRepositories.actions.details), value: 'details' },
+      { title: t(Dic.myRepositories.actions.back), value: 'back' },
+    ],
+    initial: 0,
+  })
+
+  if (action === 'open') {
+    await openRepository(selection.repo.html_url)
+  }
+
+  if (action === 'details') {
+    await renderRepositoryDetails(selection.repo)
+  }
 }
 
 async function promptLoop(repos: RepoSummary[], isUnicodeSupported: boolean) {
@@ -88,7 +139,7 @@ async function promptLoop(repos: RepoSummary[], isUnicodeSupported: boolean) {
       {
         async onSubmit(_prompt, selection: Selection) {
           initial = selection.index
-          await openRepository(selection.url)
+          await handleRepositorySelection(selection)
         },
         onCancel() {
           keepPrompt = false
@@ -128,4 +179,5 @@ export async function showRepositoryPrompt(options: RepositoryPromptOptions) {
 /** @internal */
 export const repositoryInternal = {
   formatRepositoryLabel,
+  renderRepositoryDetails,
 }

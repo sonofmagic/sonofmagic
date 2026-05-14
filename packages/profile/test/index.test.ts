@@ -4,7 +4,7 @@ import { photoGalleryInternal } from '@/features/photo-gallery'
 import { repositoryInternal } from '@/features/repositories'
 import { changeLanguage, Dic, getCurrentLanguage, getSupportedLanguages, init, t } from '@/i18n'
 import { menuInternal } from '@/menu'
-import { getFallbackRepoList } from '@/repos'
+import { getFallbackRepoList, getRepositorySpotlight } from '@/repos'
 import { emoji, isComplexType, isPrimitivesType, splitParagraphByLines } from '@/util'
 
 function stripAnsi(input: string): string {
@@ -102,6 +102,13 @@ describe('repository helpers', () => {
     const second = getFallbackRepoList()
     expect(first.map(repo => repo.name)).toEqual(['weapp-tailwindcss', 'weapp-vite', 'mokup'])
     expect(first[0]).not.toBe(second[0])
+  })
+
+  it('provides spotlight metadata for highlighted repositories', () => {
+    const spotlight = getRepositorySpotlight('weapp-tailwindcss')
+    expect(spotlight?.tagline).toContain('utility-first CSS')
+    expect(spotlight?.bestFor.length).toBeGreaterThan(0)
+    expect(getRepositorySpotlight('unknown')).toBeNull()
   })
 })
 

@@ -70,9 +70,13 @@ describe('direct commands', () => {
     })
 
     expect(logMock).toHaveBeenCalledTimes(1)
-    const records = JSON.parse(String(logMock.mock.calls[0]?.[0])) as Array<{ name: string, spotlight?: unknown }>
+    const records = JSON.parse(String(logMock.mock.calls[0]?.[0])) as Array<{
+      name: string
+      spotlight?: { tagline: string, bestFor: string[] }
+    }>
     expect(records[0]?.name).toBe('weapp-tailwindcss')
-    expect(records[0]?.spotlight).toBeDefined()
+    expect(records[0]?.spotlight?.tagline).toContain('utility-first CSS')
+    expect(records[0]?.spotlight?.bestFor.length).toBeGreaterThan(0)
   })
 
   it('prints a single url for url command', async () => {
@@ -108,6 +112,46 @@ describe('direct commands', () => {
     expect(output).toContain('ok links:')
     expect(output).toContain('ok markdownExport:')
     expect(process.exitCode).toBeUndefined()
+  })
+
+  it('prints local health checks as json', async () => {
+    await runDirectCommand({
+      command: 'health',
+      args: [],
+      language: 'en',
+      json: true,
+    })
+
+    expect(logMock).toHaveBeenCalledTimes(1)
+    const health = JSON.parse(String(logMock.mock.calls[0]?.[0])) as {
+      ok: boolean
+      checks: Array<{ status: string, label: string }>
+    }
+    expect(health.ok).toBe(true)
+    expect(health.checks.some(check => check.label === 'links' && check.status === 'ok')).toBe(true)
+  })
+
+  it('prints timeline in text and json formats', async () => {
+    await runDirectCommand({
+      command: 'timeline',
+      args: [],
+      language: 'en',
+    })
+
+    const textOutput = logMock.mock.calls.map(call => String(call[0])).join('\n')
+    expect(textOutput).toContain('2021:')
+    expect(textOutput).toContain('weapp-tailwindcss')
+
+    logMock.mockReset()
+    await runDirectCommand({
+      command: 'timeline',
+      args: [],
+      language: 'en',
+      json: true,
+    })
+
+    const entries = JSON.parse(String(logMock.mock.calls[0]?.[0])) as Array<{ year: string, title: string }>
+    expect(entries.some(entry => entry.year === '2024' && entry.title === 'weapp-vite')).toBe(true)
   })
 
   it('prints markdown export with timeline content', async () => {

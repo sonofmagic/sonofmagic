@@ -32,26 +32,12 @@ interface RepositorySummary {
 
 interface RepositorySpotlight {
   name: string
-  tagline: string
-  bestFor: string[]
 }
 
 const repositorySpotlights: RepositorySpotlight[] = [
-  {
-    name: 'weapp-tailwindcss',
-    tagline: 'Bring utility-first CSS workflows into WeChat mini-program projects.',
-    bestFor: ['Tailwind design systems', 'mini-program build integration', 'cross-team UI consistency'],
-  },
-  {
-    name: 'weapp-vite',
-    tagline: 'Use Vite-era development ergonomics for mini-program engineering.',
-    bestFor: ['fast local feedback', 'modern plugin pipelines', 'WeChat project modernization'],
-  },
-  {
-    name: 'mokup',
-    tagline: 'Run file-based mocks across development and build-time workflows.',
-    bestFor: ['API mock routes', 'Vite integration', 'CLI and runtime adapters'],
-  },
+  { name: 'weapp-tailwindcss' },
+  { name: 'weapp-vite' },
+  { name: 'mokup' },
 ]
 
 const fallbackRepositories: RepositorySummary[] = [
@@ -158,14 +144,11 @@ export function getFallbackRepoList() {
 
 export function getRepositorySpotlight(repoName: string) {
   const spotlight = repositorySpotlights.find(item => item.name === repoName)
-  return spotlight ? { ...spotlight, bestFor: [...spotlight.bestFor] } : null
+  return spotlight ? { ...spotlight } : null
 }
 
 export function getRepositorySpotlights() {
-  return repositorySpotlights.map(spotlight => ({
-    ...spotlight,
-    bestFor: [...spotlight.bestFor],
-  }))
+  return repositorySpotlights.map(spotlight => ({ ...spotlight }))
 }
 
 export type { RepositorySpotlight, RepositorySummary }

@@ -106,8 +106,7 @@ describe('repository helpers', () => {
 
   it('provides spotlight metadata for highlighted repositories', () => {
     const spotlight = getRepositorySpotlight('weapp-tailwindcss')
-    expect(spotlight?.tagline).toContain('utility-first CSS')
-    expect(spotlight?.bestFor.length).toBeGreaterThan(0)
+    expect(spotlight?.name).toBe('weapp-tailwindcss')
     expect(getRepositorySpotlight('unknown')).toBeNull()
   })
 })

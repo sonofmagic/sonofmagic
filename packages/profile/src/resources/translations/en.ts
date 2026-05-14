@@ -162,6 +162,20 @@ export const translation: ITranslation = (() => {
       bestFor: 'Best for',
       noDescription: 'No repository description available',
     },
+    spotlights: {
+      weappTailwindcss: {
+        tagline: 'Bring utility-first CSS workflows into WeChat mini-program projects.',
+        bestFor: 'Tailwind design systems, mini-program build integration, cross-team UI consistency',
+      },
+      weappVite: {
+        tagline: 'Use Vite-era development ergonomics for mini-program engineering.',
+        bestFor: 'fast local feedback, modern plugin pipelines, WeChat project modernization',
+      },
+      mokup: {
+        tagline: 'Run file-based mocks across development and build-time workflows.',
+        bestFor: 'API mock routes, Vite integration, CLI and runtime adapters',
+      },
+    },
   }
 
   base.leaveMeMessage = {

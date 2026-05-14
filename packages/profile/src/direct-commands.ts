@@ -5,7 +5,7 @@ import process from 'node:process'
 import { profileData, profileLinks } from './constants'
 import { Dic, getSupportedLanguages, init, t } from './i18n'
 import { consoleLog as log } from './logger'
-import { renderProfileMarkdown } from './profile-content'
+import { buildTimelineEntries, renderProfileMarkdown } from './profile-content'
 import { getFallbackRepoList, getRepositorySpotlight, getRepositorySpotlights } from './repos'
 import { dayjs } from './util'
 
@@ -63,9 +63,32 @@ function assertNoExtraArgs(commandName: string, args: readonly string[]) {
   }
 }
 
+function resolveSpotlightContent(repoName: string) {
+  const spotlight = getRepositorySpotlight(repoName)
+  if (!spotlight) {
+    return null
+  }
+
+  const keyMap = {
+    'weapp-tailwindcss': Dic.myRepositories.spotlights.weappTailwindcss,
+    'weapp-vite': Dic.myRepositories.spotlights.weappVite,
+    'mokup': Dic.myRepositories.spotlights.mokup,
+  } as const
+  const keys = keyMap[spotlight.name as keyof typeof keyMap]
+  if (!keys) {
+    return null
+  }
+
+  return {
+    name: spotlight.name,
+    tagline: t(keys.tagline),
+    bestFor: String(t(keys.bestFor)).split(',').map(item => item.trim()).filter(Boolean),
+  }
+}
+
 function buildProjectLines() {
   return getFallbackRepoList().flatMap((repo, index) => {
-    const spotlight = getRepositorySpotlight(repo.name)
+    const spotlight = resolveSpotlightContent(repo.name)
     const lines = [
       `${index + 1}. ${repo.name}`,
       `   url: ${repo.html_url}`,
@@ -81,6 +104,10 @@ function buildProjectLines() {
   })
 }
 
+function buildTimelineLines() {
+  return buildTimelineEntries().map(entry => `${entry.year}: ${entry.title} - ${entry.detail}`)
+}
+
 export interface RunDirectCommandOptions {
   command: string
   args: readonly string[]
@@ -91,7 +118,7 @@ export interface RunDirectCommandOptions {
 
 function buildProjectRecords() {
   return getFallbackRepoList().map((repo) => {
-    const spotlight = getRepositorySpotlight(repo.name)
+    const spotlight = resolveSpotlightContent(repo.name)
     return {
       ...repo,
       ...(spotlight ? { spotlight } : {}),
@@ -148,6 +175,15 @@ async function buildHealthLines(language?: SupportedLanguage) {
   return {
     lines,
     ok: issues.length === 0,
+    checks: lines.map((line) => {
+      const [status, rest] = line.split(' ', 2)
+      const separatorIndex = rest?.indexOf(':') ?? -1
+      return {
+        status,
+        label: separatorIndex >= 0 ? rest!.slice(0, separatorIndex) : rest,
+        detail: separatorIndex >= 0 ? rest!.slice(separatorIndex + 1).trim() : '',
+      }
+    }),
   }
 }
 
@@ -167,6 +203,7 @@ export async function runDirectCommand({ command, args, language, json, output }
     if (output) {
       throw new Error('The --output option is only supported by the "export" command.')
     }
+    await init(language)
     if (json) {
       log(JSON.stringify(buildProjectRecords(), null, 2))
       return
@@ -186,15 +223,35 @@ export async function runDirectCommand({ command, args, language, json, output }
     return
   }
 
+  if (normalizedCommand === 'timeline') {
+    assertNoExtraArgs(normalizedCommand, args)
+    if (output) {
+      throw new Error('The --output option is only supported by the "export" command.')
+    }
+    await init(language)
+    if (json) {
+      log(JSON.stringify(buildTimelineEntries(), null, 2))
+      return
+    }
+    for (const line of buildTimelineLines()) {
+      log(line)
+    }
+    return
+  }
+
   if (normalizedCommand === 'health') {
     assertNoExtraArgs(normalizedCommand, args)
-    if (json) {
-      throw new Error('The --json option is only supported by the "projects" command.')
-    }
     if (output) {
       throw new Error('The --output option is only supported by the "export" command.')
     }
     const health = await buildHealthLines(language)
+    if (json) {
+      log(JSON.stringify({ ok: health.ok, checks: health.checks }, null, 2))
+      if (!health.ok) {
+        process.exitCode = 1
+      }
+      return
+    }
     for (const line of health.lines) {
       log(line)
     }
@@ -243,4 +300,6 @@ export const directCommandInternal = {
   buildProjectLines,
   buildProjectRecords,
   buildHealthLines,
+  buildTimelineLines,
+  resolveSpotlightContent,
 }

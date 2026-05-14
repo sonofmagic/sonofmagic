@@ -157,6 +157,20 @@ export const translation: ITranslation = {
       bestFor: '适合场景',
       noDescription: '暂无项目描述',
     },
+    spotlights: {
+      weappTailwindcss: {
+        tagline: '把 utility-first CSS 工作流带入微信小程序项目。',
+        bestFor: 'Tailwind 设计系统、小程序构建集成、跨团队 UI 一致性',
+      },
+      weappVite: {
+        tagline: '为小程序工程提供 Vite 时代的开发体验。',
+        bestFor: '快速本地反馈、现代插件管线、微信项目现代化',
+      },
+      mokup: {
+        tagline: '在开发与构建流程中运行文件路由 Mock。',
+        bestFor: 'API mock 路由、Vite 集成、CLI 与运行时适配',
+      },
+    },
   },
 
   leaveMeMessage: {

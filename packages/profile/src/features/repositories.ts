@@ -63,6 +63,29 @@ function buildRepoChoices(repos: RepoSummary[], isUnicodeSupported: boolean): Re
   }))
 }
 
+function resolveSpotlightContent(repoName: string) {
+  const spotlight = getRepositorySpotlight(repoName)
+  if (!spotlight) {
+    return null
+  }
+
+  const keyMap = {
+    'weapp-tailwindcss': Dic.myRepositories.spotlights.weappTailwindcss,
+    'weapp-vite': Dic.myRepositories.spotlights.weappVite,
+    'mokup': Dic.myRepositories.spotlights.mokup,
+  } as const
+  const keys = keyMap[spotlight.name as keyof typeof keyMap]
+  if (!keys) {
+    return null
+  }
+
+  return {
+    name: spotlight.name,
+    tagline: t(keys.tagline),
+    bestFor: String(t(keys.bestFor)).split(',').map(item => item.trim()).filter(Boolean),
+  }
+}
+
 async function openRepository(url: string) {
   if (!openModulePromise) {
     openModulePromise = import('open')
@@ -72,7 +95,7 @@ async function openRepository(url: string) {
 }
 
 async function renderRepositoryDetails(repo: RepoSummary) {
-  const spotlight = getRepositorySpotlight(repo.name)
+  const spotlight = resolveSpotlightContent(repo.name)
   const lines = [
     profileTheme.colors.primaryStrong(repo.name),
     '',
@@ -180,4 +203,5 @@ export async function showRepositoryPrompt(options: RepositoryPromptOptions) {
 export const repositoryInternal = {
   formatRepositoryLabel,
   renderRepositoryDetails,
+  resolveSpotlightContent,
 }

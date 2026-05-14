@@ -138,6 +138,20 @@ const Dic = {
       bestFor: '',
       noDescription: '',
     },
+    spotlights: {
+      weappTailwindcss: {
+        tagline: '',
+        bestFor: '',
+      },
+      weappVite: {
+        tagline: '',
+        bestFor: '',
+      },
+      mokup: {
+        tagline: '',
+        bestFor: '',
+      },
+    },
   },
 
   leaveMeMessage: {

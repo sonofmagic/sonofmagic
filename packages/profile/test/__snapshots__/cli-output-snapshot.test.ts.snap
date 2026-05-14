@@ -13,6 +13,7 @@ Commands:
   export        Print profile as Markdown and exit
   health        Run local profile data checks and exit
   projects      Print highlighted projects and exit
+  timeline      Print engineering timeline and exit
   url <target>  Print a single public url and exit
 
 For more info, run any command with the \`--help\` flag:
@@ -22,6 +23,7 @@ For more info, run any command with the \`--help\` flag:
   $ profile export --help
   $ profile health --help
   $ profile projects --help
+  $ profile timeline --help
   $ profile url --help
 
 Options:
@@ -36,6 +38,7 @@ $ profile summary --lang en
 $ profile export --lang en
 $ profile health
 $ profile projects
+$ profile timeline --json
 $ profile links
 $ profile url github
 $ profile --lang en
@@ -55,6 +58,7 @@ Commands:
   export        Print profile as Markdown and exit
   health        Run local profile data checks and exit
   projects      Print highlighted projects and exit
+  timeline      Print engineering timeline and exit
   url <target>  Print a single public url and exit
 
 For more info, run any command with the \`--help\` flag:
@@ -64,6 +68,7 @@ For more info, run any command with the \`--help\` flag:
   $ sonofmagic export --help
   $ sonofmagic health --help
   $ sonofmagic projects --help
+  $ sonofmagic timeline --help
   $ sonofmagic url --help
 
 Options:
@@ -78,6 +83,7 @@ $ sonofmagic summary --lang en
 $ sonofmagic export --lang en
 $ sonofmagic health
 $ sonofmagic projects
+$ sonofmagic timeline --json
 $ sonofmagic links
 $ sonofmagic url github
 $ sonofmagic --lang en
@@ -97,6 +103,7 @@ Commands:
   export        Print profile as Markdown and exit
   health        Run local profile data checks and exit
   projects      Print highlighted projects and exit
+  timeline      Print engineering timeline and exit
   url <target>  Print a single public url and exit
 
 For more info, run any command with the \`--help\` flag:
@@ -106,6 +113,7 @@ For more info, run any command with the \`--help\` flag:
   $ yangqiming export --help
   $ yangqiming health --help
   $ yangqiming projects --help
+  $ yangqiming timeline --help
   $ yangqiming url --help
 
 Options:
@@ -120,6 +128,7 @@ $ yangqiming summary --lang en
 $ yangqiming export --lang en
 $ yangqiming health
 $ yangqiming projects
+$ yangqiming timeline --json
 $ yangqiming links
 $ yangqiming url github
 $ yangqiming --lang en

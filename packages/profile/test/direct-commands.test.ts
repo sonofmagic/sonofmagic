@@ -1,4 +1,7 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { mkdtemp, readFile, rm } from 'node:fs/promises'
+import { tmpdir } from 'node:os'
+import { join } from 'node:path'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { profileLinks } from '../src/constants'
 import { directCommandInternal, runDirectCommand } from '../src/direct-commands'
 
@@ -15,8 +18,15 @@ vi.mock('../src/logger', () => {
 })
 
 describe('direct commands', () => {
+  let tempDirs: string[] = []
+
   beforeEach(() => {
+    tempDirs = []
     logMock.mockReset()
+  })
+
+  afterEach(async () => {
+    await Promise.all(tempDirs.map(dir => rm(dir, { recursive: true, force: true })))
   })
 
   it('resolves supported aliases for url targets', () => {
@@ -46,6 +56,19 @@ describe('direct commands', () => {
     expect(output).toContain('1. weapp-tailwindcss')
     expect(output).toContain('bestFor:')
     expect(output).toContain('mokup')
+  })
+
+  it('prints highlighted projects as json', async () => {
+    await runDirectCommand({
+      command: 'projects',
+      args: [],
+      json: true,
+    })
+
+    expect(logMock).toHaveBeenCalledTimes(1)
+    const records = JSON.parse(String(logMock.mock.calls[0]?.[0])) as Array<{ name: string, spotlight?: unknown }>
+    expect(records[0]?.name).toBe('weapp-tailwindcss')
+    expect(records[0]?.spotlight).toBeDefined()
   })
 
   it('prints a single url for url command', async () => {
@@ -82,6 +105,23 @@ describe('direct commands', () => {
     expect(output).toContain('# Engineering Profile')
     expect(output).toContain('## Engineering Timeline')
     expect(output).toContain('weapp-tailwindcss')
+  })
+
+  it('writes markdown export to a file', async () => {
+    const tempDir = await mkdtemp(join(tmpdir(), 'profile-export-'))
+    tempDirs.push(tempDir)
+    const outputPath = join(tempDir, 'profile.md')
+
+    await runDirectCommand({
+      command: 'export',
+      args: [],
+      language: 'en',
+      output: outputPath,
+    })
+
+    const content = await readFile(outputPath, 'utf8')
+    expect(content).toContain('# Engineering Profile')
+    expect(logMock).toHaveBeenCalledWith(`Wrote profile export to ${outputPath}`)
   })
 
   it('throws for unknown url targets', async () => {

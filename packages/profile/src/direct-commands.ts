@@ -1,5 +1,6 @@
 import type { ProfileLinkKey } from './constants'
 import type { SupportedLanguage } from './i18n'
+import { writeFile } from 'node:fs/promises'
 import { profileData, profileLinks } from './constants'
 import { Dic, init, t } from './i18n'
 import { consoleLog as log } from './logger'
@@ -83,9 +84,25 @@ export interface RunDirectCommandOptions {
   command: string
   args: readonly string[]
   language?: SupportedLanguage
+  json?: boolean
+  output?: string
 }
 
-export async function runDirectCommand({ command, args, language }: RunDirectCommandOptions) {
+function buildProjectRecords() {
+  return getFallbackRepoList().map((repo) => {
+    const spotlight = getRepositorySpotlight(repo.name)
+    return {
+      ...repo,
+      ...(spotlight ? { spotlight } : {}),
+    }
+  })
+}
+
+async function writeOutputFile(outputPath: string, content: string) {
+  await writeFile(outputPath, content, 'utf8')
+}
+
+export async function runDirectCommand({ command, args, language, json, output }: RunDirectCommandOptions) {
   const normalizedCommand = normalizeToken(command)
 
   if (normalizedCommand === 'links' || normalizedCommand === 'contact') {
@@ -98,6 +115,13 @@ export async function runDirectCommand({ command, args, language }: RunDirectCom
 
   if (normalizedCommand === 'projects') {
     assertNoExtraArgs(normalizedCommand, args)
+    if (output) {
+      throw new Error('The --output option is only supported by the "export" command.')
+    }
+    if (json) {
+      log(JSON.stringify(buildProjectRecords(), null, 2))
+      return
+    }
     for (const line of buildProjectLines()) {
       log(line)
     }
@@ -115,8 +139,17 @@ export async function runDirectCommand({ command, args, language }: RunDirectCom
 
   if (normalizedCommand === 'export') {
     assertNoExtraArgs(normalizedCommand, args)
+    if (json) {
+      throw new Error('The --json option is only supported by the "projects" command.')
+    }
     await init(language)
-    log(renderProfileMarkdown())
+    const markdown = renderProfileMarkdown()
+    if (output) {
+      await writeOutputFile(output, markdown)
+      log(`Wrote profile export to ${output}`)
+      return
+    }
+    log(markdown)
     return
   }
 
@@ -141,4 +174,5 @@ export const directCommandInternal = {
   resolveLinkTarget,
   buildLinkLines,
   buildProjectLines,
+  buildProjectRecords,
 }

@@ -24,6 +24,8 @@ For more info, run any command with the \`--help\` flag:
 
 Options:
   -l, --lang <language>  Specify language (zh|en) 
+  --json                 Print machine-readable JSON when supported 
+  -o, --output <file>    Write command output to a file when supported 
   -h, --help             Display this message 
   -v, --version          Display version number 
 
@@ -61,6 +63,8 @@ For more info, run any command with the \`--help\` flag:
 
 Options:
   -l, --lang <language>  Specify language (zh|en) 
+  --json                 Print machine-readable JSON when supported 
+  -o, --output <file>    Write command output to a file when supported 
   -h, --help             Display this message 
   -v, --version          Display version number 
 
@@ -98,6 +102,8 @@ For more info, run any command with the \`--help\` flag:
 
 Options:
   -l, --lang <language>  Specify language (zh|en) 
+  --json                 Print machine-readable JSON when supported 
+  -o, --output <file>    Write command output to a file when supported 
   -h, --help             Display this message 
   -v, --version          Display version number 
 

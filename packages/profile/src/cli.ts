@@ -63,6 +63,8 @@ export async function runCli(runOptions: RunCliOptions = {}) {
   cli.command('projects', 'Print highlighted projects and exit')
   cli.command('url <target>', 'Print a single public url and exit')
   cli.option('-l, --lang <language>', `Specify language (${getSupportedLanguages().join('|')})`)
+  cli.option('--json', 'Print machine-readable JSON when supported')
+  cli.option('-o, --output <file>', 'Write command output to a file when supported')
   cli.help()
   if (cliVersion) {
     cli.version(cliVersion)
@@ -75,7 +77,7 @@ export async function runCli(runOptions: RunCliOptions = {}) {
   cli.example(bin => `$ ${bin} --lang en`)
   cli.example(bin => `$ ${bin} --lang zh`)
 
-  const allowedOptionKeys = new Set<string>(['lang', 'l', 'help', 'h'])
+  const allowedOptionKeys = new Set<string>(['lang', 'l', 'json', 'output', 'o', 'help', 'h'])
   if (cliVersion) {
     allowedOptionKeys.add('version')
     allowedOptionKeys.add('v')
@@ -103,6 +105,8 @@ export async function runCli(runOptions: RunCliOptions = {}) {
         command: matchedCommandName,
         args: parsed.args,
         ...(language ? { language } : {}),
+        ...(parsed.options['json'] ? { json: true } : {}),
+        ...(typeof parsed.options['output'] === 'string' ? { output: parsed.options['output'] } : {}),
       }
       await runDirectCommand({
         ...directCommandOptions,

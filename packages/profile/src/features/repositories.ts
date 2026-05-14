@@ -1,4 +1,4 @@
-import ora from 'ora'
+import { createSpinner } from 'nanospinner'
 import { Dic, t } from '../i18n'
 import { consoleWarn as warn } from '../logger'
 import { getRepoList } from '../repos'
@@ -99,10 +99,7 @@ async function promptLoop(repos: RepoSummary[], isUnicodeSupported: boolean) {
 }
 
 export async function showRepositoryPrompt(options: RepositoryPromptOptions) {
-  const spinner = ora({
-    spinner: 'soccerHeader',
-    text: t(Dic.myRepositories.loading.text),
-  }).start()
+  const spinner = createSpinner(t(Dic.myRepositories.loading.text)).start()
 
   let repos: Awaited<ReturnType<typeof getRepoList>> = []
   try {

@@ -1,11 +1,12 @@
 import type { ProfileLinkKey } from './constants'
 import type { SupportedLanguage } from './i18n'
 import { writeFile } from 'node:fs/promises'
+import process from 'node:process'
 import { profileData, profileLinks } from './constants'
-import { Dic, init, t } from './i18n'
+import { Dic, getSupportedLanguages, init, t } from './i18n'
 import { consoleLog as log } from './logger'
 import { renderProfileMarkdown } from './profile-content'
-import { getFallbackRepoList, getRepositorySpotlight } from './repos'
+import { getFallbackRepoList, getRepositorySpotlight, getRepositorySpotlights } from './repos'
 import { dayjs } from './util'
 
 const linkAliasMap: Record<string, ProfileLinkKey> = {
@@ -102,6 +103,54 @@ async function writeOutputFile(outputPath: string, content: string) {
   await writeFile(outputPath, content, 'utf8')
 }
 
+async function buildHealthLines(language?: SupportedLanguage) {
+  await init(language)
+
+  const lines: string[] = []
+  const issues: string[] = []
+  const pushCheck = (passed: boolean, label: string, detail: string) => {
+    lines.push(`${passed ? 'ok' : 'warn'} ${label}: ${detail}`)
+    if (!passed) {
+      issues.push(label)
+    }
+  }
+
+  const links = Object.entries(profileLinks)
+  const invalidLinks = links.filter(([, url]) => {
+    try {
+      const parsed = new URL(url)
+      return parsed.protocol !== 'https:' && parsed.protocol !== 'http:'
+    }
+    catch {
+      return true
+    }
+  })
+  pushCheck(invalidLinks.length === 0, 'links', `${links.length} configured`)
+
+  const fallbackRepos = getFallbackRepoList()
+  const fallbackRepoNames = new Set(fallbackRepos.map(repo => repo.name))
+  pushCheck(fallbackRepos.length > 0, 'fallbackRepositories', `${fallbackRepos.length} configured`)
+  pushCheck(
+    fallbackRepoNames.size === fallbackRepos.length,
+    'fallbackRepositoryNames',
+    `${fallbackRepoNames.size} unique`,
+  )
+
+  const spotlights = getRepositorySpotlights()
+  const missingSpotlights = fallbackRepos.filter(repo => !spotlights.some(spotlight => spotlight.name === repo.name))
+  pushCheck(missingSpotlights.length === 0, 'repositorySpotlights', `${spotlights.length} configured`)
+
+  const languages = getSupportedLanguages()
+  pushCheck(languages.length > 0, 'languages', languages.join(', '))
+  pushCheck(Boolean(t(Dic.profile.title)), 'i18n', `profile.title=${t(Dic.profile.title)}`)
+  pushCheck(Boolean(renderProfileMarkdown()), 'markdownExport', 'rendered')
+
+  return {
+    lines,
+    ok: issues.length === 0,
+  }
+}
+
 export async function runDirectCommand({ command, args, language, json, output }: RunDirectCommandOptions) {
   const normalizedCommand = normalizeToken(command)
 
@@ -133,6 +182,24 @@ export async function runDirectCommand({ command, args, language, json, output }
     const lines = await buildSummaryLines(language)
     for (const line of lines) {
       log(line)
+    }
+    return
+  }
+
+  if (normalizedCommand === 'health') {
+    assertNoExtraArgs(normalizedCommand, args)
+    if (json) {
+      throw new Error('The --json option is only supported by the "projects" command.')
+    }
+    if (output) {
+      throw new Error('The --output option is only supported by the "export" command.')
+    }
+    const health = await buildHealthLines(language)
+    for (const line of health.lines) {
+      log(line)
+    }
+    if (!health.ok) {
+      process.exitCode = 1
     }
     return
   }
@@ -175,4 +242,5 @@ export const directCommandInternal = {
   buildLinkLines,
   buildProjectLines,
   buildProjectRecords,
+  buildHealthLines,
 }

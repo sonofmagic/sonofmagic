@@ -113,6 +113,24 @@ describe('runCli', () => {
     expect(process.exitCode).toBeUndefined()
   })
 
+  it('dispatches health direct command', async () => {
+    const runCli = await loadRunCli()
+    await runCli({
+      argv: ['node', 'profile', 'health', '--lang', 'EN-US'],
+      name: 'profile',
+      version: '3.0.4',
+    })
+
+    expect(mainMock).not.toHaveBeenCalled()
+    expect(directCommandMock).toHaveBeenCalledTimes(1)
+    expect(directCommandMock).toHaveBeenCalledWith({
+      command: 'health',
+      args: [],
+      language: 'en',
+    })
+    expect(process.exitCode).toBeUndefined()
+  })
+
   it('passes direct command output options', async () => {
     const runCli = await loadRunCli()
     await runCli({

@@ -19,14 +19,18 @@ vi.mock('../src/logger', () => {
 
 describe('direct commands', () => {
   let tempDirs: string[] = []
+  let previousExitCode: typeof process.exitCode
 
   beforeEach(() => {
     tempDirs = []
+    previousExitCode = process.exitCode
+    process.exitCode = undefined
     logMock.mockReset()
   })
 
   afterEach(async () => {
     await Promise.all(tempDirs.map(dir => rm(dir, { recursive: true, force: true })))
+    process.exitCode = previousExitCode
   })
 
   it('resolves supported aliases for url targets', () => {
@@ -91,6 +95,19 @@ describe('direct commands', () => {
     const outputLines = logMock.mock.calls.map(call => String(call[0]))
     expect(outputLines).toContain(`name: Icebreaker Lab`)
     expect(outputLines.some(line => line.startsWith('position: '))).toBe(true)
+  })
+
+  it('prints local health checks', async () => {
+    await runDirectCommand({
+      command: 'health',
+      args: [],
+      language: 'en',
+    })
+
+    const output = logMock.mock.calls.map(call => String(call[0])).join('\n')
+    expect(output).toContain('ok links:')
+    expect(output).toContain('ok markdownExport:')
+    expect(process.exitCode).toBeUndefined()
   })
 
   it('prints markdown export with timeline content', async () => {

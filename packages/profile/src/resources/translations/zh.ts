@@ -105,11 +105,6 @@ export const translation: ITranslation = {
     selectMsg: '选择你的语言',
     description: '目前支持中文和英文',
   },
-  wechat: {
-    id: '公开渠道',
-    scan: '扫码访问',
-    search: '站内搜索',
-  },
   page: '页码',
   next: '下一张',
   prev: '上一张',
@@ -150,10 +145,6 @@ export const translation: ITranslation = {
     },
   },
   about: '关于',
-  cardMp: {
-    description: '公开开发者档案',
-    title: '开发者名片',
-  },
 }
 
 export default {

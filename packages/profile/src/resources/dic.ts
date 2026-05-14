@@ -60,11 +60,6 @@ const Dic = {
     description: '',
   },
 
-  cardMp: {
-    title: '',
-    description: '',
-  },
-
   blogWeb: {
     title: '',
     description: '',
@@ -88,12 +83,6 @@ const Dic = {
   },
 
   changeLanguage: { title: '', description: '', selectMsg: '' },
-  wechat: {
-    id: '',
-    search: '',
-    scan: '',
-  },
-
   page: '',
   next: '',
   prev: '',

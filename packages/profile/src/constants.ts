@@ -19,10 +19,8 @@ export const profileData: {
 export const optionsData = {
   profile: 'profile',
   contact: 'contact',
-  // wechat: 'wechat',
   blogWeb: 'blogWeb',
   blogMp: 'blogMp',
-  cardMp: 'cardMp',
   leaveMsg: 'leaveMsg',
   about: 'about',
   music: 'music',

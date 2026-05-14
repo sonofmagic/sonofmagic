@@ -204,26 +204,6 @@ function createBlogMpItem(context: MenuContext): MenuItem {
   }
 }
 
-function createCardMpItem(context: MenuContext): MenuItem {
-  return {
-    value: context.options.cardMp,
-    title: t(Dic.cardMp.title),
-    description: t(Dic.cardMp.description),
-    async handler() {
-      const qrcode = await generateQrcode(profileLinks.github)
-      const lines = [
-        headingLine(t(Dic.cardMp.title)),
-        '',
-        `${t(Dic.directAccess)}: ${profileTheme.colors.link(profileLinks.github)}`,
-        '',
-        'Scan for public profile:',
-      ]
-      await typeWriterLines(lines, 12, 90, 4)
-      await animateQrcodeBox(qrcode)
-    },
-  }
-}
-
 function createChangeLanguageItem(context: MenuContext): MenuItem {
   return {
     value: context.options.changeLanguage,
@@ -281,7 +261,6 @@ export function buildMenuItems(context: MenuContext): MenuItem[] {
     createRepositoriesItem(context),
     createBlogWebItem(context),
     createBlogMpItem(context),
-    createCardMpItem(context),
     createChangeLanguageItem(context),
     createQuitItem(context),
   ]

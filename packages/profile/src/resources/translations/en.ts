@@ -108,12 +108,6 @@ export const translation: ITranslation = (() => {
     selectMsg: 'Pick your preferred language',
   }
 
-  base.wechat = {
-    id: 'Public channel',
-    scan: 'Scan to open',
-    search: 'Search in portal',
-  }
-
   base.page = 'page'
   base.next = 'next'
   base.prev = 'previous'
@@ -156,11 +150,6 @@ export const translation: ITranslation = (() => {
   }
 
   base.about = 'About'
-  base.cardMp = {
-    title: 'Developer Card',
-    description: 'Public developer profile',
-  }
-
   return base
 })()
 

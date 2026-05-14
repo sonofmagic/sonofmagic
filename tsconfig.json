@@ -46,6 +46,9 @@
     "esModuleInterop": true,
 
     // 跳过库文件的类型检查，提高编译速度（库文件通常已经有类型声明）
-    "skipLibCheck": true
+    "skipLibCheck": true,
+
+    // Silences TS6 baseUrl deprecation until workspace path aliases are migrated.
+    "ignoreDeprecations": "6.0"
   }
 }

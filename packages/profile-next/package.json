@@ -31,8 +31,8 @@
     "lint:fix": "eslint . --fix"
   },
   "dependencies": {
-    "ink": "^6.8.0",
-    "react": "^19.2.4"
+    "ink": "^7.0.3",
+    "react": "^19.2.6"
   },
   "devDependencies": {
     "@types/react": "^19.2.14",

@@ -1,5 +1,13 @@
 # yangqiming
 
+## 4.0.2
+
+### Patch Changes
+
+- 🐛 **Refine terminal profile copy with a more direct engineering voice.** [`0afe018`](https://github.com/sonofmagic/sonofmagic/commit/0afe0189881a9c740bab620a808cae2f58bdc92d) by @sonofmagic
+- 📦 **Dependencies** [`0afe018`](https://github.com/sonofmagic/sonofmagic/commit/0afe0189881a9c740bab620a808cae2f58bdc92d)
+  → `@icebreakers/profile@4.0.2`
+
 ## 4.0.1
 
 ### Patch Changes

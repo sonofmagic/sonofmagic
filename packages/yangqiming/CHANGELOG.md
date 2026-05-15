@@ -1,5 +1,12 @@
 # yangqiming
 
+## 4.0.1
+
+### Patch Changes
+
+- 📦 **Dependencies** [`543ef92`](https://github.com/sonofmagic/sonofmagic/commit/543ef9274c10b20e01485667e374aa009c6c7318)
+  → `@icebreakers/profile@4.0.1`
+
 ## 4.0.0
 
 ### Major Changes

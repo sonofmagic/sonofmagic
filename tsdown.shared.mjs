@@ -3,7 +3,9 @@ import { defineConfig } from 'tsdown'
 export function createEsmNodeConfig(overrides = {}) {
   return defineConfig({
     shims: true,
-    inlineOnly: false,
+    deps: {
+      onlyBundle: false,
+    },
     format: ['esm'],
     clean: true,
     dts: true,

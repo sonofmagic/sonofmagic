@@ -2,6 +2,8 @@
 
 This is my chinese/english resume
 
+Node.js requirement: `^20.19.0 || >=22.12.0`.
+
 You can run this command:
 
 ```bash

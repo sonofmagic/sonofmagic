@@ -108,7 +108,7 @@ async function fetchRepository(owner: string, repo: string): Promise<RepositoryS
 
 async function resolveHighlightedRepository(
   target: HighlightedRepository,
-  rankedByStars: RepositorySummary[],
+  rankedByStars: RepositorySummary[] = [],
 ): Promise<RepositorySummary | null> {
   const existing = rankedByStars.find(repo => repo.name === target.name)
   if (existing) {
@@ -127,15 +127,27 @@ async function resolveHighlightedRepository(
 
 // https://github.com/angus-c/just
 export async function getRepoList() {
-  const rankedByStars = await fetchUserRepositories('sonofmagic')
   const highlightedResolved = await Promise.all(
-    highlightedRepositories.map(target => resolveHighlightedRepository(target, rankedByStars)),
+    highlightedRepositories.map(target => resolveHighlightedRepository(target)),
   )
   const highlighted = highlightedResolved.filter((repo): repo is RepositorySummary => Boolean(repo))
-  const highlightedSet = new Set<string>(highlighted.map(repo => repo.name))
+
+  let rankedByStars: RepositorySummary[] = []
+  try {
+    rankedByStars = await fetchUserRepositories('sonofmagic')
+  }
+  catch {
+    return highlighted
+  }
+
+  const highlightedWithRankedFallback = highlightedRepositories
+    .map((target, index) => highlightedResolved[index] ?? rankedByStars.find(repo => repo.name === target.name))
+    .filter((repo): repo is RepositorySummary => Boolean(repo))
+
+  const highlightedSet = new Set<string>(highlightedWithRankedFallback.map(repo => repo.name))
   const rest = rankedByStars.filter(repo => !highlightedSet.has(repo.name))
 
-  return [...highlighted, ...rest]
+  return [...highlightedWithRankedFallback, ...rest]
 }
 
 export function getFallbackRepoList() {

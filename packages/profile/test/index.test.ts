@@ -1,11 +1,14 @@
-import { afterAll, beforeAll, describe, expect, it } from 'vitest'
+import axios from 'axios'
+import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest'
 import { cliInternal } from '@/cli'
 import { photoGalleryInternal } from '@/features/photo-gallery'
 import { repositoryInternal } from '@/features/repositories'
 import { changeLanguage, Dic, getCurrentLanguage, getSupportedLanguages, init, t } from '@/i18n'
 import { menuInternal } from '@/menu'
-import { getFallbackRepoList, getRepositorySpotlight } from '@/repos'
+import { getFallbackRepoList, getRepoList, getRepositorySpotlight } from '@/repos'
 import { emoji, isComplexType, isPrimitivesType, splitParagraphByLines } from '@/util'
+
+vi.mock('axios')
 
 function stripAnsi(input: string): string {
   // eslint-disable-next-line no-control-regex
@@ -83,6 +86,7 @@ describe('photo helpers', () => {
 
 describe('repository helpers', () => {
   const { formatRepositoryLabel } = repositoryInternal
+  const axiosGetMock = vi.mocked(axios.get)
 
   it('formats metadata with unicode icons', () => {
     const repo = {
@@ -108,6 +112,59 @@ describe('repository helpers', () => {
     const spotlight = getRepositorySpotlight('weapp-tailwindcss')
     expect(spotlight?.name).toBe('weapp-tailwindcss')
     expect(getRepositorySpotlight('unknown')).toBeNull()
+  })
+
+  it('fetches highlighted repositories even when the user repository list fails', async () => {
+    axiosGetMock.mockImplementation(async (url: string) => {
+      if (url === 'https://api.github.com/repos/sonofmagic/weapp-tailwindcss') {
+        return {
+          data: {
+            name: 'weapp-tailwindcss',
+            html_url: 'https://github.com/sonofmagic/weapp-tailwindcss',
+            description: 'Tailwind CSS utility compiler',
+            language: 'TypeScript',
+            stargazers_count: 123,
+            forks_count: 45,
+          },
+        }
+      }
+
+      if (url === 'https://api.github.com/repos/weapp-vite/weapp-vite') {
+        return {
+          data: {
+            name: 'weapp-vite',
+            html_url: 'https://github.com/weapp-vite/weapp-vite',
+            description: 'Vite workflow',
+            language: 'TypeScript',
+            stargazers_count: 67,
+            forks_count: 8,
+          },
+        }
+      }
+
+      if (url === 'https://api.github.com/repos/sonofmagic/mokup') {
+        return {
+          data: {
+            name: 'mokup',
+            html_url: 'https://github.com/sonofmagic/mokup',
+            description: 'Mock toolkit',
+            language: 'TypeScript',
+            stargazers_count: 9,
+            forks_count: 1,
+          },
+        }
+      }
+
+      throw new Error('user repos unavailable')
+    })
+
+    const repos = await getRepoList()
+
+    expect(repos.map(repo => repo.name)).toEqual(['weapp-tailwindcss', 'weapp-vite', 'mokup'])
+    expect(repos.map(repo => repo.stargazers_count)).toEqual([123, 67, 9])
+    expect(repos.map(repo => repo.forks_count)).toEqual([45, 8, 1])
+
+    axiosGetMock.mockReset()
   })
 })
 

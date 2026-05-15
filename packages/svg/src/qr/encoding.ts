@@ -1,7 +1,7 @@
+import type { EcLevel } from './shared'
 import { BYTE_MODE_INDICATOR, PAD_CODEWORDS } from './constants'
 import { generateErrorCodewords } from './galois'
 import {
-  type EcLevel,
   getByteCapacity,
   getByteCharCountBits,
   getEcBlocks,

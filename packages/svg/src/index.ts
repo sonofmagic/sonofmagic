@@ -1,3 +1,8 @@
+export { createContactCardSvg } from './contact/card'
+
+export { createContactPanelSvg } from './contact/panel'
+export { createHeroSvg, createHeroSvgDataUri } from './hero'
+export { createQrCodeSvg, createQrCodeSvgDataUri } from './qr/svg'
 export type {
   ContactCardSvgOptions,
   ContactPanelEntry,
@@ -6,8 +11,3 @@ export type {
   HeroSvgOptions,
   QrCodeSvgOptions,
 } from './types'
-
-export { createContactCardSvg } from './contact/card'
-export { createContactPanelSvg } from './contact/panel'
-export { createHeroSvg, createHeroSvgDataUri } from './hero'
-export { createQrCodeSvg, createQrCodeSvgDataUri } from './qr/svg'

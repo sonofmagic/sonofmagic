@@ -1,7 +1,7 @@
+import type { ContactPanelEntry } from '../types'
 import { createQrCodeSvg } from '../qr/svg'
 import { renderInlineIcon, resolveIconName } from '../shared/icons'
 import { escapeXml, formatNumber } from '../shared/svg'
-import type { ContactPanelEntry } from '../types'
 
 export function renderContactPanelCell(
   entry: ContactPanelEntry,

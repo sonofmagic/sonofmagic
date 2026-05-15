@@ -1,6 +1,6 @@
+import type { EcLevel } from './shared'
 import { FORMAT_INFO_POLY, FORMAT_MASK, VERSION_INFO_POLY } from './constants'
 import {
-  type EcLevel,
   getEcLevelBits,
   getSymbolSize,
   QrMatrixBuffer,

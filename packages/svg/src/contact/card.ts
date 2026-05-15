@@ -1,6 +1,6 @@
+import type { ContactCardSvgOptions } from '../types'
 import { createQrCodeSvg } from '../qr/svg'
 import { buildGridPath, escapeXml, formatNumber, hashCode } from '../shared/svg'
-import type { ContactCardSvgOptions } from '../types'
 
 const CONTACT_CARD_DEFAULTS = {
   width: 320,

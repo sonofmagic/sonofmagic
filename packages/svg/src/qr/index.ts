@@ -1,7 +1,7 @@
+import type { EcLevel, QrMatrix } from './shared'
 import { Buffer } from 'node:buffer'
 import { createCodewords, pickVersion } from './encoding'
 import { buildMatrix } from './matrix'
-import type { EcLevel, QrMatrix } from './shared'
 
 export type { QrMatrix } from './shared'
 

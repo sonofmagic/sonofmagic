@@ -1,6 +1,5 @@
-import { createQrCodeSvg } from '../qr/svg'
-import { hashCode } from '../shared/svg'
 import type { ContactPanelSvgOptions } from '../types'
+import { hashCode } from '../shared/svg'
 import { createCenterSignalAccents, createPanelOrbitAccents } from './panel-accents'
 import { renderPanelBackdrop, renderPanelDefs } from './panel-background'
 import { renderContactPanelCell } from './panel-cell'

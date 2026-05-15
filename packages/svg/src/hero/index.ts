@@ -1,5 +1,5 @@
-import { buildGridPath, escapeXml, estimateBadgeWidth, hashCode } from '../shared/svg'
 import type { HeroSvgOptions } from '../types'
+import { buildGridPath, escapeXml, estimateBadgeWidth, hashCode } from '../shared/svg'
 
 const DEFAULTS = {
   width: 1280,

@@ -1,6 +1,6 @@
+import type { QrCodeSvgOptions } from '../types'
 import { createQrMatrix } from '.'
 import { escapeXml, formatNumber, hashCode } from '../shared/svg'
-import type { QrCodeSvgOptions } from '../types'
 
 const QR_DEFAULTS = {
   size: 160,

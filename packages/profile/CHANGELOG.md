@@ -1,5 +1,29 @@
 # @icebreakers/profile
 
+## 4.0.1
+
+### Patch Changes
+
+- 🐛 **Add an offline fallback list for highlighted repositories when GitHub data is unavailable.** [`543ef92`](https://github.com/sonofmagic/sonofmagic/commit/543ef9274c10b20e01485667e374aa009c6c7318) by @sonofmagic
+
+- 🐛 **Add repository spotlight details and actions to the interactive project browser.** [`c37cf22`](https://github.com/sonofmagic/sonofmagic/commit/c37cf22113c572fb604ca1625a7312cce52dbdd1) by @sonofmagic
+
+- 🐛 **Replace the repository loading spinner dependency with nanospinner and remove the unused graphemer dependency.** [`e761c0a`](https://github.com/sonofmagic/sonofmagic/commit/e761c0a6172be4e163aebe74a6e9ced09a6da644) by @sonofmagic
+
+- 🐛 **Add a projects direct command that prints highlighted repository details.** [`871ae58`](https://github.com/sonofmagic/sonofmagic/commit/871ae58a84e32909be569f7424152a54dbb55a62) by @sonofmagic
+
+- 🐛 **Fetch highlighted GitHub repositories directly so the repository picker shows live star and fork counts even when the user repository list request fails.** [`8337099`](https://github.com/sonofmagic/sonofmagic/commit/8337099d9e29c12893517a56be3fbaffa069a0c3) by @sonofmagic
+
+- 🐛 **Add timeline direct command, JSON health output, and localized repository spotlight details.** [`3e7e596`](https://github.com/sonofmagic/sonofmagic/commit/3e7e596e2a13a95a07c17458a455910851541d52) by @sonofmagic
+
+- 🐛 **Remove the deprecated developer card mini-program menu entry and related WeChat copy.** [`c64bda5`](https://github.com/sonofmagic/sonofmagic/commit/c64bda5084da9234599f18550194f4ad3d216432) by @sonofmagic
+
+- 🐛 **Add JSON output for highlighted projects and file output support for Markdown exports.** [`b38b94c`](https://github.com/sonofmagic/sonofmagic/commit/b38b94c459e5df828497d2a76c7319387ead7de4) by @sonofmagic
+
+- 🐛 **Add a local health command for validating profile links, fallback repositories, i18n, and Markdown export data.** [`469e9eb`](https://github.com/sonofmagic/sonofmagic/commit/469e9ebc5e2daf85c9c0db5e1617a85b42639b73) by @sonofmagic
+
+- 🐛 **Add an interactive engineering timeline and a Markdown export command for the profile CLI.** [`7828b28`](https://github.com/sonofmagic/sonofmagic/commit/7828b28dff79f38d0f7ff20e56888d4e6659f2d5) by @sonofmagic
+
 ## 4.0.0
 
 ### Major Changes

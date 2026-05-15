@@ -1,10 +1,10 @@
-# Resume of profile
+# Terminal Profile
 
-This is my chinese/english resume
+My profile in Chinese and English, right in the terminal.
 
 Node.js requirement: `^20.19.0 || >=22.12.0`.
 
-You can run this command:
+Run it with:
 
 ```bash
 npx @icebreakers/profile@latest
@@ -12,24 +12,24 @@ npx @icebreakers/profile@latest
 npx @icebreakers/profile@latest --ignore-existing
 ```
 
-This will show you my resume in your terminal
+That opens the interactive profile.
 
-Direct output commands:
+Commands that print and exit:
 
 ```bash
-# Print a concise summary and exit
+# Show a short intro and exit
 npx @icebreakers/profile@latest summary --lang en
 
-# Print all public links and exit
+# Show all public links and exit
 npx @icebreakers/profile@latest links
 npx @icebreakers/profile@latest contact
 
-# Print one target link and exit
+# Show one target link and exit
 npx @icebreakers/profile@latest url github
 npx @icebreakers/profile@latest url gh
 ```
 
-Supported url targets:
+Supported URL targets:
 
 ```text
 github, website, repositories, juejin, blog, x

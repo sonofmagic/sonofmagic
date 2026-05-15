@@ -24,7 +24,7 @@ function normalizeToken(value: string) {
 
 function resolveLinkTarget(value: unknown): ProfileLinkKey {
   if (typeof value !== 'string' || value.trim().length === 0) {
-    throw new Error(`Missing url target. Available targets: ${Object.keys(profileLinks).join(', ')}`)
+    throw new Error(`Missing URL target. Available targets: ${Object.keys(profileLinks).join(', ')}`)
   }
 
   const normalized = normalizeToken(value)
@@ -35,7 +35,7 @@ function resolveLinkTarget(value: unknown): ProfileLinkKey {
 
   const directMatched = Object.keys(profileLinks).find(linkKey => linkKey === normalized)
   if (!directMatched) {
-    throw new Error(`Unknown url target "${value}". Available targets: ${Object.keys(profileLinks).join(', ')}`)
+    throw new Error(`Unknown URL target "${value}". Available targets: ${Object.keys(profileLinks).join(', ')}`)
   }
 
   return directMatched as ProfileLinkKey
@@ -91,13 +91,13 @@ function buildProjectLines() {
     const spotlight = resolveSpotlightContent(repo.name)
     const lines = [
       `${index + 1}. ${repo.name}`,
-      `   url: ${repo.html_url}`,
-      `   description: ${repo.description}`,
+      `   URL: ${repo.html_url}`,
+      `   About: ${repo.description}`,
     ]
 
     if (spotlight) {
-      lines.push(`   spotlight: ${spotlight.tagline}`)
-      lines.push(`   bestFor: ${spotlight.bestFor.join(', ')}`)
+      lines.push(`   In one line: ${spotlight.tagline}`)
+      lines.push(`   Useful for: ${spotlight.bestFor.join(', ')}`)
     }
 
     return lines
@@ -270,7 +270,7 @@ export async function runDirectCommand({ command, args, language, json, output }
     const markdown = renderProfileMarkdown()
     if (output) {
       await writeOutputFile(output, markdown)
-      log(`Wrote profile export to ${output}`)
+      log(`Wrote the profile to ${output}`)
       return
     }
     log(markdown)
@@ -279,7 +279,7 @@ export async function runDirectCommand({ command, args, language, json, output }
 
   if (normalizedCommand === 'url') {
     if (args.length === 0) {
-      throw new Error(`Missing url target. Available targets: ${Object.keys(profileLinks).join(', ')}`)
+      throw new Error(`Missing URL target. Available targets: ${Object.keys(profileLinks).join(', ')}`)
     }
     if (args.length > 1) {
       throw new Error(`Unknown argument for command "url": ${args[1]}`)

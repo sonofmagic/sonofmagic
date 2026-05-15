@@ -182,7 +182,7 @@ describe('i18n manager', () => {
   })
 
   it('provides translations after initialization', async () => {
-    expect(t(Dic.quit.title)).toBe('Sign out')
+    expect(t(Dic.quit.title)).toBe('Exit')
 
     await changeLanguage('zh')
     expect(getCurrentLanguage()).toBe('zh')

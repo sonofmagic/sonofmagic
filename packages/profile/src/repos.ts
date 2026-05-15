@@ -44,7 +44,7 @@ const fallbackRepositories: RepositorySummary[] = [
   {
     name: 'weapp-tailwindcss',
     html_url: 'https://github.com/sonofmagic/weapp-tailwindcss',
-    description: 'Tailwind CSS utility compiler and integration toolkit for WeChat mini-program projects.',
+    description: 'Use Tailwind CSS in WeChat mini-program projects.',
     language: 'TypeScript',
     stargazers_count: 0,
     forks_count: 0,
@@ -52,7 +52,7 @@ const fallbackRepositories: RepositorySummary[] = [
   {
     name: 'weapp-vite',
     html_url: 'https://github.com/weapp-vite/weapp-vite',
-    description: 'Vite-powered workflow for mini-program development.',
+    description: 'Bring a Vite-style workflow to mini-program development.',
     language: 'TypeScript',
     stargazers_count: 0,
     forks_count: 0,
@@ -60,7 +60,7 @@ const fallbackRepositories: RepositorySummary[] = [
   {
     name: 'mokup',
     html_url: 'https://github.com/sonofmagic/mokup',
-    description: 'File-based mock toolkit for Vite, CLI builds, and runtime adapters.',
+    description: 'File-based mocks for Vite, CLI builds, and runtime adapters.',
     language: 'TypeScript',
     stargazers_count: 0,
     forks_count: 0,

@@ -7,14 +7,14 @@ Usage:
   $ profile [command] [options]
 
 Commands:
-  summary       Print profile summary and exit
-  links         Print all public links and exit
-  contact       Print contact links and exit
-  export        Print profile as Markdown and exit
-  health        Run local profile data checks and exit
-  projects      Print highlighted projects and exit
-  timeline      Print engineering timeline and exit
-  url <target>  Print a single public url and exit
+  summary       Show a short intro and exit
+  links         Show all public links and exit
+  contact       Show contact links and exit
+  export        Show the profile as Markdown and exit
+  health        Check the local profile data and exit
+  projects      Show a few picked projects and exit
+  timeline      Show the project timeline and exit
+  url <target>  Show one public URL and exit
 
 For more info, run any command with the \`--help\` flag:
   $ profile summary --help
@@ -27,9 +27,9 @@ For more info, run any command with the \`--help\` flag:
   $ profile url --help
 
 Options:
-  -l, --lang <language>  Specify language (zh|en) 
-  --json                 Print machine-readable JSON when supported 
-  -o, --output <file>    Write command output to a file when supported 
+  -l, --lang <language>  Use a language (zh|en) 
+  --json                 Output JSON when this command supports it 
+  -o, --output <file>    Write the output to a file when supported 
   -h, --help             Display this message 
   -v, --version          Display version number 
 
@@ -52,14 +52,14 @@ Usage:
   $ sonofmagic [command] [options]
 
 Commands:
-  summary       Print profile summary and exit
-  links         Print all public links and exit
-  contact       Print contact links and exit
-  export        Print profile as Markdown and exit
-  health        Run local profile data checks and exit
-  projects      Print highlighted projects and exit
-  timeline      Print engineering timeline and exit
-  url <target>  Print a single public url and exit
+  summary       Show a short intro and exit
+  links         Show all public links and exit
+  contact       Show contact links and exit
+  export        Show the profile as Markdown and exit
+  health        Check the local profile data and exit
+  projects      Show a few picked projects and exit
+  timeline      Show the project timeline and exit
+  url <target>  Show one public URL and exit
 
 For more info, run any command with the \`--help\` flag:
   $ sonofmagic summary --help
@@ -72,9 +72,9 @@ For more info, run any command with the \`--help\` flag:
   $ sonofmagic url --help
 
 Options:
-  -l, --lang <language>  Specify language (zh|en) 
-  --json                 Print machine-readable JSON when supported 
-  -o, --output <file>    Write command output to a file when supported 
+  -l, --lang <language>  Use a language (zh|en) 
+  --json                 Output JSON when this command supports it 
+  -o, --output <file>    Write the output to a file when supported 
   -h, --help             Display this message 
   -v, --version          Display version number 
 
@@ -97,14 +97,14 @@ Usage:
   $ yangqiming [command] [options]
 
 Commands:
-  summary       Print profile summary and exit
-  links         Print all public links and exit
-  contact       Print contact links and exit
-  export        Print profile as Markdown and exit
-  health        Run local profile data checks and exit
-  projects      Print highlighted projects and exit
-  timeline      Print engineering timeline and exit
-  url <target>  Print a single public url and exit
+  summary       Show a short intro and exit
+  links         Show all public links and exit
+  contact       Show contact links and exit
+  export        Show the profile as Markdown and exit
+  health        Check the local profile data and exit
+  projects      Show a few picked projects and exit
+  timeline      Show the project timeline and exit
+  url <target>  Show one public URL and exit
 
 For more info, run any command with the \`--help\` flag:
   $ yangqiming summary --help
@@ -117,9 +117,9 @@ For more info, run any command with the \`--help\` flag:
   $ yangqiming url --help
 
 Options:
-  -l, --lang <language>  Specify language (zh|en) 
-  --json                 Print machine-readable JSON when supported 
-  -o, --output <file>    Write command output to a file when supported 
+  -l, --lang <language>  Use a language (zh|en) 
+  --json                 Output JSON when this command supports it 
+  -o, --output <file>    Write the output to a file when supported 
   -h, --help             Display this message 
   -v, --version          Display version number 
 

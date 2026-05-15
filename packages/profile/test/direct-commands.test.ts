@@ -58,7 +58,7 @@ describe('direct commands', () => {
 
     const output = logMock.mock.calls.map(call => String(call[0])).join('\n')
     expect(output).toContain('1. weapp-tailwindcss')
-    expect(output).toContain('bestFor:')
+    expect(output).toContain('Useful for:')
     expect(output).toContain('mokup')
   })
 
@@ -75,7 +75,7 @@ describe('direct commands', () => {
       spotlight?: { tagline: string, bestFor: string[] }
     }>
     expect(records[0]?.name).toBe('weapp-tailwindcss')
-    expect(records[0]?.spotlight?.tagline).toContain('utility-first CSS')
+    expect(records[0]?.spotlight?.tagline).toContain('Tailwind')
     expect(records[0]?.spotlight?.bestFor.length).toBeGreaterThan(0)
   })
 
@@ -163,8 +163,8 @@ describe('direct commands', () => {
 
     expect(logMock).toHaveBeenCalledTimes(1)
     const output = String(logMock.mock.calls[0]?.[0])
-    expect(output).toContain('# Engineering Profile')
-    expect(output).toContain('## Engineering Timeline')
+    expect(output).toContain('# About Me')
+    expect(output).toContain('## Timeline')
     expect(output).toContain('weapp-tailwindcss')
   })
 
@@ -181,14 +181,14 @@ describe('direct commands', () => {
     })
 
     const content = await readFile(outputPath, 'utf8')
-    expect(content).toContain('# Engineering Profile')
-    expect(logMock).toHaveBeenCalledWith(`Wrote profile export to ${outputPath}`)
+    expect(content).toContain('# About Me')
+    expect(logMock).toHaveBeenCalledWith(`Wrote the profile to ${outputPath}`)
   })
 
   it('throws for unknown url targets', async () => {
     await expect(runDirectCommand({
       command: 'url',
       args: ['unknown-target'],
-    })).rejects.toThrowError(/Unknown url target/)
+    })).rejects.toThrowError(/Unknown URL target/)
   })
 })

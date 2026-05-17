@@ -1,11 +1,11 @@
 import type { MenuContext, MenuItem } from './menu'
 import process from 'node:process'
-import { optionsData, profileData } from './constants'
+import { getProfileExperienceYears, optionsData, profileData } from './constants'
 import { Dic, init, t } from './i18n'
 import { consoleError as errorLog, consoleLog as log } from './logger'
 import { buildMenuItems } from './menu'
 import { isUnicodeSupported as detectUnicodeSupport } from './support'
-import { dayjs, displayHeroBanner, profileTheme, prompts } from './util'
+import { displayHeroBanner, profileTheme, prompts } from './util'
 
 const isUnicodeSupported = detectUnicodeSupport()
 
@@ -27,8 +27,8 @@ async function handleMenuSelection(value: string, context: MenuContext) {
   const result = await target.handler()
 
   if (value === context.options.changeLanguage) {
-    const { nickname, whenToStartWork, name } = profileData
-    const experienceYears = Math.max(0, dayjs().diff(whenToStartWork, 'year'))
+    const { nickname, name } = profileData
+    const experienceYears = getProfileExperienceYears()
     const accent = t(Dic.heroBanner.accent, {
       years: experienceYears,
       position: t(Dic.profile.position),
@@ -76,8 +76,8 @@ export async function main(options?: MainOptions) {
   try {
     await init(options?.language)
 
-    const { nickname, whenToStartWork, name } = profileData
-    const experienceYears = Math.max(0, dayjs().diff(whenToStartWork, 'year'))
+    const { nickname, name } = profileData
+    const experienceYears = getProfileExperienceYears()
     const icebreaker = profileTheme.colors.primary(nickname)
     const context: MenuContext = {
       icebreaker,

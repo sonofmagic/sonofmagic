@@ -1,9 +1,10 @@
 import type { ITranslation } from '../type'
-import { profileData } from '@/constants'
-import { ansis, dayjs, emoji, profileTheme } from '@/util'
+import { getProfileExperienceYears, profileData } from '@/constants'
+import { ansis, emoji, profileTheme } from '@/util'
 
-const { name, nickname, whenToStartWork } = profileData
+const { name, nickname } = profileData
 const theme = profileTheme
+const experienceYears = getProfileExperienceYears()
 
 export const translation: ITranslation = {
   welcome: '我是 {{nickname}}，这里是我的终端名片',
@@ -14,7 +15,7 @@ export const translation: ITranslation = {
     content: [
       `${ansis.bold(name)} · ${theme.colors.primary('Engineering Portfolio')}`,
       `\n\n${emoji.get('handbag')} ${theme.colors.primaryStrong(
-        `${dayjs().year() - whenToStartWork.year()}`,
+        `${experienceYears}`,
       )} 年产品和工程一线 | ${emoji.get('rocket')} 写能落地的工具，做能长期跑的系统`,
       `\n\n${theme.colors.heading('|')} 我比较擅长`,
       '\n把业务问题拆成工程方案，把复杂流程收进工具链',
@@ -33,7 +34,7 @@ export const translation: ITranslation = {
     summaryTitle: '简介',
     summary: [
       `${ansis.bold(name)} · ${theme.colors.primaryStrong(nickname)}`,
-      `${emoji.get('handbag')} ${theme.colors.primaryStrong(`${dayjs().year() - whenToStartWork.year()}`)} 年产品和工程一线 | ${emoji.get('sparkles')} 写工具链、做自动化，也处理真实项目里的工程债`,
+      `${emoji.get('handbag')} ${theme.colors.primaryStrong(`${experienceYears}`)} 年产品和工程一线 | ${emoji.get('sparkles')} 写工具链、做自动化，也处理真实项目里的工程债`,
     ].join('\n'),
     strengthsTitle: '我比较擅长',
     strengths: [

@@ -1,10 +1,11 @@
 import type { ITranslation } from '../type'
-import { profileData } from '@/constants'
-import { ansis, dayjs, emoji, profileTheme } from '@/util'
+import { getProfileExperienceYears, profileData } from '@/constants'
+import { ansis, emoji, profileTheme } from '@/util'
 import { translation as zhTranslation } from './zh'
 
-const { name, nickname, whenToStartWork } = profileData
+const { name, nickname } = profileData
 const theme = profileTheme
+const experienceYears = getProfileExperienceYears()
 
 function cloneTranslation(source: ITranslation): ITranslation {
   return JSON.parse(JSON.stringify(source)) as ITranslation
@@ -26,7 +27,7 @@ export const translation: ITranslation = (() => {
     summary: [
       `${ansis.bold(name)} · ${theme.colors.primaryStrong(nickname)}`,
       `${emoji.get('handbag')} ${theme.colors.primaryStrong(
-        `${dayjs().year() - whenToStartWork.year()}`,
+        `${experienceYears}`,
       )}+ years on product and engineering work | ${emoji.get('sparkles')} tooling, automation, and production engineering debt`,
     ].join('\n'),
     strengthsTitle: 'What I am good at',

@@ -2,12 +2,11 @@ import type { ProfileLinkKey } from './constants'
 import type { SupportedLanguage } from './i18n'
 import { writeFile } from 'node:fs/promises'
 import process from 'node:process'
-import { profileData, profileLinks } from './constants'
+import { getProfileExperienceYears, profileData, profileLinks } from './constants'
 import { Dic, getSupportedLanguages, init, t } from './i18n'
 import { consoleLog as log } from './logger'
 import { buildTimelineEntries, renderProfileMarkdown } from './profile-content'
 import { getFallbackRepoList, getRepositorySpotlight, getRepositorySpotlights } from './repos'
-import { dayjs } from './util'
 
 const linkAliasMap: Record<string, ProfileLinkKey> = {
   gh: 'github',
@@ -47,7 +46,7 @@ function buildLinkLines() {
 
 async function buildSummaryLines(language?: SupportedLanguage) {
   await init(language)
-  const experienceYears = Math.max(0, dayjs().diff(profileData.whenToStartWork, 'year'))
+  const experienceYears = getProfileExperienceYears()
   return [
     `name: ${profileData.name}`,
     `nickname: ${profileData.nickname}`,

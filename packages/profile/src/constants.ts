@@ -16,6 +16,10 @@ export const profileData: {
   startWorkDay,
 }
 
+export function getProfileExperienceYears(referenceDate = dayjs()) {
+  return Math.max(0, referenceDate.diff(profileData.whenToStartWork, 'year'))
+}
+
 export const optionsData = {
   profile: 'profile',
   contact: 'contact',

@@ -1,5 +1,11 @@
 # @icebreakers/profile
 
+## 4.0.3
+
+### Patch Changes
+
+- 🐛 **Unify profile experience year calculation across CLI profile output.** [`1eae599`](https://github.com/sonofmagic/sonofmagic/commit/1eae5999ecf1c061ec22297336599820fef02b90) by @sonofmagic
+
 ## 4.0.2
 
 ### Patch Changes

@@ -1,5 +1,13 @@
 # yangqiming
 
+## 4.0.3
+
+### Patch Changes
+
+- 🐛 **Unify profile experience year calculation across CLI profile output.** [`1eae599`](https://github.com/sonofmagic/sonofmagic/commit/1eae5999ecf1c061ec22297336599820fef02b90) by @sonofmagic
+- 📦 **Dependencies** [`1eae599`](https://github.com/sonofmagic/sonofmagic/commit/1eae5999ecf1c061ec22297336599820fef02b90)
+  → `@icebreakers/profile@4.0.3`
+
 ## 4.0.2
 
 ### Patch Changes

@@ -76,6 +76,33 @@ export const translation: ITranslation = (() => {
     description: 'You can find me on GitHub, Juejin, my blog, and X',
   }
 
+  base.shareCenter = {
+    title: 'Share Center',
+    description: 'QR codes, browser opens, and copy-ready terminal commands',
+    targetPrompt: 'What do you want to share?',
+    actionPrompt: 'What should happen with {{target}}?',
+    shareTitle: '{{nickname}}\'s {{target}}',
+    shareIntro: 'This is the {{target}} entry for {{name}}. Open the link directly or use npx to view it in a terminal.',
+    commandLabel: 'Terminal command',
+    linkLabel: 'Link',
+    qrCommandLabel: 'QR command',
+    opened: 'Opened {{target}}: {{url}}',
+    targets: {
+      github: 'GitHub',
+      website: 'Homepage',
+      repositories: 'Project list',
+      juejin: 'Juejin',
+      blog: 'Blog',
+      x: 'X',
+    },
+    actions: {
+      qrcode: 'Show QR code',
+      open: 'Open in browser',
+      shareText: 'Generate share text',
+      back: 'Pick another target',
+    },
+  }
+
   base.photo = {
     title: 'Photo',
     description: 'An avatar that works in the terminal',

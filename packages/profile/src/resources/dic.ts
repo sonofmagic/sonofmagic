@@ -55,6 +55,33 @@ const Dic = {
     description: '',
   },
 
+  shareCenter: {
+    title: '',
+    description: '',
+    targetPrompt: '',
+    actionPrompt: '',
+    shareTitle: '',
+    shareIntro: '',
+    commandLabel: '',
+    linkLabel: '',
+    qrCommandLabel: '',
+    opened: '',
+    targets: {
+      github: '',
+      website: '',
+      repositories: '',
+      juejin: '',
+      blog: '',
+      x: '',
+    },
+    actions: {
+      qrcode: '',
+      open: '',
+      shareText: '',
+      back: '',
+    },
+  },
+
   photo: {
     title: '',
     description: '',

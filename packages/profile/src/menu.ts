@@ -4,6 +4,7 @@ import type { ProfileSection, TimelineEntry } from './profile-content'
 import { profileLinks } from './constants'
 import { showPhotoGallery } from './features/photo-gallery'
 import { showRepositoryPrompt } from './features/repositories'
+import { showShareCenter } from './features/share-center'
 import { changeLanguage, Dic, getCurrentLanguage, getSupportedLanguages, t } from './i18n'
 import { consoleLog as log } from './logger'
 import { buildProfileSections, buildTimelineEntries } from './profile-content'
@@ -113,6 +114,17 @@ function createContactItem(context: MenuContext): MenuItem {
       ]
       await typeWriterLines(lines, 12, 90, 4)
       await animateQrcodeBox(qrcode)
+    },
+  }
+}
+
+function createShareCenterItem(context: MenuContext): MenuItem {
+  return {
+    value: context.options.shareCenter,
+    title: t(Dic.shareCenter.title),
+    description: t(Dic.shareCenter.description),
+    async handler() {
+      await showShareCenter()
     },
   }
 }
@@ -245,6 +257,7 @@ export function buildMenuItems(context: MenuContext): MenuItem[] {
   return [
     createProfileItem(context),
     createContactItem(context),
+    createShareCenterItem(context),
     createPhotoItem(context),
     createTimelineItem(context),
     createRepositoriesItem(context),

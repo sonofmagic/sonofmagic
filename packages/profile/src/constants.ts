@@ -33,6 +33,7 @@ export const optionsData = {
   timeline: 'timeline',
   changeLanguage: 'changeLanguage',
   myRepositories: 'myRepositories',
+  shareCenter: 'shareCenter',
 } as const
 
 export type ProfileOptions = typeof optionsData

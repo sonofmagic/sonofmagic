@@ -1,10 +1,12 @@
 import axios from 'axios'
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest'
 import { cliInternal } from '@/cli'
+import { optionsData, profileLinks } from '@/constants'
 import { photoGalleryInternal } from '@/features/photo-gallery'
 import { repositoryInternal } from '@/features/repositories'
+import { shareCenterInternal } from '@/features/share-center'
 import { changeLanguage, Dic, getCurrentLanguage, getSupportedLanguages, init, t } from '@/i18n'
-import { menuInternal } from '@/menu'
+import { buildMenuItems, menuInternal } from '@/menu'
 import { getFallbackRepoList, getRepoList, getRepositorySpotlight } from '@/repos'
 import { emoji, isComplexType, isPrimitivesType, splitParagraphByLines } from '@/util'
 
@@ -189,6 +191,37 @@ describe('i18n manager', () => {
     expect(t(Dic.quit.title)).toBe('退出')
 
     await changeLanguage('en')
+  })
+})
+
+describe('share center', () => {
+  beforeAll(async () => {
+    await changeLanguage('en')
+  })
+
+  it('builds share commands for supported targets', () => {
+    expect(shareCenterInternal.buildShareCommand('github')).toBe('npx @icebreakers/profile@latest url github')
+    expect(shareCenterInternal.buildQrCommand('website')).toBe('npx @icebreakers/profile@latest qr website')
+  })
+
+  it('builds share text with links and terminal commands', () => {
+    const lines = shareCenterInternal.buildShareLines('github')
+    const text = stripAnsi(lines.join('\n'))
+
+    expect(text).toContain(profileLinks.github)
+    expect(text).toContain('npx @icebreakers/profile@latest url github')
+    expect(text).toContain('npx @icebreakers/profile@latest qr github')
+  })
+
+  it('adds the share center to the interactive menu', () => {
+    const items = buildMenuItems({
+      icebreaker: 'icebreaker',
+      options: optionsData,
+      isUnicodeSupported: true,
+    })
+
+    expect(items.map(item => item.value)).toContain(optionsData.shareCenter)
+    expect(items.find(item => item.value === optionsData.shareCenter)?.title).toBe('Share Center')
   })
 })
 

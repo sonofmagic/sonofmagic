@@ -82,6 +82,30 @@ const Dic = {
     },
   },
 
+  pitchLab: {
+    title: '',
+    description: '',
+    promptMsg: '',
+    copyHint: '',
+    audiences: {
+      oss: {
+        title: '',
+        description: '',
+        body: '',
+      },
+      hiring: {
+        title: '',
+        description: '',
+        body: '',
+      },
+      collaboration: {
+        title: '',
+        description: '',
+        body: '',
+      },
+    },
+  },
+
   photo: {
     title: '',
     description: '',

@@ -103,6 +103,42 @@ export const translation: ITranslation = (() => {
     },
   }
 
+  base.pitchLab = {
+    title: 'Pitch Lab',
+    description: 'Generate a 30-second intro for a specific audience',
+    promptMsg: 'Who is this intro for?',
+    copyHint: 'Copy this text directly, or switch language to generate the Chinese version.',
+    audiences: {
+      oss: {
+        title: 'Open-source community',
+        description: 'Focus on maintenance experience, tooling, and project direction',
+        body: [
+          'I am {{nickname}}, with {{years}}+ years in product and engineering work, focused on mini-program tooling, frontend build systems, and Node.js toolchains.',
+          'I maintain projects such as weapp-tailwindcss, weapp-vite, and mokup, where the goal is to turn repeated build, styling, mock, and migration problems into reusable tools.',
+          'If you work on mini-programs, cross-platform systems, or engineering efficiency, I prefer starting from a concrete problem and then turning the solution into something others can reuse.',
+        ].join('\n'),
+      },
+      hiring: {
+        title: 'Hiring or interview',
+        description: 'Focus on role fit, delivery, and collaboration style',
+        body: [
+          'I am {{name}}, also known as {{nickname}}, a {{position}} with {{years}}+ years of hands-on product and engineering experience.',
+          'My strength is turning business problems into engineering plans, then shipping them through frontend systems, Node.js services, build tooling, and automation.',
+          'I am a strong fit for platform engineering, frontend architecture, toolchain governance, and gradual modernization of complex projects.',
+        ].join('\n'),
+      },
+      collaboration: {
+        title: 'Project collaboration',
+        description: 'Focus on problem framing, delivery, and long-term maintenance',
+        body: [
+          'I am {{nickname}}, and I build engineering tools and systems that are meant to ship and keep running.',
+          'In collaboration, I start by making the goal, boundary, and risk explicit, then choose a technical path that can survive beyond the first delivery.',
+          'Mini-program engineering, cross-platform architecture, build performance, mock systems, and team toolchains are all good places to start a concrete conversation.',
+        ].join('\n'),
+      },
+    },
+  }
+
   base.photo = {
     title: 'Photo',
     description: 'An avatar that works in the terminal',

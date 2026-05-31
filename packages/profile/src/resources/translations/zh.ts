@@ -105,6 +105,41 @@ export const translation: ITranslation = {
       back: '重新选择入口',
     },
   },
+  pitchLab: {
+    title: '介绍生成器',
+    description: '按不同场景生成一段 30 秒自我介绍',
+    promptMsg: '这段介绍要给谁看?',
+    copyHint: '可以直接复制这段文字，也可以继续切换语言生成英文版本。',
+    audiences: {
+      oss: {
+        title: '给开源社区',
+        description: '强调维护经验、工具链和项目方向',
+        body: [
+          '我是 {{nickname}}，{{years}} 年产品和工程一线，主要做小程序工程化、前端构建和 Node.js 工具链。',
+          '我长期维护 weapp-tailwindcss、weapp-vite 和 mokup 这类开源项目，关注真实项目里会反复出现的构建、样式、Mock 和迁移问题。',
+          '如果你也在做小程序、跨端或工程效率，我们可以从具体问题聊起，再一起把方案沉淀成可复用工具。',
+        ].join('\n'),
+      },
+      hiring: {
+        title: '给招聘/面试',
+        description: '强调岗位匹配、落地能力和协作方式',
+        body: [
+          '我是 {{name}}，也叫 {{nickname}}，{{position}}，有 {{years}} 年产品和工程一线经验。',
+          '我的强项是把业务问题拆成工程方案，再用前端、Node.js、构建工具和自动化流程把方案落到生产环境。',
+          '我适合负责平台工程、前端架构、工具链治理和复杂项目的渐进式改造。',
+        ].join('\n'),
+      },
+      collaboration: {
+        title: '给合作方',
+        description: '强调问题拆解、交付和长期维护',
+        body: [
+          '我是 {{nickname}}，主要做能落地的工程工具和可长期维护的系统。',
+          '合作时我会先把目标、边界和风险讲清楚，再选择足够稳的技术路径，避免只解决眼前问题。',
+          '小程序工程化、跨端架构、构建性能、Mock 体系和团队工具链，都可以从一次具体项目开始聊。',
+        ].join('\n'),
+      },
+    },
+  },
   photo: {
     title: '照片',
     description: '一张终端里能看的头像',

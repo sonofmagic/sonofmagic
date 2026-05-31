@@ -34,6 +34,7 @@ export const optionsData = {
   changeLanguage: 'changeLanguage',
   myRepositories: 'myRepositories',
   shareCenter: 'shareCenter',
+  pitchLab: 'pitchLab',
 } as const
 
 export type ProfileOptions = typeof optionsData

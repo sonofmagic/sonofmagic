@@ -3,6 +3,7 @@ import type { SupportedLanguage } from './i18n'
 import type { ProfileSection, TimelineEntry } from './profile-content'
 import { profileLinks } from './constants'
 import { showPhotoGallery } from './features/photo-gallery'
+import { showPitchLab } from './features/pitch-lab'
 import { showRepositoryPrompt } from './features/repositories'
 import { showShareCenter } from './features/share-center'
 import { changeLanguage, Dic, getCurrentLanguage, getSupportedLanguages, t } from './i18n'
@@ -151,6 +152,17 @@ function createTimelineItem(context: MenuContext): MenuItem {
   }
 }
 
+function createPitchLabItem(context: MenuContext): MenuItem {
+  return {
+    value: context.options.pitchLab,
+    title: t(Dic.pitchLab.title),
+    description: t(Dic.pitchLab.description),
+    async handler() {
+      await showPitchLab()
+    },
+  }
+}
+
 function createRepositoriesItem(context: MenuContext): MenuItem {
   return {
     value: context.options.myRepositories,
@@ -260,6 +272,7 @@ export function buildMenuItems(context: MenuContext): MenuItem[] {
     createShareCenterItem(context),
     createPhotoItem(context),
     createTimelineItem(context),
+    createPitchLabItem(context),
     createRepositoriesItem(context),
     createBlogWebItem(context),
     createBlogMpItem(context),

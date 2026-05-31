@@ -3,6 +3,7 @@ import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest'
 import { cliInternal } from '@/cli'
 import { optionsData, profileLinks } from '@/constants'
 import { photoGalleryInternal } from '@/features/photo-gallery'
+import { pitchLabInternal } from '@/features/pitch-lab'
 import { repositoryInternal } from '@/features/repositories'
 import { shareCenterInternal } from '@/features/share-center'
 import { changeLanguage, Dic, getCurrentLanguage, getSupportedLanguages, init, t } from '@/i18n'
@@ -242,6 +243,40 @@ describe('share center', () => {
 
     expect(items.map(item => item.value)).toContain(optionsData.shareCenter)
     expect(items.find(item => item.value === optionsData.shareCenter)?.title).toBe('Share Center')
+  })
+})
+
+describe('pitch lab', () => {
+  beforeAll(async () => {
+    await changeLanguage('en')
+  })
+
+  it('builds pitch choices for supported audiences', () => {
+    const choices = pitchLabInternal.buildPitchChoices()
+
+    expect(choices.map(choice => choice.value)).toEqual(['oss', 'hiring', 'collaboration'])
+    expect(choices.every(choice => choice.title.length > 0)).toBe(true)
+  })
+
+  it('builds pitch lines with profile context', () => {
+    const lines = pitchLabInternal.buildPitchLines('hiring')
+    const text = stripAnsi(lines.join('\n'))
+
+    expect(lines.length).toBeGreaterThan(1)
+    expect(text).toContain('Icebreaker Lab')
+    expect(text).toContain('icebreaker')
+    expect(text).toContain('Full-stack Architect')
+  })
+
+  it('adds the pitch lab to the interactive menu', () => {
+    const items = buildMenuItems({
+      icebreaker: 'icebreaker',
+      options: optionsData,
+      isUnicodeSupported: true,
+    })
+
+    expect(items.map(item => item.value)).toContain(optionsData.pitchLab)
+    expect(items.find(item => item.value === optionsData.pitchLab)?.title).toBe('Pitch Lab')
   })
 })
 

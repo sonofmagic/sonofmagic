@@ -179,6 +179,8 @@ export const translation: ITranslation = (() => {
     actions: {
       open: 'Open repository',
       details: 'Show details',
+      qrcode: 'Show QR code',
+      shareText: 'Generate share text',
       back: 'Back to the list',
     },
     detail: {
@@ -189,6 +191,9 @@ export const translation: ITranslation = (() => {
       spotlight: 'In one line',
       bestFor: 'Useful for',
       noDescription: 'This repository has no description yet',
+      shareTitle: '{{name}} repository',
+      shareIntro: 'Open this repository directly, or use npx to jump to the full project index.',
+      commandLabel: 'Project index command',
     },
     spotlights: {
       weappTailwindcss: {

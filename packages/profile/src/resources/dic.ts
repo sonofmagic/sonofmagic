@@ -154,6 +154,8 @@ const Dic = {
     actions: {
       open: '',
       details: '',
+      qrcode: '',
+      shareText: '',
       back: '',
     },
     detail: {
@@ -164,6 +166,9 @@ const Dic = {
       spotlight: '',
       bestFor: '',
       noDescription: '',
+      shareTitle: '',
+      shareIntro: '',
+      commandLabel: '',
     },
     spotlights: {
       weappTailwindcss: {

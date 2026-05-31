@@ -173,6 +173,8 @@ export const translation: ITranslation = {
     actions: {
       open: '打开仓库',
       details: '看看详情',
+      qrcode: '显示二维码',
+      shareText: '生成分享文本',
       back: '回到列表',
     },
     detail: {
@@ -183,6 +185,9 @@ export const translation: ITranslation = {
       spotlight: '一句话',
       bestFor: '适合用在',
       noDescription: '这个仓库暂时没有写描述',
+      shareTitle: '{{name}} 仓库',
+      shareIntro: '可以直接打开这个仓库，也可以用 npx 跳到完整项目索引。',
+      commandLabel: '项目索引命令',
     },
     spotlights: {
       weappTailwindcss: {

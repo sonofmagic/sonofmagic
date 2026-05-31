@@ -2,7 +2,7 @@ import { createSpinner } from 'nanospinner'
 import { Dic, t } from '../i18n'
 import { consoleLog as log, consoleWarn as warn } from '../logger'
 import { getFallbackRepoList, getRepoList, getRepositorySpotlight } from '../repos'
-import { boxen, emoji, profileTheme, prompts, typeWriterLines } from '../util'
+import { animateQrcodeBox, boxen, emoji, generateQrcode, profileTheme, prompts, typeWriterLines } from '../util'
 
 interface RepositoryPromptOptions {
   isUnicodeSupported: boolean
@@ -20,6 +20,8 @@ interface RepoChoice {
   description?: string
   value: Selection
 }
+
+type RepositoryAction = 'open' | 'details' | 'qrcode' | 'shareText' | 'back'
 
 const iconCache = new Map<boolean, {
   starIcon: string
@@ -123,25 +125,78 @@ async function renderRepositoryDetails(repo: RepoSummary) {
   await typeWriterLines(card.split('\n'), 4, 0, 1)
 }
 
+function buildRepositoryShareLines(repo: RepoSummary) {
+  const spotlight = resolveSpotlightContent(repo.name)
+  const lines = [
+    t(Dic.myRepositories.detail.shareTitle, { name: repo.name }) as string,
+    '',
+    repo.description || t(Dic.myRepositories.detail.noDescription) as string,
+    '',
+    `${t(Dic.myRepositories.detail.url)}: ${repo.html_url}`,
+    `${t(Dic.myRepositories.detail.language)}: ${repo.language ?? 'n/a'}`,
+    `${t(Dic.myRepositories.detail.stars)}: ${repo.stargazers_count}`,
+    `${t(Dic.myRepositories.detail.forks)}: ${repo.forks_count}`,
+    `${t(Dic.myRepositories.detail.commandLabel)}: npx @icebreakers/profile@latest projects`,
+  ]
+
+  if (spotlight) {
+    lines.push('')
+    lines.push(`${t(Dic.myRepositories.detail.spotlight)}: ${spotlight.tagline}`)
+    lines.push(`${t(Dic.myRepositories.detail.bestFor)}: ${spotlight.bestFor.join(', ')}`)
+  }
+
+  lines.push('')
+  lines.push(t(Dic.myRepositories.detail.shareIntro) as string)
+
+  return lines
+}
+
+function renderRepositoryShareText(repo: RepoSummary) {
+  return boxen(buildRepositoryShareLines(repo).join('\n'), {
+    borderStyle: 'round',
+    borderColor: 'magenta',
+    padding: { top: 1, bottom: 1, left: 2, right: 2 },
+    margin: { top: 1, bottom: 1, left: 0, right: 0 },
+  })
+}
+
+function buildRepositoryActionChoices(): Array<{ title: string, value: RepositoryAction }> {
+  return [
+    { title: t(Dic.myRepositories.actions.open) as string, value: 'open' },
+    { title: t(Dic.myRepositories.actions.details) as string, value: 'details' },
+    { title: t(Dic.myRepositories.actions.qrcode) as string, value: 'qrcode' },
+    { title: t(Dic.myRepositories.actions.shareText) as string, value: 'shareText' },
+    { title: t(Dic.myRepositories.actions.back) as string, value: 'back' },
+  ]
+}
+
 async function handleRepositorySelection(selection: Selection) {
   const { action } = await prompts({
     type: 'select',
     name: 'action',
     message: selection.repo.name,
-    choices: [
-      { title: t(Dic.myRepositories.actions.open), value: 'open' },
-      { title: t(Dic.myRepositories.actions.details), value: 'details' },
-      { title: t(Dic.myRepositories.actions.back), value: 'back' },
-    ],
+    choices: buildRepositoryActionChoices(),
     initial: 0,
   })
 
-  if (action === 'open') {
+  const selectedAction = action as RepositoryAction | undefined
+
+  if (selectedAction === 'open') {
     await openRepository(selection.repo.html_url)
   }
 
-  if (action === 'details') {
+  if (selectedAction === 'details') {
     await renderRepositoryDetails(selection.repo)
+  }
+
+  if (selectedAction === 'qrcode') {
+    const qrcode = await generateQrcode(selection.repo.html_url)
+    await animateQrcodeBox(qrcode)
+  }
+
+  if (selectedAction === 'shareText') {
+    const shareText = renderRepositoryShareText(selection.repo)
+    await typeWriterLines(shareText.split('\n'), 4, 0, 1)
   }
 }
 
@@ -201,7 +256,10 @@ export async function showRepositoryPrompt(options: RepositoryPromptOptions) {
 
 /** @internal */
 export const repositoryInternal = {
+  buildRepositoryActionChoices,
+  buildRepositoryShareLines,
   formatRepositoryLabel,
+  renderRepositoryShareText,
   renderRepositoryDetails,
   resolveSpotlightContent,
 }

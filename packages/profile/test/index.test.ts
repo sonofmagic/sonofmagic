@@ -87,8 +87,12 @@ describe('photo helpers', () => {
 })
 
 describe('repository helpers', () => {
-  const { formatRepositoryLabel } = repositoryInternal
+  const { buildRepositoryActionChoices, buildRepositoryShareLines, formatRepositoryLabel } = repositoryInternal
   const axiosGetMock = vi.mocked(axios.get)
+
+  beforeAll(async () => {
+    await init('en')
+  })
 
   it('formats metadata with unicode icons', () => {
     const repo = {
@@ -114,6 +118,22 @@ describe('repository helpers', () => {
     const spotlight = getRepositorySpotlight('weapp-tailwindcss')
     expect(spotlight?.name).toBe('weapp-tailwindcss')
     expect(getRepositorySpotlight('unknown')).toBeNull()
+  })
+
+  it('adds QR and share actions to repository selections', () => {
+    const actionValues = buildRepositoryActionChoices().map(action => action.value)
+
+    expect(actionValues).toEqual(['open', 'details', 'qrcode', 'shareText', 'back'])
+  })
+
+  it('builds repository share text with spotlight context', () => {
+    const repo = getFallbackRepoList()[0]!
+    const text = stripAnsi(buildRepositoryShareLines(repo).join('\n'))
+
+    expect(text).toContain(repo.html_url)
+    expect(text).toContain('npx @icebreakers/profile@latest projects')
+    expect(text).toContain('Write Tailwind')
+    expect(text).toContain('Useful for')
   })
 
   it('fetches highlighted repositories even when the user repository list fails', async () => {

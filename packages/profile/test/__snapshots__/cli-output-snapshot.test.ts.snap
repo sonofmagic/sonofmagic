@@ -7,14 +7,16 @@ Usage:
   $ profile [command] [options]
 
 Commands:
-  summary       Show a short intro and exit
-  links         Show all public links and exit
-  contact       Show contact links and exit
-  export        Show the profile as Markdown and exit
-  health        Check the local profile data and exit
-  projects      Show a few picked projects and exit
-  timeline      Show the project timeline and exit
-  url <target>  Show one public URL and exit
+  summary        Show a short intro and exit
+  links          Show all public links and exit
+  contact        Show contact links and exit
+  export         Show the profile as Markdown and exit
+  health         Check the local profile data and exit
+  projects       Show a few picked projects and exit
+  timeline       Show the project timeline and exit
+  url <target>   Show one public URL and exit
+  qr <target>    Show a public URL as a terminal QR code and exit
+  open <target>  Open one public URL in the browser and exit
 
 For more info, run any command with the \`--help\` flag:
   $ profile summary --help
@@ -25,6 +27,8 @@ For more info, run any command with the \`--help\` flag:
   $ profile projects --help
   $ profile timeline --help
   $ profile url --help
+  $ profile qr --help
+  $ profile open --help
 
 Options:
   -l, --lang <language>  Use a language (zh|en) 
@@ -41,6 +45,8 @@ $ profile projects
 $ profile timeline --json
 $ profile links
 $ profile url github
+$ profile qr website
+$ profile open repositories
 $ profile --lang en
 $ profile --lang zh"
 `;
@@ -52,14 +58,16 @@ Usage:
   $ sonofmagic [command] [options]
 
 Commands:
-  summary       Show a short intro and exit
-  links         Show all public links and exit
-  contact       Show contact links and exit
-  export        Show the profile as Markdown and exit
-  health        Check the local profile data and exit
-  projects      Show a few picked projects and exit
-  timeline      Show the project timeline and exit
-  url <target>  Show one public URL and exit
+  summary        Show a short intro and exit
+  links          Show all public links and exit
+  contact        Show contact links and exit
+  export         Show the profile as Markdown and exit
+  health         Check the local profile data and exit
+  projects       Show a few picked projects and exit
+  timeline       Show the project timeline and exit
+  url <target>   Show one public URL and exit
+  qr <target>    Show a public URL as a terminal QR code and exit
+  open <target>  Open one public URL in the browser and exit
 
 For more info, run any command with the \`--help\` flag:
   $ sonofmagic summary --help
@@ -70,6 +78,8 @@ For more info, run any command with the \`--help\` flag:
   $ sonofmagic projects --help
   $ sonofmagic timeline --help
   $ sonofmagic url --help
+  $ sonofmagic qr --help
+  $ sonofmagic open --help
 
 Options:
   -l, --lang <language>  Use a language (zh|en) 
@@ -86,6 +96,8 @@ $ sonofmagic projects
 $ sonofmagic timeline --json
 $ sonofmagic links
 $ sonofmagic url github
+$ sonofmagic qr website
+$ sonofmagic open repositories
 $ sonofmagic --lang en
 $ sonofmagic --lang zh"
 `;
@@ -97,14 +109,16 @@ Usage:
   $ yangqiming [command] [options]
 
 Commands:
-  summary       Show a short intro and exit
-  links         Show all public links and exit
-  contact       Show contact links and exit
-  export        Show the profile as Markdown and exit
-  health        Check the local profile data and exit
-  projects      Show a few picked projects and exit
-  timeline      Show the project timeline and exit
-  url <target>  Show one public URL and exit
+  summary        Show a short intro and exit
+  links          Show all public links and exit
+  contact        Show contact links and exit
+  export         Show the profile as Markdown and exit
+  health         Check the local profile data and exit
+  projects       Show a few picked projects and exit
+  timeline       Show the project timeline and exit
+  url <target>   Show one public URL and exit
+  qr <target>    Show a public URL as a terminal QR code and exit
+  open <target>  Open one public URL in the browser and exit
 
 For more info, run any command with the \`--help\` flag:
   $ yangqiming summary --help
@@ -115,6 +129,8 @@ For more info, run any command with the \`--help\` flag:
   $ yangqiming projects --help
   $ yangqiming timeline --help
   $ yangqiming url --help
+  $ yangqiming qr --help
+  $ yangqiming open --help
 
 Options:
   -l, --lang <language>  Use a language (zh|en) 
@@ -131,6 +147,8 @@ $ yangqiming projects
 $ yangqiming timeline --json
 $ yangqiming links
 $ yangqiming url github
+$ yangqiming qr website
+$ yangqiming open repositories
 $ yangqiming --lang en
 $ yangqiming --lang zh"
 `;

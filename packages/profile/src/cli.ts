@@ -64,6 +64,8 @@ export async function runCli(runOptions: RunCliOptions = {}) {
   cli.command('projects', 'Show a few picked projects and exit')
   cli.command('timeline', 'Show the project timeline and exit')
   cli.command('url <target>', 'Show one public URL and exit')
+  cli.command('qr <target>', 'Show a public URL as a terminal QR code and exit')
+  cli.command('open <target>', 'Open one public URL in the browser and exit')
   cli.option('-l, --lang <language>', `Use a language (${getSupportedLanguages().join('|')})`)
   cli.option('--json', 'Output JSON when this command supports it')
   cli.option('-o, --output <file>', 'Write the output to a file when supported')
@@ -78,6 +80,8 @@ export async function runCli(runOptions: RunCliOptions = {}) {
   cli.example(bin => `$ ${bin} timeline --json`)
   cli.example(bin => `$ ${bin} links`)
   cli.example(bin => `$ ${bin} url github`)
+  cli.example(bin => `$ ${bin} qr website`)
+  cli.example(bin => `$ ${bin} open repositories`)
   cli.example(bin => `$ ${bin} --lang en`)
   cli.example(bin => `$ ${bin} --lang zh`)
 

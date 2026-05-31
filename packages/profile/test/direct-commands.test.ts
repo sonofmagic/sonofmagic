@@ -5,15 +5,22 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { profileLinks } from '../src/constants'
 import { directCommandInternal, runDirectCommand } from '../src/direct-commands'
 
-const { logMock } = vi.hoisted(() => {
+const { logMock, openMock } = vi.hoisted(() => {
   return {
     logMock: vi.fn(),
+    openMock: vi.fn(),
   }
 })
 
 vi.mock('../src/logger', () => {
   return {
     consoleLog: logMock,
+  }
+})
+
+vi.mock('open', () => {
+  return {
+    default: openMock,
   }
 })
 
@@ -26,6 +33,7 @@ describe('direct commands', () => {
     previousExitCode = process.exitCode
     process.exitCode = undefined
     logMock.mockReset()
+    openMock.mockReset()
   })
 
   afterEach(async () => {
@@ -87,6 +95,43 @@ describe('direct commands', () => {
 
     expect(logMock).toHaveBeenCalledTimes(1)
     expect(logMock).toHaveBeenCalledWith(profileLinks.github)
+  })
+
+  it('prints a terminal QR code for qr command', async () => {
+    await runDirectCommand({
+      command: 'qr',
+      args: ['gh'],
+    })
+
+    expect(logMock).toHaveBeenCalledTimes(1)
+    expect(String(logMock.mock.calls[0]?.[0]).length).toBeGreaterThan(0)
+  })
+
+  it('writes a terminal QR code to a file', async () => {
+    const tempDir = await mkdtemp(join(tmpdir(), 'profile-qr-'))
+    tempDirs.push(tempDir)
+    const outputPath = join(tempDir, 'github-qr.txt')
+
+    await runDirectCommand({
+      command: 'qr',
+      args: ['gh'],
+      output: outputPath,
+    })
+
+    const content = await readFile(outputPath, 'utf8')
+    expect(content.length).toBeGreaterThan(0)
+    expect(logMock).toHaveBeenCalledWith(`Wrote the QR code to ${outputPath}`)
+  })
+
+  it('opens a url target in the browser', async () => {
+    await runDirectCommand({
+      command: 'open',
+      args: ['gh'],
+    })
+
+    expect(openMock).toHaveBeenCalledTimes(1)
+    expect(openMock).toHaveBeenCalledWith(profileLinks.github)
+    expect(logMock).toHaveBeenCalledWith(`Opened github: ${profileLinks.github}`)
   })
 
   it('prints summary lines with localized position text', async () => {
@@ -190,5 +235,19 @@ describe('direct commands', () => {
       command: 'url',
       args: ['unknown-target'],
     })).rejects.toThrowError(/Unknown URL target/)
+  })
+
+  it('throws when unsupported output options are used', async () => {
+    await expect(runDirectCommand({
+      command: 'open',
+      args: ['gh'],
+      output: 'url.txt',
+    })).rejects.toThrowError('The --output option is not supported by the "open" command.')
+
+    await expect(runDirectCommand({
+      command: 'qr',
+      args: ['gh'],
+      json: true,
+    })).rejects.toThrowError('The --json option is not supported by the "qr" command.')
   })
 })

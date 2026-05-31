@@ -27,6 +27,13 @@ npx @icebreakers/profile@latest contact
 # Show one target link and exit
 npx @icebreakers/profile@latest url github
 npx @icebreakers/profile@latest url gh
+
+# Show a terminal QR code for one target
+npx @icebreakers/profile@latest qr website
+npx @icebreakers/profile@latest qr gh --output github-qr.txt
+
+# Open one target in the browser
+npx @icebreakers/profile@latest open repositories
 ```
 
 Supported URL targets:

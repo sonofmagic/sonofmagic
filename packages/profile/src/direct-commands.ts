@@ -7,6 +7,7 @@ import { Dic, getSupportedLanguages, init, t } from './i18n'
 import { consoleLog as log } from './logger'
 import { buildTimelineEntries, renderProfileMarkdown } from './profile-content'
 import { getFallbackRepoList, getRepositorySpotlight, getRepositorySpotlights } from './repos'
+import { generateQrcode } from './util'
 
 const linkAliasMap: Record<string, ProfileLinkKey> = {
   gh: 'github',
@@ -16,6 +17,7 @@ const linkAliasMap: Record<string, ProfileLinkKey> = {
   site: 'website',
   web: 'website',
 }
+let openModulePromise: Promise<typeof import('open')> | null = null
 
 function normalizeToken(value: string) {
   return value.trim().toLowerCase().replaceAll('_', '-')
@@ -129,6 +131,26 @@ async function writeOutputFile(outputPath: string, content: string) {
   await writeFile(outputPath, content, 'utf8')
 }
 
+async function openUrl(url: string) {
+  if (!openModulePromise) {
+    openModulePromise = import('open')
+  }
+  const mod = await openModulePromise
+  await mod.default(url)
+}
+
+function assertNoJson(commandName: string, json?: boolean) {
+  if (json) {
+    throw new Error(`The --json option is not supported by the "${commandName}" command.`)
+  }
+}
+
+function assertNoOutput(commandName: string, output?: string) {
+  if (output) {
+    throw new Error(`The --output option is not supported by the "${commandName}" command.`)
+  }
+}
+
 async function buildHealthLines(language?: SupportedLanguage) {
   await init(language)
 
@@ -199,9 +221,7 @@ export async function runDirectCommand({ command, args, language, json, output }
 
   if (normalizedCommand === 'projects') {
     assertNoExtraArgs(normalizedCommand, args)
-    if (output) {
-      throw new Error('The --output option is only supported by the "export" command.')
-    }
+    assertNoOutput(normalizedCommand, output)
     await init(language)
     if (json) {
       log(JSON.stringify(buildProjectRecords(), null, 2))
@@ -224,9 +244,7 @@ export async function runDirectCommand({ command, args, language, json, output }
 
   if (normalizedCommand === 'timeline') {
     assertNoExtraArgs(normalizedCommand, args)
-    if (output) {
-      throw new Error('The --output option is only supported by the "export" command.')
-    }
+    assertNoOutput(normalizedCommand, output)
     await init(language)
     if (json) {
       log(JSON.stringify(buildTimelineEntries(), null, 2))
@@ -240,9 +258,7 @@ export async function runDirectCommand({ command, args, language, json, output }
 
   if (normalizedCommand === 'health') {
     assertNoExtraArgs(normalizedCommand, args)
-    if (output) {
-      throw new Error('The --output option is only supported by the "export" command.')
-    }
+    assertNoOutput(normalizedCommand, output)
     const health = await buildHealthLines(language)
     if (json) {
       log(JSON.stringify({ ok: health.ok, checks: health.checks }, null, 2))
@@ -262,9 +278,7 @@ export async function runDirectCommand({ command, args, language, json, output }
 
   if (normalizedCommand === 'export') {
     assertNoExtraArgs(normalizedCommand, args)
-    if (json) {
-      throw new Error('The --json option is only supported by the "projects" command.')
-    }
+    assertNoJson(normalizedCommand, json)
     await init(language)
     const markdown = renderProfileMarkdown()
     if (output) {
@@ -277,6 +291,8 @@ export async function runDirectCommand({ command, args, language, json, output }
   }
 
   if (normalizedCommand === 'url') {
+    assertNoJson(normalizedCommand, json)
+    assertNoOutput(normalizedCommand, output)
     if (args.length === 0) {
       throw new Error(`Missing URL target. Available targets: ${Object.keys(profileLinks).join(', ')}`)
     }
@@ -285,6 +301,40 @@ export async function runDirectCommand({ command, args, language, json, output }
     }
     const target = resolveLinkTarget(args[0])
     log(profileLinks[target])
+    return
+  }
+
+  if (normalizedCommand === 'qr') {
+    assertNoJson(normalizedCommand, json)
+    if (args.length === 0) {
+      throw new Error(`Missing QR target. Available targets: ${Object.keys(profileLinks).join(', ')}`)
+    }
+    if (args.length > 1) {
+      throw new Error(`Unknown argument for command "qr": ${args[1]}`)
+    }
+    const target = resolveLinkTarget(args[0])
+    const qrcode = await generateQrcode(profileLinks[target])
+    if (output) {
+      await writeOutputFile(output, qrcode)
+      log(`Wrote the QR code to ${output}`)
+      return
+    }
+    log(qrcode)
+    return
+  }
+
+  if (normalizedCommand === 'open') {
+    assertNoJson(normalizedCommand, json)
+    assertNoOutput(normalizedCommand, output)
+    if (args.length === 0) {
+      throw new Error(`Missing URL target. Available targets: ${Object.keys(profileLinks).join(', ')}`)
+    }
+    if (args.length > 1) {
+      throw new Error(`Unknown argument for command "open": ${args[1]}`)
+    }
+    const target = resolveLinkTarget(args[0])
+    await openUrl(profileLinks[target])
+    log(`Opened ${target}: ${profileLinks[target]}`)
     return
   }
 
@@ -301,4 +351,5 @@ export const directCommandInternal = {
   buildHealthLines,
   buildTimelineLines,
   resolveSpotlightContent,
+  openUrl,
 }

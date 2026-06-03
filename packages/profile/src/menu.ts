@@ -1,7 +1,7 @@
 import type { ProfileOptions } from './constants'
 import type { SupportedLanguage } from './i18n'
 import type { ProfileSection, TimelineEntry } from './profile-content'
-import { profileLinks } from './constants'
+import { showArcade } from './features/arcade'
 import { showPhotoGallery } from './features/photo-gallery'
 import { showPitchLab } from './features/pitch-lab'
 import { showRepositoryPrompt } from './features/repositories'
@@ -9,7 +9,7 @@ import { showShareCenter } from './features/share-center'
 import { changeLanguage, Dic, getCurrentLanguage, getSupportedLanguages, t } from './i18n'
 import { consoleLog as log } from './logger'
 import { buildProfileSections, buildTimelineEntries } from './profile-content'
-import { animateQrcodeBox, boxen, generateQrcode, profileTheme, prompts, sleep, typeWriterLines } from './util'
+import { boxen, profileTheme, prompts, sleep, typeWriterLines } from './util'
 
 export interface MenuContext {
   icebreaker: string
@@ -25,6 +25,14 @@ export interface MenuItem {
   title: string
   description?: string
   handler: MenuHandler
+}
+
+type ProfileHubAction = 'overview' | 'timeline' | 'photo' | 'pitchLab' | 'back'
+
+interface ProfileHubChoice {
+  title: string
+  description?: string
+  value: ProfileHubAction
 }
 
 function headingLine(title: string) {
@@ -82,6 +90,35 @@ async function renderTimeline(entries: TimelineEntry[]) {
   ], 8, 70, 2)
 }
 
+function buildProfileHubChoices(): ProfileHubChoice[] {
+  return [
+    {
+      title: t(Dic.profile.title),
+      description: t(Dic.profile.description),
+      value: 'overview',
+    },
+    {
+      title: t(Dic.timeline.title),
+      description: t(Dic.timeline.description),
+      value: 'timeline',
+    },
+    {
+      title: t(Dic.photo.title),
+      description: t(Dic.photo.description),
+      value: 'photo',
+    },
+    {
+      title: t(Dic.pitchLab.title),
+      description: t(Dic.pitchLab.description),
+      value: 'pitchLab',
+    },
+    {
+      title: t(Dic.back),
+      value: 'back',
+    },
+  ]
+}
+
 function createProfileItem(context: MenuContext): MenuItem {
   const { icebreaker, options } = context
   return {
@@ -89,32 +126,36 @@ function createProfileItem(context: MenuContext): MenuItem {
     title: t(Dic.profile.title),
     description: t(Dic.profile.description, { nickname: icebreaker }),
     async handler() {
-      const sections = buildProfileSections()
-      await renderProfileSections(sections)
-    },
-  }
-}
+      const response = await prompts({
+        type: 'select',
+        name: 'action',
+        message: t(Dic.profile.menuPrompt),
+        choices: buildProfileHubChoices(),
+        initial: 0,
+      })
 
-function createContactItem(context: MenuContext): MenuItem {
-  const { icebreaker, options } = context
-  return {
-    value: options.contact,
-    title: t(Dic.contact.title),
-    description: t(Dic.contact.description, { nickname: icebreaker }),
-    async handler() {
-      const qrcode = await generateQrcode(profileLinks.github)
-      const lines = [
-        headingLine(t(Dic.contact.title)),
-        '',
-        `GitHub: ${profileTheme.colors.link(profileLinks.github)}`,
-        `Juejin: ${profileTheme.colors.link(profileLinks.juejin)}`,
-        `Blog: ${profileTheme.colors.link(profileLinks.blog)}`,
-        `X: ${profileTheme.colors.link(profileLinks.x)}`,
-        '',
-        `${t(Dic.blogWeb.title)}: ${profileTheme.colors.link(profileLinks.website)}`,
-      ]
-      await typeWriterLines(lines, 12, 90, 4)
-      await animateQrcodeBox(qrcode)
+      const action = response?.action as ProfileHubAction | undefined
+
+      if (!action || action === 'back') {
+        return
+      }
+
+      if (action === 'timeline') {
+        await renderTimeline(buildTimelineEntries())
+        return
+      }
+
+      if (action === 'photo') {
+        await showPhotoGallery()
+        return
+      }
+
+      if (action === 'pitchLab') {
+        await showPitchLab()
+        return
+      }
+
+      await renderProfileSections(buildProfileSections())
     },
   }
 }
@@ -130,35 +171,13 @@ function createShareCenterItem(context: MenuContext): MenuItem {
   }
 }
 
-function createPhotoItem(context: MenuContext): MenuItem {
+function createArcadeItem(context: MenuContext): MenuItem {
   return {
-    value: context.options.photo,
-    title: t(Dic.photo.title),
-    description: t(Dic.photo.description),
+    value: context.options.arcade,
+    title: t(Dic.arcade.title),
+    description: t(Dic.arcade.description),
     async handler() {
-      await showPhotoGallery()
-    },
-  }
-}
-
-function createTimelineItem(context: MenuContext): MenuItem {
-  return {
-    value: context.options.timeline,
-    title: t(Dic.timeline.title),
-    description: t(Dic.timeline.description),
-    async handler() {
-      await renderTimeline(buildTimelineEntries())
-    },
-  }
-}
-
-function createPitchLabItem(context: MenuContext): MenuItem {
-  return {
-    value: context.options.pitchLab,
-    title: t(Dic.pitchLab.title),
-    description: t(Dic.pitchLab.description),
-    async handler() {
-      await showPitchLab()
+      await showArcade()
     },
   }
 }
@@ -172,46 +191,6 @@ function createRepositoriesItem(context: MenuContext): MenuItem {
       await showRepositoryPrompt({
         isUnicodeSupported: context.isUnicodeSupported,
       })
-    },
-  }
-}
-
-function createBlogWebItem(context: MenuContext): MenuItem {
-  return {
-    value: context.options.blogWeb,
-    title: t(Dic.blogWeb.title),
-    description: t(Dic.blogWeb.description),
-    async handler() {
-      const qrcode = await generateQrcode(profileLinks.website)
-      const lines = [
-        headingLine(t(Dic.blogWeb.title)),
-        '',
-        `${t(Dic.directAccess)}: ${profileTheme.colors.link(profileLinks.website)}`,
-        '',
-        'Scan to open in browser:',
-      ]
-      await typeWriterLines(lines, 12, 90, 4)
-      await animateQrcodeBox(qrcode)
-    },
-  }
-}
-
-function createBlogMpItem(context: MenuContext): MenuItem {
-  return {
-    value: context.options.blogMp,
-    title: t(Dic.blogMp.title),
-    description: t(Dic.blogMp.description),
-    async handler() {
-      const qrcode = await generateQrcode(profileLinks.repositories)
-      const lines = [
-        headingLine(t(Dic.blogMp.title)),
-        '',
-        `${t(Dic.directAccess)}: ${profileTheme.colors.link(profileLinks.repositories)}`,
-        '',
-        'Scan to open repository list:',
-      ]
-      await typeWriterLines(lines, 12, 90, 4)
-      await animateQrcodeBox(qrcode)
     },
   }
 }
@@ -268,14 +247,9 @@ function createQuitItem(context: MenuContext): MenuItem {
 export function buildMenuItems(context: MenuContext): MenuItem[] {
   return [
     createProfileItem(context),
-    createContactItem(context),
-    createShareCenterItem(context),
-    createPhotoItem(context),
-    createTimelineItem(context),
-    createPitchLabItem(context),
     createRepositoriesItem(context),
-    createBlogWebItem(context),
-    createBlogMpItem(context),
+    createShareCenterItem(context),
+    createArcadeItem(context),
     createChangeLanguageItem(context),
     createQuitItem(context),
   ]
@@ -283,5 +257,6 @@ export function buildMenuItems(context: MenuContext): MenuItem[] {
 
 /** @internal */
 export const menuInternal = {
+  buildProfileHubChoices,
   buildProfileSections,
 }

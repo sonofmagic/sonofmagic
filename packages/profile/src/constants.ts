@@ -35,6 +35,7 @@ export const optionsData = {
   myRepositories: 'myRepositories',
   shareCenter: 'shareCenter',
   pitchLab: 'pitchLab',
+  arcade: 'arcade',
 } as const
 
 export type ProfileOptions = typeof optionsData

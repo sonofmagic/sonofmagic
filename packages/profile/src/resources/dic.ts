@@ -45,6 +45,7 @@ const Dic = {
     projects: '',
     closingTitle: '',
     closing: '',
+    menuPrompt: '',
   },
   heroBanner: {
     accent: '',
@@ -106,6 +107,31 @@ const Dic = {
     },
   },
 
+  arcade: {
+    title: '',
+    description: '',
+    score: '',
+    gameOver: '',
+    games: {
+      game2048: {
+        title: '',
+        description: '',
+        controls: '',
+        moves: '',
+        bestTile: '',
+        bestScore: '',
+        keepGoing: '',
+        noMove: '',
+        noMoves: '',
+        noUndo: '',
+        restart: '',
+        rawModeUnavailable: '',
+        undo: '',
+        win: '',
+      },
+    },
+  },
+
   photo: {
     title: '',
     description: '',
@@ -161,6 +187,7 @@ const Dic = {
   next: '',
   prev: '',
   exit: '',
+  back: '',
 
   directAccess: '',
 

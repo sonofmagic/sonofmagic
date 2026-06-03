@@ -70,6 +70,7 @@ export const translation: ITranslation = {
       '小程序工程化、跨端架构、构建性能、工具链设计，都可以聊。',
       '常用公开渠道：GitHub / Juejin / Blog / X。',
     ].join('\n'),
+    menuPrompt: '想看哪部分关于我的内容?',
   },
   heroBanner: {
     accent: '{{years}} 年产品与工程一线 | {{position}}',
@@ -140,6 +141,30 @@ export const translation: ITranslation = {
       },
     },
   },
+  arcade: {
+    title: '2048',
+    description: '直接用键盘在终端里滑动数字块',
+    score: '分数',
+    gameOver: '游戏结束，最终分数 {{score}}',
+    games: {
+      game2048: {
+        title: '2048',
+        description: '移动数字块，合成更大的数字',
+        controls: 'WASD / 方向键移动 · U 撤销 · R 重开 · Q 退出',
+        moves: '步数',
+        bestTile: '最大',
+        bestScore: '最高',
+        keepGoing: '已经到 2048，继续冲更高分。',
+        noMove: '这个方向移动不了。',
+        noMoves: '没有可移动的格子了。',
+        noUndo: '没有可以撤销的上一步。',
+        restart: '新局开始。',
+        rawModeUnavailable: '当前终端不支持实时按键输入，2048 需要在交互式 TTY 里运行。',
+        undo: '已撤销一步。',
+        win: '合成 2048，继续玩可以刷更高分。',
+      },
+    },
+  },
   photo: {
     title: '照片',
     description: '一张终端里能看的头像',
@@ -193,6 +218,7 @@ export const translation: ITranslation = {
   next: '下一张',
   prev: '上一张',
   exit: '退出请按',
+  back: '返回',
 
   directAccess: '直接打开',
   openWithBrowser: '用浏览器打开吗?',

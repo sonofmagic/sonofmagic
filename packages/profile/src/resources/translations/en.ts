@@ -64,6 +64,7 @@ export const translation: ITranslation = (() => {
       'Mini-program engineering, cross-platform architecture, build performance, and toolchain design are all in scope.',
       'Public channels: GitHub / Juejin / Blog / X.',
     ].join('\n'),
+    menuPrompt: 'Which profile section do you want to open?',
   }
 
   base.heroBanner = {
@@ -139,6 +140,31 @@ export const translation: ITranslation = (() => {
     },
   }
 
+  base.arcade = {
+    title: '2048',
+    description: 'Slide tiles directly from the keyboard',
+    score: 'Score',
+    gameOver: 'Game over. Final score: {{score}}',
+    games: {
+      game2048: {
+        title: '2048',
+        description: 'Move tiles and merge bigger numbers',
+        controls: 'WASD / arrow keys to move · U undo · R restart · Q quit',
+        moves: 'Moves',
+        bestTile: 'Best',
+        bestScore: 'High',
+        keepGoing: '2048 reached. Keep going for a higher score.',
+        noMove: 'No tile can move that way.',
+        noMoves: 'No moves left.',
+        noUndo: 'There is no previous move to undo.',
+        restart: 'New board started.',
+        rawModeUnavailable: 'This terminal does not support real-time key input. 2048 needs an interactive TTY.',
+        undo: 'Undid one move.',
+        win: '2048 reached. Keep playing for a higher score.',
+      },
+    },
+  }
+
   base.photo = {
     title: 'Photo',
     description: 'An avatar that works in the terminal',
@@ -199,6 +225,7 @@ export const translation: ITranslation = (() => {
   base.next = 'next'
   base.prev = 'previous'
   base.exit = 'exit'
+  base.back = 'Back'
 
   base.directAccess = 'Open directly'
   base.openWithBrowser = 'Open in browser?'

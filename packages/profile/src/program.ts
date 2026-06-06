@@ -5,6 +5,7 @@ import { Dic, init, t } from './i18n'
 import { consoleError as errorLog, consoleLog as log } from './logger'
 import { buildMenuItems } from './menu'
 import { isUnicodeSupported as detectUnicodeSupport } from './support'
+import { selectWithShortcuts } from './terminal-shortcuts'
 import { displayHeroBanner, profileTheme, prompts } from './util'
 
 const isUnicodeSupported = detectUnicodeSupport()
@@ -12,9 +13,48 @@ const isUnicodeSupported = detectUnicodeSupport()
 function mapMenuItems(menuItems: MenuItem[]) {
   return menuItems.map(item => ({
     title: item.title,
-    description: item.description,
     value: item.value,
+    ...(item.description ? { description: item.description } : {}),
   }))
+}
+
+async function selectMainMenuItem(context: MenuContext, initial: number): Promise<{ value: string, index: number } | null> {
+  const selection = await selectWithShortcuts({
+    message: () => t(Dic.promptMsg) as string,
+    choices: () => mapMenuItems(buildMenuItems(context)),
+    initial,
+  })
+  if (!selection) {
+    return null
+  }
+
+  return {
+    value: selection.value,
+    index: selection.index,
+  }
+}
+
+async function renderCurrentHeroBanner() {
+  const { nickname, name } = profileData
+  const experienceYears = getProfileExperienceYears()
+  const accent = t(Dic.heroBanner.accent, {
+    years: experienceYears,
+    position: t(Dic.profile.position),
+  }) as string
+
+  const taglineText = t(Dic.heroBanner.tagline) as string
+  const taglineLines = taglineText
+    .split('\n')
+    .map(line => line.trim())
+    .filter(Boolean)
+
+  await displayHeroBanner({
+    title: nickname.toUpperCase(),
+    subtitle: t(Dic.welcome, { nickname: name }) as string,
+    accent,
+    tagline: taglineLines,
+    taglineColor: null,
+  })
 }
 
 async function handleMenuSelection(value: string, context: MenuContext) {
@@ -27,26 +67,7 @@ async function handleMenuSelection(value: string, context: MenuContext) {
   const result = await target.handler()
 
   if (value === context.options.changeLanguage) {
-    const { nickname, name } = profileData
-    const experienceYears = getProfileExperienceYears()
-    const accent = t(Dic.heroBanner.accent, {
-      years: experienceYears,
-      position: t(Dic.profile.position),
-    }) as string
-
-    const taglineText = t(Dic.heroBanner.tagline) as string
-    const taglineLines = taglineText
-      .split('\n')
-      .map(line => line.trim())
-      .filter(Boolean)
-
-    await displayHeroBanner({
-      title: nickname.toUpperCase(),
-      subtitle: t(Dic.welcome, { nickname: name }) as string,
-      accent,
-      tagline: taglineLines,
-      taglineColor: null,
-    })
+    await renderCurrentHeroBanner()
   }
 
   if (result === false) {
@@ -76,59 +97,31 @@ export async function main(options?: MainOptions) {
   try {
     await init(options?.language)
 
-    const { nickname, name } = profileData
-    const experienceYears = getProfileExperienceYears()
-    const icebreaker = profileTheme.colors.primary(nickname)
+    const icebreaker = profileTheme.colors.primary(profileData.nickname)
     const context: MenuContext = {
       icebreaker,
       options: optionsData,
       isUnicodeSupported,
     }
 
-    const accent = t(Dic.heroBanner.accent, {
-      years: experienceYears,
-      position: t(Dic.profile.position),
-    }) as string
-
-    const taglineText = t(Dic.heroBanner.tagline) as string
-    const taglineLines = taglineText
-      .split('\n')
-      .map(line => line.trim())
-      .filter(Boolean)
-
-    await displayHeroBanner({
-      title: nickname.toUpperCase(),
-      subtitle: t(Dic.welcome, { nickname: name }) as string,
-      accent,
-      tagline: taglineLines,
-      taglineColor: null,
-    })
+    await renderCurrentHeroBanner()
 
     let continueLoop = true
     let initial = 0
 
     while (continueLoop) {
       const menuItems = buildMenuItems(context)
-      const { value } = await prompts(
-        {
-          type: 'select',
-          name: 'value',
-          message: t(Dic.promptMsg) as string,
-          choices: mapMenuItems(menuItems),
-          initial,
-        },
-        {
-          async onCancel() {
-            if (await confirmExit()) {
-              log(t(Dic.quit.successExitString))
-              process.exit()
-            }
-            return true
-          },
-        },
-      )
+      const selection = await selectMainMenuItem(context, initial)
 
-      const selectedIndex = menuItems.findIndex(item => item.value === value)
+      if (!selection) {
+        if (await confirmExit()) {
+          log(t(Dic.quit.successExitString))
+          process.exit()
+        }
+        continue
+      }
+
+      const selectedIndex = selection.index
       if (selectedIndex === -1) {
         continue
       }

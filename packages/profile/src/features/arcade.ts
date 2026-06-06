@@ -2,6 +2,7 @@ import type { Buffer } from 'node:buffer'
 import process from 'node:process'
 import { Dic, t } from '../i18n'
 import { consoleLog as log } from '../logger'
+import { getShortcutBarText, switchToNextLanguage } from '../terminal-shortcuts'
 import { boxen, profileTheme } from '../util'
 
 type MoveDirection = 'up' | 'down' | 'left' | 'right'
@@ -30,6 +31,9 @@ interface Game2048State {
 const boardSize = 4
 const winningTile = 2048
 const topTiles = new Set([128, 256, 512, 1024, 2048])
+const cursorHome = '\u001B[H'
+const eraseLineRight = '\u001B[K'
+const eraseScreenBelow = '\u001B[J'
 
 function cloneBoard(board: number[][]) {
   return board.map(row => [...row])
@@ -157,7 +161,7 @@ function getMaxTile(board: number[][]) {
   return Math.max(...board.flat())
 }
 
-function parse2048Input(input: Buffer | string): MoveDirection | 'quit' | 'restart' | 'undo' | null {
+function parse2048Input(input: Buffer | string): MoveDirection | 'quit' | 'restart' | 'undo' | 'language' | null {
   const value = input.toString()
   if (value.includes('\u001B[A') || value.toLowerCase().includes('w')) {
     return 'up'
@@ -173,6 +177,9 @@ function parse2048Input(input: Buffer | string): MoveDirection | 'quit' | 'resta
   }
   if (value.includes('\u0003') || value.toLowerCase().includes('q') || value.includes('\u001B')) {
     return 'quit'
+  }
+  if (value.toLowerCase().includes('l')) {
+    return 'language'
   }
   if (value.toLowerCase().includes('r')) {
     return 'restart'
@@ -306,6 +313,16 @@ function render2048Board(state: Game2048State) {
   })
 }
 
+function render2048Frame(state: Game2048State) {
+  const lines = [
+    render2048Board(state),
+    profileTheme.colors.secondary(t(Dic.arcade.games.game2048.controls) as string),
+    profileTheme.colors.secondary(getShortcutBarText()),
+  ].join('\n').split('\n')
+
+  return `${cursorHome}${lines.map(line => `${line}${eraseLineRight}`).join('\n')}${eraseScreenBelow}`
+}
+
 async function run2048Game() {
   const stdin = process.stdin
   const stdout = process.stdout
@@ -324,13 +341,7 @@ async function run2048Game() {
     let stopGame = () => {}
 
     const renderFrame = () => {
-      stdout.write([
-        '\u001B[H',
-        render2048Board(state),
-        '\n',
-        profileTheme.colors.secondary(t(Dic.arcade.games.game2048.controls) as string),
-        '\u001B[J',
-      ].join(''))
+      stdout.write(render2048Frame(state))
     }
 
     const handleSignal = () => {
@@ -347,6 +358,10 @@ async function run2048Game() {
       const action = parse2048Input(input)
       if (action === 'quit') {
         stopGame()
+        return
+      }
+      if (action === 'language') {
+        void switchToNextLanguage().then(renderFrame)
         return
       }
       if (!action) {
@@ -380,6 +395,7 @@ async function run2048Game() {
       stopped = true
       stdin.off('data', onData)
       stdin.setRawMode(Boolean(wasRaw))
+      stdin.pause()
       for (const restoreHandler of restoreHandlers) {
         restoreHandler()
       }
@@ -413,6 +429,7 @@ export const arcadeInternal = {
   moveBoard,
   parse2048Input,
   render2048Board,
+  render2048Frame,
   renderTile,
   undo2048Move,
 }

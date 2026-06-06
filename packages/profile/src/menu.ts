@@ -1,15 +1,14 @@
 import type { ProfileOptions } from './constants'
-import type { SupportedLanguage } from './i18n'
 import type { ProfileSection, TimelineEntry } from './profile-content'
 import { showArcade } from './features/arcade'
 import { showPhotoGallery } from './features/photo-gallery'
-import { showPitchLab } from './features/pitch-lab'
 import { showRepositoryPrompt } from './features/repositories'
 import { showShareCenter } from './features/share-center'
-import { changeLanguage, Dic, getCurrentLanguage, getSupportedLanguages, t } from './i18n'
+import { Dic, t } from './i18n'
 import { consoleLog as log } from './logger'
 import { buildProfileSections, buildTimelineEntries } from './profile-content'
-import { boxen, profileTheme, prompts, sleep, typeWriterLines } from './util'
+import { selectWithShortcuts } from './terminal-shortcuts'
+import { boxen, profileTheme, sleep, typeWriterLines } from './util'
 
 export interface MenuContext {
   icebreaker: string
@@ -27,12 +26,19 @@ export interface MenuItem {
   handler: MenuHandler
 }
 
-type ProfileHubAction = 'overview' | 'timeline' | 'photo' | 'pitchLab' | 'back'
+type ProfileHubAction = 'overview' | 'timeline' | 'photo' | 'back'
+type GameHubAction = 'game2048' | 'back'
 
 interface ProfileHubChoice {
   title: string
   description?: string
   value: ProfileHubAction
+}
+
+interface GameHubChoice {
+  title: string
+  description?: string
+  value: GameHubAction
 }
 
 function headingLine(title: string) {
@@ -93,7 +99,7 @@ async function renderTimeline(entries: TimelineEntry[]) {
 function buildProfileHubChoices(): ProfileHubChoice[] {
   return [
     {
-      title: t(Dic.profile.title),
+      title: t(Dic.profile.summaryTitle),
       description: t(Dic.profile.description),
       value: 'overview',
     },
@@ -108,9 +114,18 @@ function buildProfileHubChoices(): ProfileHubChoice[] {
       value: 'photo',
     },
     {
-      title: t(Dic.pitchLab.title),
-      description: t(Dic.pitchLab.description),
-      value: 'pitchLab',
+      title: t(Dic.back),
+      value: 'back',
+    },
+  ]
+}
+
+function buildGameHubChoices(): GameHubChoice[] {
+  return [
+    {
+      title: t(Dic.arcade.games.game2048.title),
+      description: t(Dic.arcade.games.game2048.description),
+      value: 'game2048',
     },
     {
       title: t(Dic.back),
@@ -126,15 +141,13 @@ function createProfileItem(context: MenuContext): MenuItem {
     title: t(Dic.profile.title),
     description: t(Dic.profile.description, { nickname: icebreaker }),
     async handler() {
-      const response = await prompts({
-        type: 'select',
-        name: 'action',
-        message: t(Dic.profile.menuPrompt),
-        choices: buildProfileHubChoices(),
+      const response = await selectWithShortcuts({
+        message: () => t(Dic.profile.menuPrompt) as string,
+        choices: buildProfileHubChoices,
         initial: 0,
       })
 
-      const action = response?.action as ProfileHubAction | undefined
+      const action = response?.value as ProfileHubAction | undefined
 
       if (!action || action === 'back') {
         return
@@ -147,11 +160,6 @@ function createProfileItem(context: MenuContext): MenuItem {
 
       if (action === 'photo') {
         await showPhotoGallery()
-        return
-      }
-
-      if (action === 'pitchLab') {
-        await showPitchLab()
         return
       }
 
@@ -171,12 +179,23 @@ function createShareCenterItem(context: MenuContext): MenuItem {
   }
 }
 
-function createArcadeItem(context: MenuContext): MenuItem {
+function createGamesItem(context: MenuContext): MenuItem {
   return {
     value: context.options.arcade,
     title: t(Dic.arcade.title),
     description: t(Dic.arcade.description),
     async handler() {
+      const response = await selectWithShortcuts({
+        message: () => t(Dic.arcade.menuPrompt) as string,
+        choices: buildGameHubChoices,
+        initial: 0,
+      })
+
+      const game = response?.value as GameHubAction | undefined
+      if (!game || game === 'back') {
+        return
+      }
+
       await showArcade()
     },
   }
@@ -191,43 +210,6 @@ function createRepositoriesItem(context: MenuContext): MenuItem {
       await showRepositoryPrompt({
         isUnicodeSupported: context.isUnicodeSupported,
       })
-    },
-  }
-}
-
-function createChangeLanguageItem(context: MenuContext): MenuItem {
-  return {
-    value: context.options.changeLanguage,
-    title: t(Dic.changeLanguage.title),
-    description: t(Dic.changeLanguage.description),
-    async handler() {
-      const languages = getSupportedLanguages()
-      const labelMap: Record<SupportedLanguage, string> = {
-        en: 'English',
-        zh: '中文',
-      }
-      const choices = languages.map(language => ({
-        title: labelMap[language],
-        value: language,
-      }))
-
-      const currentLanguage = getCurrentLanguage()
-      const initialIndex = Math.max(
-        0,
-        choices.findIndex(choice => currentLanguage.startsWith(choice.value)),
-      )
-
-      const response = await prompts({
-        type: 'select',
-        name: 'lang',
-        message: t(Dic.changeLanguage.selectMsg),
-        choices,
-        initial: initialIndex,
-      })
-      const selectedLanguage = response?.lang as SupportedLanguage | undefined
-      if (selectedLanguage) {
-        await changeLanguage(selectedLanguage)
-      }
     },
   }
 }
@@ -249,14 +231,14 @@ export function buildMenuItems(context: MenuContext): MenuItem[] {
     createProfileItem(context),
     createRepositoriesItem(context),
     createShareCenterItem(context),
-    createArcadeItem(context),
-    createChangeLanguageItem(context),
+    createGamesItem(context),
     createQuitItem(context),
   ]
 }
 
 /** @internal */
 export const menuInternal = {
+  buildGameHubChoices,
   buildProfileHubChoices,
   buildProfileSections,
 }

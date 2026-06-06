@@ -7,6 +7,7 @@ import prompts from 'prompts'
 export { profileTheme } from './theme'
 export { displayHeroBanner } from './utils/hero-banner'
 export type { HeroBannerOptions } from './utils/hero-banner'
+export { openUrl } from './utils/open-url'
 export {
   animateQrcodeBox,
   generateQrcode,
@@ -16,8 +17,12 @@ export type { QrcodeAnimationOptions } from './utils/qrcode'
 export {
   isComplexType,
   isPrimitivesType,
+  padEndDisplay,
   sleep,
   splitParagraphByLines,
+  stripAnsi,
+  terminalDisplayWidth,
+  truncateDisplay,
 } from './utils/shared'
 export {
   typeWriter,

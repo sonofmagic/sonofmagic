@@ -5,6 +5,7 @@ import readline from 'node:readline'
 import { assetPaths } from '../constants'
 import { Dic, t } from '../i18n'
 import { consoleLog as log, consoleWarn as warn } from '../logger'
+import { getShortcutBarText, switchToNextLanguage } from '../terminal-shortcuts'
 import { profileTheme, sleep, splitParagraphByLines } from '../util'
 
 const defaultPhotoDir = assetPaths.photosDir
@@ -23,6 +24,15 @@ function normalizePhotoIndex(index: number, total: number) {
   return normalized < 0 ? normalized + total : normalized
 }
 
+function isPhotoExitKey(input: string, key?: readline.Key) {
+  return Boolean(
+    input === '\u001B'
+    || key?.name === 'escape'
+    || key?.name === 'q'
+    || (key?.ctrl && key.name === 'c'),
+  )
+}
+
 function enableRawMode(stream: NodeJS.ReadStream) {
   const canToggle = Boolean(stream.isTTY && typeof stream.setRawMode === 'function')
   if (!canToggle) {
@@ -33,6 +43,7 @@ function enableRawMode(stream: NodeJS.ReadStream) {
   stream.setRawMode(true)
   return () => {
     stream.setRawMode(Boolean(previous))
+    stream.pause()
   }
 }
 
@@ -71,8 +82,9 @@ async function renderPhoto(index: number, photoDir: string, total: number) {
   log(
     `\n${t(Dic.page)}: ${index + 1}/${total} ${t(Dic.prev)}: ${profileTheme.colors.arrowHint('← ↑')} ${t(
       Dic.next,
-    )}: ${profileTheme.colors.arrowHint('→ ↓')} ${t(Dic.exit)}: ${profileTheme.colors.arrowHint('ctrl + c')}`,
+    )}: ${profileTheme.colors.arrowHint('→ ↓')}`,
   )
+  log(profileTheme.colors.secondary(getShortcutBarText()))
 }
 
 export async function showPhotoGallery(options: PhotoGalleryOptions = {}) {
@@ -104,7 +116,7 @@ export async function showPhotoGallery(options: PhotoGalleryOptions = {}) {
   readline.emitKeypressEvents(process.stdin, rl)
   const restoreRawMode = enableRawMode(process.stdin)
 
-  const handleKeypress = async (_: string, key?: readline.Key) => {
+  const handleKeypress = async (input: string, key?: readline.Key) => {
     if (loading || !key) {
       return
     }
@@ -115,7 +127,11 @@ export async function showPhotoGallery(options: PhotoGalleryOptions = {}) {
     else if (key.name === 'left' || key.name === 'up') {
       await render(index - 1)
     }
-    else if (key.ctrl && key.name === 'c') {
+    else if (key.name === 'l') {
+      await switchToNextLanguage()
+      await render(index)
+    }
+    else if (isPhotoExitKey(input, key)) {
       rl.close()
     }
   }
@@ -135,4 +151,5 @@ export async function showPhotoGallery(options: PhotoGalleryOptions = {}) {
 export const photoGalleryInternal = {
   normalizePhotoIndex,
   buildPhotoPath,
+  isPhotoExitKey,
 }

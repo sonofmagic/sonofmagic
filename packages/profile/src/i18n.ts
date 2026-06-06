@@ -1,5 +1,7 @@
 import type { i18n as I18nInstance, TFunction } from 'i18next'
+import { execFile as execFileWithCallback } from 'node:child_process'
 import process from 'node:process'
+import { promisify } from 'node:util'
 import { createInstance } from 'i18next'
 import resources from './resources'
 import Dic from './resources/dic'
@@ -9,6 +11,8 @@ export type SupportedLanguage = typeof supportedLanguages[number]
 
 const defaultLanguage: SupportedLanguage = 'zh'
 const localeSeparatorPattern = /_/g
+const macOSLocaleReadTimeout = 500
+const execFile = promisify(execFileWithCallback)
 
 let cachedInstance: I18nInstance | null = null
 let initializationPromise: Promise<void> | null = null
@@ -53,6 +57,55 @@ function detectFromEnv(): SupportedLanguage | undefined {
   return undefined
 }
 
+function extractMacOSLocaleCandidates(output: string): string[] {
+  const quotedMatches = [...output.matchAll(/"([^"]+)"/g)]
+    .map(match => match[1])
+    .filter((value): value is string => Boolean(value))
+
+  if (quotedMatches.length > 0) {
+    return quotedMatches
+  }
+
+  return output
+    .split(/[\n,;]/)
+    .map(value => value.replace(/[()"]/g, '').trim())
+    .filter(Boolean)
+}
+
+async function readMacOSDefault(key: string): Promise<string | undefined> {
+  if (process.platform !== 'darwin') {
+    return undefined
+  }
+
+  try {
+    const { stdout } = await execFile('defaults', ['read', '-g', key], {
+      timeout: macOSLocaleReadTimeout,
+    })
+    return stdout
+  }
+  catch {
+    return undefined
+  }
+}
+
+async function detectFromMacOSDefaults(): Promise<SupportedLanguage | undefined> {
+  const appleLocale = await readMacOSDefault('AppleLocale')
+  const localeMatch = matchSupportedLanguage(sanitizeLocaleTag(appleLocale))
+  if (localeMatch) {
+    return localeMatch
+  }
+
+  const appleLanguages = await readMacOSDefault('AppleLanguages')
+  for (const candidate of extractMacOSLocaleCandidates(appleLanguages ?? '')) {
+    const matched = matchSupportedLanguage(sanitizeLocaleTag(candidate))
+    if (matched) {
+      return matched
+    }
+  }
+
+  return undefined
+}
+
 function detectFromIntl(): SupportedLanguage | undefined {
   try {
     const locale = sanitizeLocaleTag(Intl.DateTimeFormat().resolvedOptions().locale)
@@ -66,6 +119,7 @@ function detectFromIntl(): SupportedLanguage | undefined {
 async function detectLanguage(): Promise<SupportedLanguage> {
   return (
     detectFromEnv()
+    ?? await detectFromMacOSDefaults()
     ?? detectFromIntl()
     ?? defaultLanguage
   )
@@ -142,4 +196,11 @@ export function getI18nInstance() {
     throw new Error('i18n has not been initialized. Call init() first.')
   }
   return cachedInstance
+}
+
+/** @internal */
+export const i18nInternal = {
+  extractMacOSLocaleCandidates,
+  matchSupportedLanguage,
+  sanitizeLocaleTag,
 }

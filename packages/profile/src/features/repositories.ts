@@ -2,7 +2,8 @@ import { createSpinner } from 'nanospinner'
 import { Dic, t } from '../i18n'
 import { consoleLog as log, consoleWarn as warn } from '../logger'
 import { getFallbackRepoList, getRepoList, getRepositorySpotlight } from '../repos'
-import { animateQrcodeBox, boxen, emoji, generateQrcode, profileTheme, prompts, typeWriterLines } from '../util'
+import { selectWithShortcuts } from '../terminal-shortcuts'
+import { animateQrcodeBox, boxen, emoji, generateQrcode, openUrl, profileTheme, typeWriterLines } from '../util'
 
 interface RepositoryPromptOptions {
   isUnicodeSupported: boolean
@@ -22,12 +23,16 @@ interface RepoChoice {
 }
 
 type RepositoryAction = 'open' | 'details' | 'qrcode' | 'shareText' | 'back'
+interface RepositoryListAction {
+  type: 'repo'
+  selection: Selection
+}
 
 const iconCache = new Map<boolean, {
   starIcon: string
   forkIcon: string
 }>()
-let openModulePromise: Promise<typeof import('open')> | null = null
+const repositoryPageSize = 8
 
 function getRepositoryIcons(isUnicodeSupported: boolean) {
   const cached = iconCache.get(isUnicodeSupported)
@@ -65,6 +70,50 @@ function buildRepoChoices(repos: RepoSummary[], isUnicodeSupported: boolean): Re
   }))
 }
 
+function getRepositoryPageCount(repos: RepoSummary[], pageSize = repositoryPageSize) {
+  return Math.max(1, Math.ceil(repos.length / pageSize))
+}
+
+function buildPagedRepoChoices(
+  repos: RepoSummary[],
+  isUnicodeSupported: boolean,
+  page: number,
+  pageSize = repositoryPageSize,
+): Array<{
+  title: string
+  description?: string
+  value: RepositoryListAction
+}> {
+  const pageCount = getRepositoryPageCount(repos, pageSize)
+  const normalizedPage = Math.min(Math.max(0, page), pageCount - 1)
+  const start = normalizedPage * pageSize
+  const pageChoices: Array<{
+    title: string
+    description?: string
+    value: RepositoryListAction
+  }> = buildRepoChoices(repos.slice(start, start + pageSize), isUnicodeSupported)
+    .map(choice => ({
+      ...choice,
+      value: {
+        type: 'repo',
+        selection: {
+          index: start + choice.value.index,
+          repo: choice.value.repo,
+        },
+      } satisfies RepositoryListAction,
+    }))
+
+  return pageChoices
+}
+
+function buildRepositoryPagerText(page: number, pageCount: number) {
+  if (pageCount <= 1) {
+    return ''
+  }
+
+  return `${profileTheme.colors.arrowHint('←')} ${t(Dic.prev)} · ${profileTheme.colors.arrowHint('→')} ${t(Dic.next)} · ${t(Dic.page)} ${page + 1}/${pageCount}`
+}
+
 function resolveSpotlightContent(repoName: string) {
   const spotlight = getRepositorySpotlight(repoName)
   if (!spotlight) {
@@ -86,14 +135,6 @@ function resolveSpotlightContent(repoName: string) {
     tagline: t(keys.tagline),
     bestFor: String(t(keys.bestFor)).split(',').map(item => item.trim()).filter(Boolean),
   }
-}
-
-async function openRepository(url: string) {
-  if (!openModulePromise) {
-    openModulePromise = import('open')
-  }
-  const mod = await openModulePromise
-  await mod.default(url)
 }
 
 async function renderRepositoryDetails(repo: RepoSummary) {
@@ -171,18 +212,16 @@ function buildRepositoryActionChoices(): Array<{ title: string, value: Repositor
 }
 
 async function handleRepositorySelection(selection: Selection) {
-  const { action } = await prompts({
-    type: 'select',
-    name: 'action',
+  const response = await selectWithShortcuts({
     message: selection.repo.name,
-    choices: buildRepositoryActionChoices(),
+    choices: buildRepositoryActionChoices,
     initial: 0,
   })
 
-  const selectedAction = action as RepositoryAction | undefined
+  const selectedAction = response?.value as RepositoryAction | undefined
 
   if (selectedAction === 'open') {
-    await openRepository(selection.repo.html_url)
+    await openUrl(selection.repo.html_url)
   }
 
   if (selectedAction === 'details') {
@@ -201,29 +240,33 @@ async function handleRepositorySelection(selection: Selection) {
 }
 
 async function promptLoop(repos: RepoSummary[], isUnicodeSupported: boolean) {
+  let page = 0
   let initial = 0
   let keepPrompt = true
-  const baseChoices = buildRepoChoices(repos, isUnicodeSupported)
 
   while (keepPrompt) {
-    await prompts(
-      {
-        type: 'autocomplete',
-        name: 'selection',
-        message: t(Dic.myRepositories.promptMsg),
-        choices: baseChoices.map(choice => ({ ...choice })),
-        initial,
+    const pageCount = getRepositoryPageCount(repos)
+    const response = await selectWithShortcuts({
+      message: () => `${t(Dic.myRepositories.promptMsg)} ${page + 1}/${pageCount}`,
+      choices: () => buildPagedRepoChoices(repos, isUnicodeSupported, page),
+      initial,
+      footer: () => buildRepositoryPagerText(page, pageCount),
+      onLeft: () => {
+        page = page === 0 ? pageCount - 1 : page - 1
       },
-      {
-        async onSubmit(_prompt, selection: Selection) {
-          initial = selection.index
-          await handleRepositorySelection(selection)
-        },
-        onCancel() {
-          keepPrompt = false
-        },
+      onRight: () => {
+        page = (page + 1) % pageCount
       },
-    )
+    })
+
+    const action = response?.value
+    if (!action) {
+      keepPrompt = false
+      continue
+    }
+
+    initial = Math.min(response.index, repositoryPageSize - 1)
+    await handleRepositorySelection(action.selection)
   }
 }
 
@@ -256,8 +299,11 @@ export async function showRepositoryPrompt(options: RepositoryPromptOptions) {
 
 /** @internal */
 export const repositoryInternal = {
+  buildPagedRepoChoices,
+  buildRepositoryPagerText,
   buildRepositoryActionChoices,
   buildRepositoryShareLines,
+  getRepositoryPageCount,
   formatRepositoryLabel,
   renderRepositoryShareText,
   renderRepositoryDetails,

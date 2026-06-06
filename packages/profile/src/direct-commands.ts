@@ -7,7 +7,7 @@ import { Dic, getSupportedLanguages, init, t } from './i18n'
 import { consoleLog as log } from './logger'
 import { buildTimelineEntries, renderProfileMarkdown } from './profile-content'
 import { getFallbackRepoList, getRepositorySpotlight, getRepositorySpotlights } from './repos'
-import { generateQrcode } from './util'
+import { generateQrcode, openUrl } from './util'
 
 const linkAliasMap: Record<string, ProfileLinkKey> = {
   gh: 'github',
@@ -17,8 +17,6 @@ const linkAliasMap: Record<string, ProfileLinkKey> = {
   site: 'website',
   web: 'website',
 }
-let openModulePromise: Promise<typeof import('open')> | null = null
-
 function normalizeToken(value: string) {
   return value.trim().toLowerCase().replaceAll('_', '-')
 }
@@ -129,14 +127,6 @@ function buildProjectRecords() {
 
 async function writeOutputFile(outputPath: string, content: string) {
   await writeFile(outputPath, content, 'utf8')
-}
-
-async function openUrl(url: string) {
-  if (!openModulePromise) {
-    openModulePromise = import('open')
-  }
-  const mod = await openModulePromise
-  await mod.default(url)
 }
 
 function assertNoJson(commandName: string, json?: boolean) {

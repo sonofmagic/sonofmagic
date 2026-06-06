@@ -16,11 +16,12 @@ export const translation: ITranslation = (() => {
 
   base.welcome = 'I am {{nickname}}. This is my terminal profile.'
   base.promptMsg = `${theme.colors.prompt('Pick')} something to open`
+  base.promptHint = 'arrow keys / Enter / L language / Q or Esc back'
 
   base.profile = {
     ...base.profile,
     title: 'About Me',
-    description: 'I build mini-program tooling, frontend build systems, and engineering tools that can actually ship.',
+    description: 'I like open source, especially when an internal shortcut turns out to be useful for someone else too.',
     job: 'Platform engineering and full-stack architecture',
     position: 'Full-stack Architect / Technical Lead',
     summaryTitle: 'Quick intro',
@@ -28,13 +29,13 @@ export const translation: ITranslation = (() => {
       `${ansis.bold(name)} · ${theme.colors.primaryStrong(nickname)}`,
       `${emoji.get('handbag')} ${theme.colors.primaryStrong(
         `${experienceYears}`,
-      )}+ years on product and engineering work | ${emoji.get('sparkles')} tooling, automation, and production engineering debt`,
+      )}+ years in product and engineering | ${emoji.get('sparkles')} open source, full-stack work, tooling, and automation`,
     ].join('\n'),
     strengthsTitle: 'What I am good at',
     strengths: [
-      `${emoji.get('rocket')} I have maintained mini-program tooling long enough to know where real projects break down`,
-      `${emoji.get('memo')} I turn repeated work into scripts, plugins, or release pipelines with fewer manual steps`,
-      `${emoji.get('chart_with_upwards_trend')} I care about performance, reliability, and the cost of maintaining the code later`,
+      `${emoji.get('rocket')} I can move between product goals and code details without losing the thread`,
+      `${emoji.get('memo')} When the same project problem keeps showing up, I tend to turn it into a tool, plugin, or release script`,
+      `${emoji.get('chart_with_upwards_trend')} I think about performance and reliability, but also about the next person who has to change the code`,
     ].join('\n'),
     skillsTitle: 'Tech stack',
     skills: [
@@ -48,20 +49,20 @@ export const translation: ITranslation = (() => {
     expectation: [
       `${emoji.get('handshake')} Start with the problem, then choose the implementation path`,
       `${emoji.get('hourglass')} Move fast when needed, but make the tradeoffs explicit`,
-      `${emoji.get('point_right')} Prefer maintainable systems over code that only looks smart on day one`,
+      `${emoji.get('point_right')} Code still has to make sense six months later`,
     ].join('\n'),
     experienceTitle: 'A few milestones',
     experience: [
-      '2016 → now: publishing open-source tools around mini-program workflows and build pipelines',
-      '2021 → now: maintaining weapp-tailwindcss to make Tailwind usable in WeChat mini-programs',
-      '2024 → now: shipping weapp-vite to connect mini-program projects with modern build pipelines',
-      '2026 → now: launching mokup, a file-based mock toolkit for Vite, CLI builds, and runtime adapters',
+      '2016 → now: building products and systems, then open-sourcing the bits that are useful outside one project',
+      '2021 → now: maintaining weapp-tailwindcss to deal with styling, build adaptation, and team conventions',
+      '2024 → now: shipping weapp-vite so older projects can get faster feedback and a plugin-based build flow',
+      '2026 → now: launching mokup, a file-based mock toolkit that cuts down repetitive configuration',
     ].join('\n'),
     projectsTitle: 'Tooling map',
     projects: '{{projectsTree}}',
     closingTitle: 'Topics',
     closing: [
-      'Mini-program engineering, cross-platform architecture, build performance, and toolchain design are all in scope.',
+      'A good conversation can start from open-source maintenance, full-stack architecture, build performance, automation, or the small tools a team uses every day.',
       'Public channels: GitHub / Juejin / Blog / X.',
     ].join('\n'),
     menuPrompt: 'Which profile section do you want to open?',
@@ -79,7 +80,7 @@ export const translation: ITranslation = (() => {
 
   base.shareCenter = {
     title: 'Share Center',
-    description: 'QR codes, browser opens, and copy-ready terminal commands',
+    description: 'Ways to reach me and my work',
     targetPrompt: 'What do you want to share?',
     actionPrompt: 'What should happen with {{target}}?',
     shareTitle: '{{nickname}}\'s {{target}}',
@@ -104,45 +105,10 @@ export const translation: ITranslation = (() => {
     },
   }
 
-  base.pitchLab = {
-    title: 'Pitch Lab',
-    description: 'Generate a 30-second intro for a specific audience',
-    promptMsg: 'Who is this intro for?',
-    copyHint: 'Copy this text directly, or switch language to generate the Chinese version.',
-    audiences: {
-      oss: {
-        title: 'Open-source community',
-        description: 'Focus on maintenance experience, tooling, and project direction',
-        body: [
-          'I am {{nickname}}, with {{years}}+ years in product and engineering work, focused on mini-program tooling, frontend build systems, and Node.js toolchains.',
-          'I maintain projects such as weapp-tailwindcss, weapp-vite, and mokup, where the goal is to turn repeated build, styling, mock, and migration problems into reusable tools.',
-          'If you work on mini-programs, cross-platform systems, or engineering efficiency, I prefer starting from a concrete problem and then turning the solution into something others can reuse.',
-        ].join('\n'),
-      },
-      hiring: {
-        title: 'Hiring or interview',
-        description: 'Focus on role fit, delivery, and collaboration style',
-        body: [
-          'I am {{name}}, also known as {{nickname}}, a {{position}} with {{years}}+ years of hands-on product and engineering experience.',
-          'My strength is turning business problems into engineering plans, then shipping them through frontend systems, Node.js services, build tooling, and automation.',
-          'I am a strong fit for platform engineering, frontend architecture, toolchain governance, and gradual modernization of complex projects.',
-        ].join('\n'),
-      },
-      collaboration: {
-        title: 'Project collaboration',
-        description: 'Focus on problem framing, delivery, and long-term maintenance',
-        body: [
-          'I am {{nickname}}, and I build engineering tools and systems that are meant to ship and keep running.',
-          'In collaboration, I start by making the goal, boundary, and risk explicit, then choose a technical path that can survive beyond the first delivery.',
-          'Mini-program engineering, cross-platform architecture, build performance, mock systems, and team toolchains are all good places to start a concrete conversation.',
-        ].join('\n'),
-      },
-    },
-  }
-
   base.arcade = {
-    title: '2048',
-    description: 'Slide tiles directly from the keyboard',
+    title: 'Games',
+    description: '2048 now, more terminal games later',
+    menuPrompt: 'Pick a game',
     score: 'Score',
     gameOver: 'Game over. Final score: {{score}}',
     games: {
@@ -176,7 +142,7 @@ export const translation: ITranslation = (() => {
     items: {
       openSource: {
         title: 'Started publishing open-source tools',
-        detail: 'Most of them started as fixes for problems I hit in mini-program workflows and build pipelines.',
+        detail: 'Most of them started as fixes for problems I hit in product work, engineering collaboration, and build pipelines.',
       },
       weappTailwindcss: {
         title: 'weapp-tailwindcss',
@@ -219,6 +185,7 @@ export const translation: ITranslation = (() => {
     title: 'Switch language',
     description: 'Chinese / English',
     selectMsg: 'Pick a language',
+    shortcutHint: 'L language {{language}} -> {{nextLanguage}}',
   }
 
   base.page = 'page'

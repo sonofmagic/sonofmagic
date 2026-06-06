@@ -9,38 +9,39 @@ const experienceYears = getProfileExperienceYears()
 export const translation: ITranslation = {
   welcome: '我是 {{nickname}}，这里是我的终端名片',
   promptMsg: `${theme.colors.prompt('请选择')} 想看的内容`,
+  promptHint: '方向键 / 回车 / L 切语言 / Q 或 Esc 返回',
   profile: {
     title: '关于我',
-    description: '我主要写小程序工程化、前端构建和能落地的工程工具',
+    description: '喜欢开源。内部用着顺手的小工具，如果别人也可能用得上，我就想把它整理出来',
     content: [
       `${ansis.bold(name)} · ${theme.colors.primary('Engineering Portfolio')}`,
       `\n\n${emoji.get('handbag')} ${theme.colors.primaryStrong(
         `${experienceYears}`,
-      )} 年产品和工程一线 | ${emoji.get('rocket')} 写能落地的工具，做能长期跑的系统`,
+      )} 年产品和工程一线 | ${emoji.get('rocket')} 写代码，也折腾工具。能开源的，我一般会尽量开源`,
       `\n\n${theme.colors.heading('|')} 我比较擅长`,
-      '\n把业务问题拆成工程方案，把复杂流程收进工具链',
+      '\n把一团乱的问题拆开，先让它能跑，再把重复的部分收进工具里',
       `\n\n${theme.colors.heading('|')} 常用技术`,
-      '\n小程序、前端构建、Node.js、Serverless、自动化脚本和工程工具',
+      '\nTypeScript、Web 架构、Node.js、Serverless、构建系统和自动化脚本',
       `\n\n${theme.colors.heading('|')} 合作习惯`,
       `\n${emoji.get('handshake')} 先讲清目标 | ${emoji.get('hourglass')} 提前说清取舍 | ${emoji.get('chart_with_upwards_trend')} 用结果校验`,
       `\n\n${theme.colors.heading('|')} 做过的事`,
-      '\n做过从 0 到 1 的项目，也维护过长期演进的工具链；更在意代码能不能进生产、能不能继续维护',
+      '\n做过从 0 到 1 的产品，也维护过需要经常修修补补的开源项目。比起写得漂亮，我更在意它半年后还能不能改',
       `\n\n${theme.colors.heading('|')} 技术树`,
       '\n{{projectsTree}}',
-      '\n如果你也在做小程序、构建工具或工程效率，可以聊聊。',
+      '\n如果你也在写工具、做开源，或者只是被工程里的重复劳动烦到了，可以聊聊。',
     ].join(''),
     position: '全栈架构工程师 / 技术负责人',
     job: '做平台工程和全栈架构相关工作',
     summaryTitle: '简介',
     summary: [
       `${ansis.bold(name)} · ${theme.colors.primaryStrong(nickname)}`,
-      `${emoji.get('handbag')} ${theme.colors.primaryStrong(`${experienceYears}`)} 年产品和工程一线 | ${emoji.get('sparkles')} 写工具链、做自动化，也处理真实项目里的工程债`,
+      `${emoji.get('handbag')} ${theme.colors.primaryStrong(`${experienceYears}`)} 年产品和工程一线 | ${emoji.get('sparkles')} 开源爱好者，平时写全栈、工具链和自动化比较多`,
     ].join('\n'),
     strengthsTitle: '我比较擅长',
     strengths: [
-      `${emoji.get('rocket')} 长期维护小程序相关工具，知道真实项目会卡在哪些地方`,
-      `${emoji.get('memo')} 把重复流程做成脚本、插件或发布链路，减少手工步骤`,
-      `${emoji.get('chart_with_upwards_trend')} 写代码时会同时看性能、稳定性和后续维护成本`,
+      `${emoji.get('rocket')} 能从产品目标聊到代码细节，中间的坑也愿意一起填`,
+      `${emoji.get('memo')} 真实项目里反复踩到的坑，我会顺手做成工具、插件或发布脚本`,
+      `${emoji.get('chart_with_upwards_trend')} 写代码时会想性能和稳定性，也会想下一个接手的人会不会骂我`,
     ].join('\n'),
     skillsTitle: '技术栈',
     skills: [
@@ -54,27 +55,27 @@ export const translation: ITranslation = {
     expectation: [
       `${emoji.get('handshake')} 先讲清要解决的问题，再定实现路径`,
       `${emoji.get('hourglass')} 节奏可以快，关键取舍必须提前说清`,
-      `${emoji.get('point_right')} 少做花活，更看重半年后还能维护`,
+      `${emoji.get('point_right')} 少做花活。代码过半年再看，还能改，这点很重要`,
     ].join('\n'),
     experienceTitle: '一些经历',
     experience: [
-      '2016 至今：陆续写了一些和小程序工作流、构建流程有关的开源工具',
-      '2021 至今：维护 weapp-tailwindcss，把 Tailwind 的写法带到微信小程序项目里',
-      '2024 至今：发布 weapp-vite，把小程序项目接到更现代的构建流程里',
-      '2026 至今：推出 mokup，用文件路由的方式处理开发和构建时的 Mock',
+      '2016 至今：一边做产品和工程，一边把顺手的东西整理成开源项目',
+      '2021 至今：维护 weapp-tailwindcss，主要解决样式、构建适配和团队写法统一的问题',
+      '2024 至今：发布 weapp-vite，想让老项目也能有更快的开发反馈和插件化构建',
+      '2026 至今：推出 mokup，用文件路由组织 Mock，少写一点重复配置',
     ].join('\n'),
     projectsTitle: '项目树',
     projects: '{{projectsTree}}',
     closingTitle: '可以聊什么',
     closing: [
-      '小程序工程化、跨端架构、构建性能、工具链设计，都可以聊。',
+      '可以从开源维护、全栈架构、构建性能、自动化，或者团队每天都要用的小工具聊起。',
       '常用公开渠道：GitHub / Juejin / Blog / X。',
     ].join('\n'),
     menuPrompt: '想看哪部分关于我的内容?',
   },
   heroBanner: {
     accent: '{{years}} 年产品与工程一线 | {{position}}',
-    tagline: 'TypeScript · Web · Cloud Native\n写能落地的工具，做能长期跑的系统。',
+    tagline: 'TypeScript · Web · Cloud Native\n写工具，也写上线后还要继续养的系统。',
   },
   contact: {
     title: '联系方式',
@@ -82,7 +83,7 @@ export const translation: ITranslation = {
   },
   shareCenter: {
     title: '分享中心',
-    description: '二维码、浏览器打开和可复制的分享命令',
+    description: '这些入口能直接找到我和我的项目',
     targetPrompt: '想分享哪个入口?',
     actionPrompt: '对 {{target}} 做什么?',
     shareTitle: '{{nickname}} 的 {{target}}',
@@ -106,44 +107,10 @@ export const translation: ITranslation = {
       back: '重新选择入口',
     },
   },
-  pitchLab: {
-    title: '介绍生成器',
-    description: '按不同场景生成一段 30 秒自我介绍',
-    promptMsg: '这段介绍要给谁看?',
-    copyHint: '可以直接复制这段文字，也可以继续切换语言生成英文版本。',
-    audiences: {
-      oss: {
-        title: '给开源社区',
-        description: '强调维护经验、工具链和项目方向',
-        body: [
-          '我是 {{nickname}}，{{years}} 年产品和工程一线，主要做小程序工程化、前端构建和 Node.js 工具链。',
-          '我长期维护 weapp-tailwindcss、weapp-vite 和 mokup 这类开源项目，关注真实项目里会反复出现的构建、样式、Mock 和迁移问题。',
-          '如果你也在做小程序、跨端或工程效率，我们可以从具体问题聊起，再一起把方案沉淀成可复用工具。',
-        ].join('\n'),
-      },
-      hiring: {
-        title: '给招聘/面试',
-        description: '强调岗位匹配、落地能力和协作方式',
-        body: [
-          '我是 {{name}}，也叫 {{nickname}}，{{position}}，有 {{years}} 年产品和工程一线经验。',
-          '我的强项是把业务问题拆成工程方案，再用前端、Node.js、构建工具和自动化流程把方案落到生产环境。',
-          '我适合负责平台工程、前端架构、工具链治理和复杂项目的渐进式改造。',
-        ].join('\n'),
-      },
-      collaboration: {
-        title: '给合作方',
-        description: '强调问题拆解、交付和长期维护',
-        body: [
-          '我是 {{nickname}}，主要做能落地的工程工具和可长期维护的系统。',
-          '合作时我会先把目标、边界和风险讲清楚，再选择足够稳的技术路径，避免只解决眼前问题。',
-          '小程序工程化、跨端架构、构建性能、Mock 体系和团队工具链，都可以从一次具体项目开始聊。',
-        ].join('\n'),
-      },
-    },
-  },
   arcade: {
-    title: '2048',
-    description: '直接用键盘在终端里滑动数字块',
+    title: '游戏',
+    description: '2048 和以后更多终端小游戏',
+    menuPrompt: '想玩哪个游戏?',
     score: '分数',
     gameOver: '游戏结束，最终分数 {{score}}',
     games: {
@@ -175,7 +142,7 @@ export const translation: ITranslation = {
     items: {
       openSource: {
         title: '开始写开源工具',
-        detail: '最早是为了解决自己在小程序和构建流程里遇到的问题。',
+        detail: '最早是为了解决自己在产品、工程协作和构建流程里遇到的问题。',
       },
       weappTailwindcss: {
         title: 'weapp-tailwindcss',
@@ -213,6 +180,7 @@ export const translation: ITranslation = {
     title: '切换语言',
     selectMsg: '想用哪种语言?',
     description: '中文 / English',
+    shortcutHint: 'L 语言 {{language}} -> {{nextLanguage}}',
   },
   page: '页码',
   next: '下一张',

@@ -2,7 +2,8 @@ import type { ProfileLinkKey } from '../constants'
 import { profileData, profileLinks } from '../constants'
 import { Dic, t } from '../i18n'
 import { consoleLog as log } from '../logger'
-import { animateQrcodeBox, boxen, generateQrcode, prompts, typeWriterLines } from '../util'
+import { selectWithShortcuts } from '../terminal-shortcuts'
+import { animateQrcodeBox, boxen, generateQrcode, openUrl, typeWriterLines } from '../util'
 
 type ShareAction = 'qrcode' | 'open' | 'shareText' | 'back'
 
@@ -11,8 +12,6 @@ interface ShareChoice<TValue extends string> {
   description?: string
   value: TValue
 }
-
-let openModulePromise: Promise<typeof import('open')> | null = null
 
 const targetKeys = Object.keys(profileLinks) as ProfileLinkKey[]
 
@@ -30,8 +29,8 @@ function buildTargetChoices(): Array<ShareChoice<ProfileLinkKey>> {
 
 function buildActionChoices(): Array<ShareChoice<ShareAction>> {
   return [
-    { title: t(Dic.shareCenter.actions.qrcode) as string, value: 'qrcode' },
     { title: t(Dic.shareCenter.actions.open) as string, value: 'open' },
+    { title: t(Dic.shareCenter.actions.qrcode) as string, value: 'qrcode' },
     { title: t(Dic.shareCenter.actions.shareText) as string, value: 'shareText' },
     { title: t(Dic.shareCenter.actions.back) as string, value: 'back' },
   ]
@@ -76,15 +75,6 @@ function renderShareText(target: ProfileLinkKey) {
   })
 }
 
-async function openUrl(url: string) {
-  if (!openModulePromise) {
-    openModulePromise = import('open')
-  }
-
-  const mod = await openModulePromise
-  await mod.default(url)
-}
-
 async function handleTargetAction(target: ProfileLinkKey, action: ShareAction) {
   const url = profileLinks[target]
 
@@ -115,32 +105,28 @@ export async function showShareCenter() {
 
   while (keepPrompt) {
     const targetChoices = buildTargetChoices()
-    const targetResponse = await prompts({
-      type: 'select',
-      name: 'target',
-      message: t(Dic.shareCenter.targetPrompt),
-      choices: targetChoices,
+    const targetResponse = await selectWithShortcuts({
+      message: () => t(Dic.shareCenter.targetPrompt) as string,
+      choices: buildTargetChoices,
       initial: targetInitial,
     })
 
-    const target = targetResponse?.target as ProfileLinkKey | undefined
+    const target = targetResponse?.value as ProfileLinkKey | undefined
     if (!target) {
       break
     }
 
     targetInitial = Math.max(0, targetChoices.findIndex(choice => choice.value === target))
 
-    const actionResponse = await prompts({
-      type: 'select',
-      name: 'action',
-      message: t(Dic.shareCenter.actionPrompt, {
+    const actionResponse = await selectWithShortcuts({
+      message: () => t(Dic.shareCenter.actionPrompt, {
         target: getTargetLabel(target),
-      }),
-      choices: buildActionChoices(),
+      }) as string,
+      choices: buildActionChoices,
       initial: 0,
     })
 
-    const action = actionResponse?.action as ShareAction | undefined
+    const action = actionResponse?.value as ShareAction | undefined
     if (!action || action === 'back') {
       continue
     }

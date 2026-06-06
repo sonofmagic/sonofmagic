@@ -2,4 +2,4 @@
 "@icebreakers/profile": patch
 ---
 
-Add an interactive pitch lab for audience-specific profile intros.
+移除介绍生成器入口，精简关于我菜单。

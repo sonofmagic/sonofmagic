@@ -24,6 +24,7 @@ function setObjPath(dic: Record<string, unknown>, res: Record<string, unknown>, 
 const Dic = {
   welcome: '',
   promptMsg: '',
+  promptHint: '',
 
   profile: {
     title: '',
@@ -83,33 +84,10 @@ const Dic = {
     },
   },
 
-  pitchLab: {
-    title: '',
-    description: '',
-    promptMsg: '',
-    copyHint: '',
-    audiences: {
-      oss: {
-        title: '',
-        description: '',
-        body: '',
-      },
-      hiring: {
-        title: '',
-        description: '',
-        body: '',
-      },
-      collaboration: {
-        title: '',
-        description: '',
-        body: '',
-      },
-    },
-  },
-
   arcade: {
     title: '',
     description: '',
+    menuPrompt: '',
     score: '',
     gameOver: '',
     games: {
@@ -182,7 +160,7 @@ const Dic = {
     successExitString: '',
   },
 
-  changeLanguage: { title: '', description: '', selectMsg: '' },
+  changeLanguage: { title: '', description: '', selectMsg: '', shortcutHint: '' },
   page: '',
   next: '',
   prev: '',

@@ -1,16 +1,17 @@
+import readline from 'node:readline'
 import axios from 'axios'
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest'
 import { cliInternal } from '@/cli'
 import { optionsData, profileLinks } from '@/constants'
 import { arcadeInternal } from '@/features/arcade'
 import { photoGalleryInternal } from '@/features/photo-gallery'
-import { pitchLabInternal } from '@/features/pitch-lab'
 import { repositoryInternal } from '@/features/repositories'
 import { shareCenterInternal } from '@/features/share-center'
-import { changeLanguage, Dic, getCurrentLanguage, getSupportedLanguages, init, t } from '@/i18n'
+import { changeLanguage, Dic, getCurrentLanguage, getSupportedLanguages, i18nInternal, init, t } from '@/i18n'
 import { buildMenuItems, menuInternal } from '@/menu'
 import { getFallbackRepoList, getRepoList, getRepositorySpotlight } from '@/repos'
-import { emoji, isComplexType, isPrimitivesType, splitParagraphByLines } from '@/util'
+import { terminalShortcutsInternal } from '@/terminal-shortcuts'
+import { emoji, isComplexType, isPrimitivesType, splitParagraphByLines, terminalDisplayWidth, truncateDisplay } from '@/util'
 
 vi.mock('axios')
 
@@ -77,8 +78,24 @@ describe('splitParagraphByLines', () => {
   })
 })
 
+describe('terminal display width', () => {
+  it('counts ansi, chinese text, and emoji by visible terminal width', () => {
+    expect(terminalDisplayWidth('\u001B[32m关于我\u001B[39m')).toBe(6)
+    expect(terminalDisplayWidth('About')).toBe(5)
+    expect(terminalDisplayWidth('🚀')).toBe(2)
+    expect(terminalDisplayWidth('⚙')).toBe(1)
+  })
+
+  it('truncates long mixed-width text to a single terminal line', () => {
+    const truncated = truncateDisplay('weapp-vite 把现代化的 web 开发方式，带入传统的小程序开发吧！', 24)
+
+    expect(terminalDisplayWidth(truncated)).toBeLessThanOrEqual(24)
+    expect(truncated.endsWith('…')).toBe(true)
+  })
+})
+
 describe('photo helpers', () => {
-  const { normalizePhotoIndex } = photoGalleryInternal
+  const { isPhotoExitKey, normalizePhotoIndex } = photoGalleryInternal
 
   it('normalizes negative and overflow indices', () => {
     expect(normalizePhotoIndex(0, 6)).toBe(0)
@@ -86,10 +103,24 @@ describe('photo helpers', () => {
     expect(normalizePhotoIndex(6, 6)).toBe(0)
     expect(normalizePhotoIndex(-1, 6)).toBe(5)
   })
+
+  it('treats q, escape, and ctrl-c as photo gallery back keys', () => {
+    expect(isPhotoExitKey('q', { name: 'q' })).toBe(true)
+    expect(isPhotoExitKey('\u001B', { name: 'escape' })).toBe(true)
+    expect(isPhotoExitKey('', { ctrl: true, name: 'c' })).toBe(true)
+    expect(isPhotoExitKey('', { name: 'right' })).toBe(false)
+  })
 })
 
 describe('repository helpers', () => {
-  const { buildRepositoryActionChoices, buildRepositoryShareLines, formatRepositoryLabel } = repositoryInternal
+  const {
+    buildPagedRepoChoices,
+    buildRepositoryPagerText,
+    buildRepositoryActionChoices,
+    buildRepositoryShareLines,
+    formatRepositoryLabel,
+    getRepositoryPageCount,
+  } = repositoryInternal
   const axiosGetMock = vi.mocked(axios.get)
 
   beforeAll(async () => {
@@ -126,6 +157,32 @@ describe('repository helpers', () => {
     const actionValues = buildRepositoryActionChoices().map(action => action.value)
 
     expect(actionValues).toEqual(['open', 'details', 'qrcode', 'shareText', 'back'])
+  })
+
+  it('keeps repository pages short and leaves paging out of choices', () => {
+    const repos = Array.from({ length: 13 }, (_, index) => ({
+      name: `repo-${index}`,
+      stargazers_count: index,
+      forks_count: index,
+      description: `repo ${index}`,
+      html_url: `https://example.com/repo-${index}`,
+      language: 'TypeScript',
+    }))
+
+    const firstPage = buildPagedRepoChoices(repos, true, 0)
+    const values = firstPage.map(choice => choice.value.type)
+
+    expect(getRepositoryPageCount(repos)).toBe(2)
+    expect(values.filter(value => value === 'repo')).toHaveLength(8)
+    expect(values).toEqual(['repo', 'repo', 'repo', 'repo', 'repo', 'repo', 'repo', 'repo'])
+  })
+
+  it('renders repository paging as terminal footer text', () => {
+    const text = stripAnsi(buildRepositoryPagerText(0, 2))
+
+    expect(text).toContain('previous')
+    expect(text).toContain('next')
+    expect(text).toContain('page 1/2')
   })
 
   it('builds repository share text with spotlight context', () => {
@@ -205,6 +262,23 @@ describe('i18n manager', () => {
     expect(getSupportedLanguages()).toEqual(['zh', 'en'])
   })
 
+  it('normalizes locale tags before matching supported languages', () => {
+    const { matchSupportedLanguage, sanitizeLocaleTag } = i18nInternal
+
+    expect(matchSupportedLanguage(sanitizeLocaleTag('zh_CN.UTF-8'))).toBe('zh')
+    expect(matchSupportedLanguage(sanitizeLocaleTag('en_US.UTF-8'))).toBe('en')
+    expect(matchSupportedLanguage(sanitizeLocaleTag('C.UTF-8'))).toBeUndefined()
+  })
+
+  it('extracts macOS language candidates from defaults output', () => {
+    const candidates = i18nInternal.extractMacOSLocaleCandidates(`(
+    "zh-Hans-CN",
+    "en-CN"
+)`)
+
+    expect(candidates).toEqual(['zh-Hans-CN', 'en-CN'])
+  })
+
   it('provides translations after initialization', async () => {
     expect(t(Dic.quit.title)).toBe('Exit')
 
@@ -224,6 +298,12 @@ describe('share center', () => {
   it('builds share commands for supported targets', () => {
     expect(shareCenterInternal.buildShareCommand('github')).toBe('npx @icebreakers/profile@latest url github')
     expect(shareCenterInternal.buildQrCommand('website')).toBe('npx @icebreakers/profile@latest qr website')
+  })
+
+  it('puts browser open first in share actions', () => {
+    const actionValues = shareCenterInternal.buildActionChoices().map(action => action.value)
+
+    expect(actionValues).toEqual(['open', 'qrcode', 'shareText', 'back'])
   })
 
   it('builds share text with links and terminal commands', () => {
@@ -258,39 +338,118 @@ describe('share center', () => {
       optionsData.myRepositories,
       optionsData.shareCenter,
       optionsData.arcade,
-      optionsData.changeLanguage,
       optionsData.quit,
     ])
+    expect(stripAnsi(items[3]!.title)).toBe('Games')
+  })
+
+  it('parses main menu shortcut keys', () => {
+    expect(terminalShortcutsInternal.parseShortcutInput('l')).toBe('language')
+    expect(terminalShortcutsInternal.parseShortcutInput('L')).toBe('language')
+    expect(terminalShortcutsInternal.parseShortcutInput('q')).toBe('back')
+    expect(terminalShortcutsInternal.parseShortcutInput('\u001B')).toBe('back')
+    expect(terminalShortcutsInternal.parseShortcutInput('j')).toBe('down')
+    expect(terminalShortcutsInternal.parseShortcutInput('k')).toBe('up')
+    expect(terminalShortcutsInternal.parseShortcutInput('\u001B[D')).toBe('left')
+    expect(terminalShortcutsInternal.parseShortcutInput('\u001B[C')).toBe('right')
+    expect(terminalShortcutsInternal.parseShortcutInput('\n')).toBe('submit')
+  })
+
+  it('shows language switching in the main menu shortcut bar', () => {
+    const items = buildMenuItems({
+      icebreaker: 'icebreaker',
+      options: optionsData,
+      isUnicodeSupported: true,
+    })
+    const output = stripAnsi(terminalShortcutsInternal.renderShortcutSelect('Pick', items, 0))
+
+    expect(items.map(item => item.value)).not.toContain(optionsData.changeLanguage)
+    expect(output).toContain('L language')
+  })
+
+  it('aligns shortcut descriptions by terminal display width', () => {
+    const output = stripAnsi(terminalShortcutsInternal.renderShortcutSelect('Pick', [
+      { title: '关于我', description: '中文标题', value: 'profile' },
+      { title: 'Games', description: 'English title', value: 'games' },
+      { title: `${emoji.get('star')} Repo`, description: 'emoji title', value: 'repo' },
+      { title: '返回', value: 'back' },
+    ], 0))
+    const lines = output.split('\n').filter(line => line.includes(' - '))
+    const separatorColumns = lines.map((line) => {
+      const separatorIndex = line.indexOf(' - ')
+      return terminalDisplayWidth(line.slice(0, separatorIndex))
+    })
+
+    expect(new Set(separatorColumns).size).toBe(1)
+  })
+
+  it('truncates shortcut rows to avoid terminal wrapping', () => {
+    const output = stripAnsi(terminalShortcutsInternal.renderShortcutSelect('Pick', [
+      {
+        title: 'uni-app-vite-vue3-tailwind-vscode-template (⭐:338 🍴:56)',
+        description: 'uni-app vue3 tailwindcss 模板，集成了 iconify,eslint,typescript,prettier 等等工具作为解决方案',
+        value: 'repo',
+      },
+      { title: '下一张 1/2', value: 'next' },
+    ], 0, 80))
+    const row = output.split('\n').find(line => line.includes(' - '))
+
+    expect(row).toBeDefined()
+    expect(terminalDisplayWidth(row!)).toBeLessThanOrEqual(76)
+    expect(row).toContain('…')
+  })
+
+  it('renders shortcut footer outside the selectable rows', () => {
+    const output = stripAnsi(terminalShortcutsInternal.renderShortcutSelect('Pick', [
+      { title: 'repo', description: 'demo', value: 'repo' },
+    ], 0, 80, '← previous · → next · page 1/2'))
+    const lines = output.split('\n')
+
+    expect(lines.some(line => line.startsWith('← previous'))).toBe(true)
+    expect(lines.filter(line => line.includes(' - '))).toHaveLength(1)
+  })
+
+  it('pauses stdin when restoring shortcut input state', () => {
+    const setRawMode = vi.fn()
+    const pause = vi.fn()
+    const stream = {
+      setRawMode,
+      pause,
+    } as unknown as NodeJS.ReadStream
+
+    terminalShortcutsInternal.restoreInput(stream, false)
+
+    expect(setRawMode).toHaveBeenCalledWith(false)
+    expect(pause).toHaveBeenCalledTimes(1)
+  })
+
+  it('clears the current shortcut menu block before replacing it', () => {
+    const moveCursor = vi.spyOn(readline, 'moveCursor').mockImplementation(() => true)
+    const cursorTo = vi.spyOn(readline, 'cursorTo').mockImplementation(() => true)
+    const clearScreenDown = vi.spyOn(readline, 'clearScreenDown').mockImplementation(() => true)
+
+    terminalShortcutsInternal.clearRenderedBlock(process.stdout, 7)
+
+    expect(moveCursor).toHaveBeenCalledWith(process.stdout, 0, -7)
+    expect(cursorTo).toHaveBeenCalledWith(process.stdout, 0)
+    expect(clearScreenDown).toHaveBeenCalledWith(process.stdout)
+
+    moveCursor.mockRestore()
+    cursorTo.mockRestore()
+    clearScreenDown.mockRestore()
   })
 })
 
-describe('pitch lab', () => {
+describe('profile hub', () => {
   beforeAll(async () => {
     await changeLanguage('en')
   })
 
-  it('builds pitch choices for supported audiences', () => {
-    const choices = pitchLabInternal.buildPitchChoices()
-
-    expect(choices.map(choice => choice.value)).toEqual(['oss', 'hiring', 'collaboration'])
-    expect(choices.every(choice => choice.title.length > 0)).toBe(true)
-  })
-
-  it('builds pitch lines with profile context', () => {
-    const lines = pitchLabInternal.buildPitchLines('hiring')
-    const text = stripAnsi(lines.join('\n'))
-
-    expect(lines.length).toBeGreaterThan(1)
-    expect(text).toContain('Icebreaker Lab')
-    expect(text).toContain('icebreaker')
-    expect(text).toContain('Full-stack Architect')
-  })
-
-  it('keeps pitch lab inside the profile hub', () => {
+  it('keeps the profile hub focused', () => {
     const choices = menuInternal.buildProfileHubChoices()
 
-    expect(choices.map(choice => choice.value)).toEqual(['overview', 'timeline', 'photo', 'pitchLab', 'back'])
-    expect(choices.find(choice => choice.value === 'pitchLab')?.title).toBe('Pitch Lab')
+    expect(choices.map(choice => choice.value)).toEqual(['overview', 'timeline', 'photo', 'back'])
+    expect(choices[0]?.title).toBe(t(Dic.profile.summaryTitle))
   })
 })
 
@@ -431,15 +590,37 @@ describe('terminal arcade', () => {
     expect(output).toContain('Best')
   })
 
-  it('adds the arcade to the interactive menu', () => {
+  it('clears each terminal line when rendering 2048 frames', () => {
+    const state = arcadeInternal.createInitial2048State(() => 0)
+    const frame = arcadeInternal.render2048Frame({
+      ...state,
+      message: 'New board started.',
+    })
+    const visibleLines = frame
+      // eslint-disable-next-line no-control-regex
+      .replace(/^\u001B\[H/, '')
+      // eslint-disable-next-line no-control-regex
+      .replace(/\u001B\[J$/, '')
+      .split('\n')
+
+    expect(frame.startsWith('\u001B[H')).toBe(true)
+    expect(frame.endsWith('\u001B[J')).toBe(true)
+    expect(visibleLines.length).toBeGreaterThan(1)
+    expect(visibleLines.every(line => line.endsWith('\u001B[K'))).toBe(true)
+  })
+
+  it('keeps 2048 inside the games menu', () => {
     const items = buildMenuItems({
       icebreaker: 'icebreaker',
       options: optionsData,
       isUnicodeSupported: true,
     })
+    const games = menuInternal.buildGameHubChoices()
 
     expect(items.map(item => item.value)).toContain(optionsData.arcade)
-    expect(items.find(item => item.value === optionsData.arcade)?.title).toBe('2048')
+    expect(items.find(item => item.value === optionsData.arcade)?.title).toBe('Games')
+    expect(games.map(game => game.value)).toEqual(['game2048', 'back'])
+    expect(games.find(game => game.value === 'game2048')?.title).toBe('2048')
   })
 })
 
@@ -483,5 +664,40 @@ describe('profile sections', () => {
     expect(normalized).toContain('Rolldown')
     expect(normalized).toContain('monorepo automation')
     await changeLanguage('zh')
+  })
+
+  it('aligns profile skill text after mixed-width icons', () => {
+    const sections = menuInternal.buildProfileSections()
+    const skillsTitle = t(Dic.profile.skillsTitle) as string
+    const skills = sections.find(section => section.title === skillsTitle)
+    expect(skills).toBeDefined()
+
+    const textColumns = skills!.lines.map((line) => {
+      const visibleLine = stripAnsi(line)
+      const match = /^(\S+\s+)/.exec(visibleLine)
+      expect(match).not.toBeNull()
+      return terminalDisplayWidth(match![1]!)
+    })
+
+    expect(new Set(textColumns).size).toBe(1)
+    expect(stripAnsi(skills!.lines.join('\n'))).toContain('⚙  Node.js')
+  })
+
+  it('presents a broader open-source and full-stack profile', async () => {
+    await changeLanguage('en')
+    const englishSections = menuInternal.buildProfileSections()
+    const englishText = stripAnsi(englishSections.map(section => section.lines.join(' ')).join(' '))
+
+    expect(englishText).toContain('open-source')
+    expect(englishText).toContain('full-stack')
+    expect(englishText).toContain('automation')
+    expect(englishText).toContain('project problem')
+
+    await changeLanguage('zh')
+    const chineseSections = menuInternal.buildProfileSections()
+    const chineseText = stripAnsi(chineseSections.map(section => section.lines.join(' ')).join(' '))
+
+    expect(chineseText).toContain('开源爱好者')
+    expect(chineseText).toContain('全栈')
   })
 })

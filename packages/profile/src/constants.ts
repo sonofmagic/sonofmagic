@@ -34,7 +34,6 @@ export const optionsData = {
   changeLanguage: 'changeLanguage',
   myRepositories: 'myRepositories',
   shareCenter: 'shareCenter',
-  pitchLab: 'pitchLab',
   arcade: 'arcade',
 } as const
 

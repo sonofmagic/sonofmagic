@@ -1,5 +1,6 @@
 import { Dic, t } from './i18n'
 import { createProjectsTree } from './project'
+import { padEndDisplay, stripAnsi, terminalDisplayWidth } from './utils/shared'
 
 export interface ProfileSection {
   title: string
@@ -16,11 +17,12 @@ const profileSectionConfigs: Array<{
   titleKey: string
   bodyKey: string
   getParams?: () => Record<string, unknown>
+  alignLeadingMarkers?: boolean
 }> = [
   { titleKey: Dic.profile.summaryTitle, bodyKey: Dic.profile.summary },
-  { titleKey: Dic.profile.strengthsTitle, bodyKey: Dic.profile.strengths },
-  { titleKey: Dic.profile.skillsTitle, bodyKey: Dic.profile.skills },
-  { titleKey: Dic.profile.expectationTitle, bodyKey: Dic.profile.expectation },
+  { titleKey: Dic.profile.strengthsTitle, bodyKey: Dic.profile.strengths, alignLeadingMarkers: true },
+  { titleKey: Dic.profile.skillsTitle, bodyKey: Dic.profile.skills, alignLeadingMarkers: true },
+  { titleKey: Dic.profile.expectationTitle, bodyKey: Dic.profile.expectation, alignLeadingMarkers: true },
   { titleKey: Dic.profile.experienceTitle, bodyKey: Dic.profile.experience },
   {
     titleKey: Dic.profile.projectsTitle,
@@ -32,8 +34,53 @@ const profileSectionConfigs: Array<{
   { titleKey: Dic.profile.closingTitle, bodyKey: Dic.profile.closing },
 ]
 
+function parseLeadingMarker(line: string) {
+  const separatorIndex = line.search(/\s/u)
+  if (separatorIndex <= 0) {
+    return null
+  }
+
+  const marker = line.slice(0, separatorIndex)
+  const rest = line.slice(separatorIndex).trimStart()
+  if (!rest) {
+    return null
+  }
+
+  if (/^[\p{Letter}\p{Number}_-]+$/u.test(stripAnsi(marker))) {
+    return null
+  }
+
+  return {
+    marker,
+    rest,
+  }
+}
+
+function alignLeadingMarkers(lines: string[]) {
+  const parsedLines = lines.map(parseLeadingMarker)
+  const markerWidth = Math.max(
+    0,
+    ...parsedLines
+      .filter(item => item !== null)
+      .map(item => terminalDisplayWidth(item.marker)),
+  )
+
+  if (markerWidth <= 0) {
+    return lines
+  }
+
+  return lines.map((line, index) => {
+    const parsed = parsedLines[index]
+    if (!parsed) {
+      return line
+    }
+
+    return `${padEndDisplay(parsed.marker, markerWidth)} ${parsed.rest}`
+  })
+}
+
 export function buildProfileSections(): ProfileSection[] {
-  return profileSectionConfigs.map(({ titleKey, bodyKey, getParams }) => {
+  return profileSectionConfigs.map(({ titleKey, bodyKey, getParams, alignLeadingMarkers: shouldAlignLeadingMarkers }) => {
     const title = t(titleKey) as string
     const content = t(bodyKey, {
       ...(getParams?.() ?? {}),
@@ -46,7 +93,7 @@ export function buildProfileSections(): ProfileSection[] {
 
     return {
       title,
-      lines,
+      lines: shouldAlignLeadingMarkers ? alignLeadingMarkers(lines) : lines,
     }
   })
 }

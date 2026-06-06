@@ -1,5 +1,23 @@
 # @icebreakers/profile
 
+## 4.1.0
+
+### Minor Changes
+
+- ✨ **收敛终端名片首屏菜单，并新增实时 2048 游戏体验。** [`822177b`](https://github.com/sonofmagic/sonofmagic/commit/822177b7d4c860f21d67928ff7ba50b0d604b512) by @sonofmagic
+
+### Patch Changes
+
+- 🐛 **Add direct `qr` and `open` commands for profile links.** [`ed02f4b`](https://github.com/sonofmagic/sonofmagic/commit/ed02f4ba1c3abd740ca1b241e269c6182657ec5d) by @sonofmagic
+
+- 🐛 **移除介绍生成器入口，精简关于我菜单。** [`ffcd70c`](https://github.com/sonofmagic/sonofmagic/commit/ffcd70c0b2933cc561c909078a7da48238ebad18) by @sonofmagic
+
+- 🐛 **优化终端名片交互：统一快捷键返回与语言切换，开源项目改为分页器展示，并修复菜单、照片页和 2048 的渲染与退出行为。** [`1731118`](https://github.com/sonofmagic/sonofmagic/commit/173111829d458f28e5cb4ff76849926ddd9c2c76) by @sonofmagic
+
+- 🐛 **Add QR code and share text actions to the interactive repository picker.** [`a1cc572`](https://github.com/sonofmagic/sonofmagic/commit/a1cc572b25de46a35af2e6e8db3956ca0bbef7ad) by @sonofmagic
+
+- 🐛 **Add an interactive share center for profile links.** [`ac0da58`](https://github.com/sonofmagic/sonofmagic/commit/ac0da58804652335b49bafea09426ec95160396b) by @sonofmagic
+
 ## 4.0.3
 
 ### Patch Changes

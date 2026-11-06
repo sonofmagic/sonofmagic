@@ -2,7 +2,7 @@ import packageJson from '../package.json'
 import config from '../tsdown.config'
 
 describe('build configuration', () => {
-  const requiredNodeRange = '^20.19.0 || >=22.12.0'
+  const requiredNodeRange = '>=26.13.0'
 
   it('uses tsdown scripts and esm package metadata', () => {
     expect(packageJson.type).toBe('module')

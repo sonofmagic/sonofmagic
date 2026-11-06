@@ -7,7 +7,7 @@ import { describe, expect, it } from 'vitest'
 
 const execFileAsync = promisify(execFile)
 const SCRIPT_PATH = resolve(__dirname, './check-fixed-package-versions.mjs')
-const REQUIRED_NODE_RANGE = '^20.19.0 || >=22.12.0'
+const REQUIRED_NODE_RANGE = '>=26.13.0'
 
 interface FixtureOptions {
   profileVersion?: string
@@ -170,6 +170,21 @@ describe('check-fixed-package-versions script', () => {
       expect(result.status).toBe(1)
       expect(result.stderr).toContain('version mismatch detected')
       expect(result.stderr).toContain('yangqiming@3.0.5')
+    }
+    finally {
+      await rm(fixtureDir, { recursive: true, force: true })
+    }
+  })
+
+  it('fails when a CLI keeps the previous Node support range', async () => {
+    const fixtureDir = await createFixture({
+      profileNextNodeRange: '^20.19.0 || >=22.12.0',
+    })
+
+    try {
+      const result = await runCheck(fixtureDir)
+      expect(result.status).toBe(1)
+      expect(result.stderr).toContain('@icebreakers/profile-next engines.node must be >=26.13.0')
     }
     finally {
       await rm(fixtureDir, { recursive: true, force: true })

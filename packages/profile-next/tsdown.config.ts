@@ -1,5 +1,5 @@
 import { createEsmNodeConfig } from '../../tsdown.shared.mjs'
 
 export default createEsmNodeConfig({
-  entry: ['src/index.tsx'],
+  entry: ['src/index.tsx', 'src/cli.tsx'],
 })

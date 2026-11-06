@@ -9,7 +9,7 @@ describe('index', () => {
 })
 
 describe('build configuration', () => {
-  const requiredNodeRange = '^20.19.0 || >=22.12.0'
+  const requiredNodeRange = '>=26.13.0'
 
   it('uses tsdown scripts and esm metadata', () => {
     expect(packageJson.type).toBe('module')

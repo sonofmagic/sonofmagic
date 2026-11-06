@@ -6,7 +6,7 @@ This monorepo groups runnable surfaces under `apps/`, each with its own `package
 
 ## Build, Test, and Development Commands
 
-Use `pnpm install` (Node ≥20, pnpm 10) to sync dependencies; the `only-allow pnpm` hook rejects npm or yarn. Run `pnpm dev` to launch `turbo run dev --parallel`, keeping affected apps and packages in watch mode. `pnpm build` runs the Turbo pipeline (tsup/unbuild under the hood) and should pass before submitting PRs. Execute `pnpm test` for a coverage-enforced Vitest suite, and prefer `pnpm test:dev` when you need interactive debugging.
+Use `pnpm install` (Node ≥26.13.0, pnpm 12.18.0) to sync dependencies; the `only-allow pnpm` hook rejects npm or yarn. Run `pnpm dev` to launch `turbo run dev --parallel`, keeping affected apps and packages in watch mode. `pnpm build` runs the Turbo and tsdown pipeline and should pass before submitting PRs. Execute `pnpm test` for a coverage-enforced Vitest suite, then `pnpm test:smoke` to exercise the built package entry points. Prefer `pnpm test:dev` when you need interactive debugging.
 
 ## Coding Style & Naming Conventions
 

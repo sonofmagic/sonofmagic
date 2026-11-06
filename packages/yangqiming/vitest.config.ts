@@ -6,11 +6,11 @@ export default defineProject({
     alias: [
       {
         find: '@',
-        replacement: path.resolve(__dirname, './src'),
+        replacement: path.resolve(import.meta.dirname, './src'),
       },
       {
         find: '@icebreakers/profile',
-        replacement: path.resolve(__dirname, '../profile/src/index.ts'),
+        replacement: path.resolve(import.meta.dirname, '../profile/src/index.ts'),
       },
     ],
     globals: true,

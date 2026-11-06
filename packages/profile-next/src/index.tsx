@@ -1,7 +1,7 @@
-import { render, Text } from 'ink'
+import { Text } from 'ink'
 import React, { useEffect, useState } from 'react'
 
-function Counter() {
+export function Counter() {
   const [counter, setCounter] = useState(0)
 
   useEffect(() => {
@@ -22,5 +22,3 @@ function Counter() {
     </Text>
   )
 }
-
-render(<Counter />)

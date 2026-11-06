@@ -1,7 +1,7 @@
 import { defineProject } from 'vitest/config'
 
 export default defineProject({
-  root: __dirname,
+  root: import.meta.dirname,
   test: {
     name: 'scripts',
     include: [

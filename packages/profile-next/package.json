@@ -18,10 +18,10 @@
     "dist"
   ],
   "engines": {
-    "node": "^20.19.0 || >=22.12.0"
+    "node": ">=26.13.0"
   },
   "scripts": {
-    "start": "tsx src/index.tsx",
+    "start": "tsx src/cli.tsx",
     "build": "tsdown",
     "dev": "tsdown --watch --sourcemap",
     "typecheck": "tsc --noEmit",
@@ -31,11 +31,11 @@
     "lint:fix": "eslint . --fix"
   },
   "dependencies": {
-    "ink": "^7.0.5",
-    "react": "^19.2.7"
+    "ink": "^8.0.0",
+    "react": "^19.3.1"
   },
   "devDependencies": {
-    "@types/react": "^19.2.17",
+    "@types/react": "^19.3.0",
     "ink-testing-library": "^4.0.0"
   }
 }

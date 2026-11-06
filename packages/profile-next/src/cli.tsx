@@ -1,2 +1,6 @@
 #!/usr/bin/env node
-import './index'
+import { render } from 'ink'
+import React from 'react'
+import { Counter } from './index'
+
+render(<Counter />)

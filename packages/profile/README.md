@@ -2,7 +2,7 @@
 
 My profile in Chinese and English, right in the terminal.
 
-Node.js requirement: `^20.19.0 || >=22.12.0`.
+Node.js requirement: `>=26.13.0`.
 
 Run it with:
 

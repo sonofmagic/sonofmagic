@@ -2,6 +2,8 @@
 
 This is my chinese/english resume
 
+Node.js requirement: `>=26.13.0`.
+
 You can run this command:
 
 ```bash

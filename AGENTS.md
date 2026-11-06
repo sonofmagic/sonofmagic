@@ -2,20 +2,21 @@
 
 ## Project Structure & Module Organization
 
-- Root configs (`turbo.json`, `vitest.workspace.ts`, `monorepo.config.ts`) drive shared tooling; keep them in sync when adding workspaces.
+- Root configs (`turbo.json`, `vitest.config.ts`, `repoctl.config.ts`) drive shared tooling; keep them in sync when adding workspaces.
 - `apps/` hosts runnable surfaces (e.g., `apps/cli`); each app owns its `package.json` and `tsconfig.json`.
-- `packages/` contains publishable libraries. Place implementation under `src/`, tests under `test/`, and reuse the existing `tsup.config.ts` pattern.
+- `packages/` contains publishable libraries. Place implementation under `src/`, tests under `test/`, and reuse the existing `tsdown.config.ts` pattern.
 - `assets/` stores shared static files, while `dist/` and `coverage/` are generated outputs—never edit them manually.
 - Register new workspaces in `pnpm-workspace.yaml` and `turbo.json` so Turbo and pnpm pick them up.
 
 ## Build, Test, and Development Commands
 
-- `pnpm install` (Node ≥20, pnpm 10) respects the enforced `only-allow pnpm` preinstall hook.
+- `pnpm install` (Node ≥26.13.0, pnpm 12.18.0) respects the enforced `only-allow pnpm` preinstall hook.
 - `pnpm dev` runs `turbo run dev --parallel` so affected apps and packages watch and rebuild together.
-- `pnpm build` executes the workspace build pipeline via Turbo (tsup/unbuild under the hood).
+- `pnpm build` executes the workspace build pipeline via Turbo and tsdown.
 - `pnpm test` runs Vitest with coverage; prefer `pnpm test:dev` for interactive debugging.
-- `pnpm lint` fans out ESLint and Stylelint tasks through Turbo; add `--filter <workspace>` to focus on one package.
-- Utility scripts: `pnpm script:clean` clears build artifacts, `pnpm script:sync` aligns scaffolding, and `pnpm script:mirror` mirrors template changes.
+- `pnpm lint` checks root files with ESLint, then fans out workspace lint tasks through Turbo; add `--filter <workspace>` to focus on one package.
+- Utility scripts: `pnpm script:clean` removes selected workspace packages after confirmation, `pnpm script:sync` syncs public workspace packages to npmmirror, and `pnpm script:mirror` configures the VS Code binary mirror through repoctl.
+- `pnpm test:smoke` validates the built CLI and library entry points; run it after `pnpm build`.
 
 ## Coding Style & Naming Conventions
 

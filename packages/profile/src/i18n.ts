@@ -108,7 +108,7 @@ async function detectFromMacOSDefaults(): Promise<SupportedLanguage | undefined>
 
 function detectFromIntl(): SupportedLanguage | undefined {
   try {
-    const locale = sanitizeLocaleTag(Intl.DateTimeFormat().resolvedOptions().locale)
+    const locale = sanitizeLocaleTag(new Intl.DateTimeFormat().resolvedOptions().locale)
     return matchSupportedLanguage(locale)
   }
   catch {

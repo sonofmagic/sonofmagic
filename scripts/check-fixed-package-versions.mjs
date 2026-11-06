@@ -7,7 +7,7 @@ const fixedPackages = [
   'sonofmagic',
   'yangqiming',
 ]
-const requiredNodeVersionRange = '^20.19.0 || >=22.12.0'
+const requiredNodeVersionRange = '>=26.13.0'
 const requiredEsmMain = './dist/index.mjs'
 const requiredEsmTypes = './dist/index.d.mts'
 

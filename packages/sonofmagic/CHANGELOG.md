@@ -1,5 +1,16 @@
 # sonofmagic
 
+## 5.0.0
+
+### Major Changes
+
+- 🚀 **Require Node.js 26.13.0 or newer and upgrade the bundled terminal dependencies. Update the build, test, and release tooling while preserving the existing ESM exports and CLI commands.** [#38](https://github.com/sonofmagic/sonofmagic/pull/38) by @sonofmagic
+
+### Patch Changes
+
+- 📦 **Dependencies** [`eb7cdc2`](https://github.com/sonofmagic/sonofmagic/commit/eb7cdc24ddb0544e7c619905a7b80853e56c460e)
+  → `@icebreakers/profile@5.0.0`
+
 ## 4.1.0
 
 ### Patch Changes
